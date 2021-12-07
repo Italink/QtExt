@@ -29,7 +29,7 @@
 #include "ColorWheelPrivate.hpp"
 #include "QNeumorphism.h"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 
 static const double selector_radius = 6;
@@ -268,7 +268,7 @@ void ColorWheel::setValue(qreal v)
     update();
 }
 
-ColorWidgets::ColorWheel::ColorSpaceEnum ColorWheel::colorSpace() const
+QWidgetEx::ColorWheel::ColorSpaceEnum ColorWheel::colorSpace() const
 {
     return p->color_space;
 }
@@ -278,13 +278,13 @@ bool ColorWheel::rotatingSelector() const
     return p->rotating_selector;
 }
 
-ColorWidgets::ColorWheel::ShapeEnum ColorWheel::selectorShape() const
+QWidgetEx::ColorWheel::ShapeEnum ColorWheel::selectorShape() const
 {
     return p->selector_shape;
 }
 
 
-void ColorWheel::setColorSpace(ColorWidgets::ColorWheel::ColorSpaceEnum space)
+void ColorWheel::setColorSpace(QWidgetEx::ColorWheel::ColorSpaceEnum space)
 {
     if ( p->color_space != space )
     {
@@ -331,7 +331,7 @@ void ColorWheel::setRotatingSelector(bool rotating)
     Q_EMIT rotatingSelectorChanged(rotating);
 }
 
-void ColorWheel::setSelectorShape(ColorWidgets::ColorWheel::ShapeEnum shape)
+void ColorWheel::setSelectorShape(QWidgetEx::ColorWheel::ShapeEnum shape)
 {
     if ( shape != p->selector_shape )
     {

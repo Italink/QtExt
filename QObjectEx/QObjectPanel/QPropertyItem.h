@@ -23,8 +23,6 @@ protected:
     QWidget *itemWidget_ = nullptr;
     QHBoxLayout* layout_ = nullptr;
     QLabel *name_ = nullptr;
-    std::function<QVariant()> getter_ = nullptr;
-    std::function<void(QVariant)> setter_ = nullptr;
 };
 
 #endif // QPropertyItem_h__

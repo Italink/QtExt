@@ -19,6 +19,9 @@ private:
 
 private:
 	QObject* object_ = nullptr;
+protected:
+	void closeEvent(QCloseEvent* event) override;
+
 };
 
 #endif // QObejctPanel_h__

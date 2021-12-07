@@ -2,7 +2,7 @@
 #include "QPainter"
 #include "qevent.h"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 GradientBarItem::GradientBarItem(QGradientStop stop, QWidget* parent /*= 0*/)
     : QWidget(parent)

@@ -25,7 +25,7 @@
 
 #include "GradientSlider.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief A slider for selecting a hue value

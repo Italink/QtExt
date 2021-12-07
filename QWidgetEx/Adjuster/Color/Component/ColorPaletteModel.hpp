@@ -25,7 +25,7 @@
 #include <QAbstractListModel>
 #include "ColorPalette.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class  ColorPaletteModel : public QAbstractListModel
 {

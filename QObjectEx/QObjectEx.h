@@ -8,16 +8,18 @@
         if(name==var) \
             return; \
         name = var;  \
-        emit name##Changed(var); \
+        emit name##Changed(QVariant::fromValue(var)); \
     } \
-    Q_SIGNAL void name##Changed(type); \
+    Q_SIGNAL void name##Changed(QVariant); \
     type name
 
 
 namespace QObjectEx {
 	QObjectPanel* createQObjectPanel(QObject *object);
 	QJsonObject toJson(QObject * object);
-	QObject* fromJson(QJsonObject json);
+	void fromJson(QJsonObject info, QObject * object);
+
+	QObject* createFromJson(QJsonObject json);
 	QByteArray  dump(QObject *object);
 	QByteArray toByteArray(QObject * object);
 	QObject* fromByteArray(QByteArray byteArray);

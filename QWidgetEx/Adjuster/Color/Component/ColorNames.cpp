@@ -27,7 +27,7 @@ static QRegularExpression regex_func_rgb (QStringLiteral(R"(^rgb\s*\(\s*([0-9]+)
 static QRegularExpression regex_hex_rgba (QStringLiteral("^#[[:xdigit:]]{8}$"));
 static QRegularExpression regex_func_rgba (QStringLiteral(R"(^rgba?\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$)"));
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 
 QString stringFromColor(const QColor& color, bool alpha)

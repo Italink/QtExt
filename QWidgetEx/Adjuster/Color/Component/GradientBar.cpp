@@ -30,7 +30,7 @@
 #include "GradientBar.hpp"
 #include "GradientBarItem.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class GradientBar::Private
 {

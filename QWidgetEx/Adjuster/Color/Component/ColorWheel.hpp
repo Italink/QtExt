@@ -27,7 +27,7 @@
 
 
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief Display an analog widget that allows the selection of a HSV color

@@ -28,7 +28,7 @@
 #include <QMimeData>
 #include "ColorPreview.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class ColorPreview::Private
 {

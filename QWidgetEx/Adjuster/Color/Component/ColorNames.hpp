@@ -27,7 +27,7 @@
 
 
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief Convert a string into a color

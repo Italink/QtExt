@@ -30,7 +30,7 @@
 #include <QPixmap>
 
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class  ColorPalette : public QObject
 {

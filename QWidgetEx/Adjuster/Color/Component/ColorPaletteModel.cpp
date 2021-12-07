@@ -24,7 +24,7 @@
 #include <QRegularExpression>
 #include "ColorPaletteModel.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class ColorPaletteModel::Private
 {

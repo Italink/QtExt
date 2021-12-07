@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include "ColorUtils.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 enum MouseStatus
 {

@@ -24,7 +24,7 @@
 #include "HarmonyColorWheel.hpp"
 #include "ColorWheelPrivate.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 struct RingEditor
 {

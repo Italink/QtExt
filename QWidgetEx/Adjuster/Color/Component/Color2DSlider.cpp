@@ -26,7 +26,7 @@
 #include <QResizeEvent>
 #include "Color2DSlider.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 static const double selector_radius = 6;
 

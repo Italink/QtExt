@@ -25,7 +25,7 @@
 #include <QDesktopServices>
 #include "ColorUtils.hpp"
 
-QColor ColorWidgets::utils::color_from_lch(float hue, float chroma, float luma, float alpha )
+QColor QWidgetEx::utils::color_from_lch(float hue, float chroma, float luma, float alpha )
 {
     qreal h1 = hue*6;
     qreal x = chroma*(1-qAbs(std::fmod(h1,2)-1));
@@ -52,7 +52,7 @@ QColor ColorWidgets::utils::color_from_lch(float hue, float chroma, float luma, 
         alpha);
 }
 
-QColor ColorWidgets::utils::color_from_hsl(float hue, float sat, float lig, float alpha )
+QColor QWidgetEx::utils::color_from_hsl(float hue, float sat, float lig, float alpha )
 {
     qreal chroma = (1 - qAbs(2*lig-1))*sat;
     qreal h1 = hue*6;
@@ -81,7 +81,7 @@ QColor ColorWidgets::utils::color_from_hsl(float hue, float sat, float lig, floa
 }
 
 
-QColor ColorWidgets::utils::get_screen_color(const QPoint &global_pos)
+QColor QWidgetEx::utils::get_screen_color(const QPoint &global_pos)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QScreen *screen = QApplication::screenAt(global_pos);

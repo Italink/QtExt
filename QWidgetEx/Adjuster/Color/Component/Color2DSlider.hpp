@@ -25,7 +25,7 @@
 
 #include <QWidget>
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief A 2D slider that edits 2 color components

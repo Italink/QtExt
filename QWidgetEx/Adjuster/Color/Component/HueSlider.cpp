@@ -23,7 +23,7 @@
  */
 #include "HueSlider.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class HueSlider::Private
 {

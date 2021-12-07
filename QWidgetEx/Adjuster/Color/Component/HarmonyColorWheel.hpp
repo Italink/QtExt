@@ -25,7 +25,7 @@
 
 #include "ColorWheel.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief ColorWheel with color harmonies

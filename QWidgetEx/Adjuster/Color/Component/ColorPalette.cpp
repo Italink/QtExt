@@ -28,7 +28,7 @@
 #include <QFileInfo>
 #include "ColorPalette.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class ColorPalette::Private
 {

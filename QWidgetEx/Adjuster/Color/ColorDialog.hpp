@@ -6,7 +6,7 @@
 #include "Component\ColorWheel.hpp"
 
 class QAbstractButton;
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class ColorDialog : public QDialog
 {

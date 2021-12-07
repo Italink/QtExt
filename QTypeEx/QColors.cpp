@@ -24,24 +24,13 @@ void QColors::setStops(QGradientStops val)
 
 QDataStream& operator>>(QDataStream& in, QColors& var)
 {
-	int size;
-	in>> size;
-	var.stops_.clear();
-	qreal key;
-	QColor color;
-	for (int i = 0; i < size; i++) {
-		in>>key>>color;
-		var.stops_.push_back({key,color});
-	}
+	in >> var.stops_;
 	return in;
 }
 
 QDataStream& operator<<(QDataStream& out, const QColors& var)
 {
-	out<<var.stops_.size();
-	for (auto& stop : var.stops_) {
-		out<<stop.first << stop.second;
-	}
+	out << var.stops_;
 	return out;
 }
 

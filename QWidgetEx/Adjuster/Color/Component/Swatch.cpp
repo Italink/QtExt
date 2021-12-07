@@ -35,7 +35,7 @@
 #include "Swatch.hpp"
 #include "ColorPalette.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class Swatch::Private
 {

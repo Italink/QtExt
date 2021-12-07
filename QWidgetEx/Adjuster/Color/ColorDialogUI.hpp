@@ -36,23 +36,23 @@ public:
     QVBoxLayout* layout;
     QHBoxLayout* layout_main;
     QVBoxLayout* verticalLayout;
-    ColorWidgets::ColorWheel* wheel;
-    ColorWidgets::ColorPreview* preview;
+    QWidgetEx::ColorWheel* wheel;
+    QWidgetEx::ColorPreview* preview;
     QGridLayout* gridLayout;
-    ColorWidgets::GradientSlider* slide_value;
+    QWidgetEx::GradientSlider* slide_value;
     QLabel* label_7;
     QLabel* label_6;
-    ColorWidgets::GradientSlider* slide_saturation;
+    QWidgetEx::GradientSlider* slide_saturation;
     QLabel* label_8;
     QLabel* label_3;
-    ColorWidgets::GradientSlider* slide_alpha;
-    ColorWidgets::GradientSlider* slide_red;
-    ColorWidgets::GradientSlider* slide_green;
+    QWidgetEx::GradientSlider* slide_alpha;
+    QWidgetEx::GradientSlider* slide_red;
+    QWidgetEx::GradientSlider* slide_green;
     QLabel* label_5;
     QLabel* label_2;
     QLabel* label_alpha;
     QLabel* label;
-    ColorWidgets::GradientSlider* slide_blue;
+    QWidgetEx::GradientSlider* slide_blue;
     QSpinBox* spin_hue;
     QSpinBox* spin_saturation;
     QSpinBox* spin_value;
@@ -63,8 +63,8 @@ public:
     QFrame* line_alpha;
     QFrame* line;
     QFrame* line_3;
-    ColorWidgets::HueSlider* slide_hue;
-    ColorWidgets::ColorLineEdit* edit_hex;
+    QWidgetEx::HueSlider* slide_hue;
+    QWidgetEx::ColorLineEdit* edit_hex;
     QDialogButtonBox* buttonBox;
 
     void setupUi(QDialog* ColorDialog)
@@ -82,7 +82,7 @@ public:
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        wheel = new ColorWidgets::ColorWheel(ColorDialog);
+        wheel = new QWidgetEx::ColorWheel(ColorDialog);
         wheel->setObjectName(QString::fromUtf8("wheel"));
         QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy.setHorizontalStretch(0);
@@ -92,7 +92,7 @@ public:
 
         verticalLayout->addWidget(wheel);
 
-        preview = new ColorWidgets::ColorPreview(ColorDialog);
+        preview = new QWidgetEx::ColorPreview(ColorDialog);
         preview->setObjectName(QString::fromUtf8("preview"));
 
         verticalLayout->addWidget(preview);
@@ -103,7 +103,7 @@ public:
         gridLayout = new QGridLayout();
         gridLayout->setSpacing(6);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        slide_value = new ColorWidgets::GradientSlider(ColorDialog);
+        slide_value = new QWidgetEx::GradientSlider(ColorDialog);
         slide_value->setObjectName(QString::fromUtf8("slide_value"));
         slide_value->setMaximum(255);
         slide_value->setOrientation(Qt::Horizontal);
@@ -120,7 +120,7 @@ public:
 
         gridLayout->addWidget(label_6, 0, 0, 1, 1);
 
-        slide_saturation = new ColorWidgets::GradientSlider(ColorDialog);
+        slide_saturation = new QWidgetEx::GradientSlider(ColorDialog);
         slide_saturation->setObjectName(QString::fromUtf8("slide_saturation"));
         slide_saturation->setMaximum(255);
         slide_saturation->setOrientation(Qt::Horizontal);
@@ -137,21 +137,21 @@ public:
 
         gridLayout->addWidget(label_3, 6, 0, 1, 1);
 
-        slide_alpha = new ColorWidgets::GradientSlider(ColorDialog);
+        slide_alpha = new QWidgetEx::GradientSlider(ColorDialog);
         slide_alpha->setObjectName(QString::fromUtf8("slide_alpha"));
         slide_alpha->setMaximum(255);
         slide_alpha->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(slide_alpha, 8, 1, 1, 1);
 
-        slide_red = new ColorWidgets::GradientSlider(ColorDialog);
+        slide_red = new QWidgetEx::GradientSlider(ColorDialog);
         slide_red->setObjectName(QString::fromUtf8("slide_red"));
         slide_red->setMaximum(255);
         slide_red->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(slide_red, 4, 1, 1, 1);
 
-        slide_green = new ColorWidgets::GradientSlider(ColorDialog);
+        slide_green = new QWidgetEx::GradientSlider(ColorDialog);
         slide_green->setObjectName(QString::fromUtf8("slide_green"));
         slide_green->setMaximum(255);
         slide_green->setOrientation(Qt::Horizontal);
@@ -178,7 +178,7 @@ public:
 
         gridLayout->addWidget(label, 4, 0, 1, 1);
 
-        slide_blue = new ColorWidgets::GradientSlider(ColorDialog);
+        slide_blue = new QWidgetEx::GradientSlider(ColorDialog);
         slide_blue->setObjectName(QString::fromUtf8("slide_blue"));
         slide_blue->setMaximum(255);
         slide_blue->setOrientation(Qt::Horizontal);
@@ -249,14 +249,14 @@ public:
 
         gridLayout->addWidget(line_3, 9, 0, 1, 3);
 
-        slide_hue = new ColorWidgets::HueSlider(ColorDialog);
+        slide_hue = new QWidgetEx::HueSlider(ColorDialog);
         slide_hue->setObjectName(QString::fromUtf8("slide_hue"));
         slide_hue->setMinimum(0);
         slide_hue->setMaximum(359);
 
         gridLayout->addWidget(slide_hue, 0, 1, 1, 1);
 
-        edit_hex = new ColorWidgets::ColorLineEdit(ColorDialog);
+        edit_hex = new QWidgetEx::ColorLineEdit(ColorDialog);
         edit_hex->setObjectName(QString::fromUtf8("edit_hex"));
         QFont font;
         font.setFamilies({ QString::fromUtf8("Monospace") });

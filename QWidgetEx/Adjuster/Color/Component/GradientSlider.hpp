@@ -27,7 +27,7 @@
 #include <QSlider>
 #include <QGradient>
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief A slider that moves on top of a gradient

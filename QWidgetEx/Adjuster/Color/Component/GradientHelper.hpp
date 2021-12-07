@@ -3,7 +3,7 @@
 
 #include <QGradient>
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 inline QColor blendColors(const QColor& a, const QColor& b, qreal ratio)
 {

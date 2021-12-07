@@ -17,20 +17,19 @@ QPropertyItem::QPropertyItem(QObject* object, QMetaProperty property)
 	layout_->addWidget(name_, 100, Qt::AlignLeft);
 	name_->setText(QString(property.name()).replace("_", " "));
 	name_->setStyleSheet("background-color:rgba(0,0,0,0)");
-	getter_ = [object, property](){
-		return object->property(property.name());
-	};
+}
 
-	setter_ = [object, property](QVariant var){
-		object->setProperty(property.name(), var);
-	};
+QPropertyItem::~QPropertyItem()
+{
+	if(itemWidget_)
+		itemWidget_->deleteLater();
 }
 
 QWidget* QPropertyItem::createWidget()
 {
-	if (setter_ == nullptr || getter_ == nullptr)
+	if (object_ == nullptr)
 		return nullptr;
-	return createAdjuster(property_.typeId(), getter_, setter_);
+	return createAdjuster(object_,property_);
 }
 
 void QPropertyItem::setUp(QTreeWidgetItem* tree)

@@ -5,7 +5,7 @@
 #include <QWidget>
 #include "GradientHelper.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief A slider that moves on top of a gradient

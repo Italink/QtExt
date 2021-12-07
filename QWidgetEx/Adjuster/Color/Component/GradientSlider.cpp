@@ -29,7 +29,7 @@
 #include <QDebug>
 #include "GradientSlider.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class GradientSlider::Private
 {

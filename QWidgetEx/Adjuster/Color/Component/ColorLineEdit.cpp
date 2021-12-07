@@ -32,7 +32,7 @@
 #include "ColorNames.hpp"
 #include "ColorUtils.hpp"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 
 
@@ -75,7 +75,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
             Q_EMIT colorChanged(color);
     });*/
     connect(this, &QLineEdit::textEdited, [this](const QString& text){
-        QColor color = ColorWidgets::colorFromString(text, p->show_alpha);
+        QColor color = QWidgetEx::colorFromString(text, p->show_alpha);
         if ( color.isValid() )
         {
             p->color = color;
@@ -85,7 +85,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         }
     });
     connect(this, &QLineEdit::editingFinished, [this](){
-        QColor color = ColorWidgets::colorFromString(text(), p->show_alpha);
+        QColor color = QWidgetEx::colorFromString(text(), p->show_alpha);
         if ( color.isValid() )
         {
             p->color = color;
@@ -94,7 +94,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
         }
         else
         {
-            setText(ColorWidgets::stringFromColor(p->color, p->show_alpha));
+            setText(QWidgetEx::stringFromColor(p->color, p->show_alpha));
             Q_EMIT colorEditingFinished(p->color);
             Q_EMIT colorChanged(color);
         }
@@ -118,7 +118,7 @@ void ColorLineEdit::setColor(const QColor& color)
     {
         p->color = color;
         p->setPalette(p->color, this);
-        setText(ColorWidgets::stringFromColor(p->color, p->show_alpha));
+        setText(QWidgetEx::stringFromColor(p->color, p->show_alpha));
         Q_EMIT colorChanged(p->color);
     }
 }
@@ -129,7 +129,7 @@ void ColorLineEdit::setShowAlpha(bool showAlpha)
     {
         p->show_alpha = showAlpha;
         p->setPalette(p->color, this);
-        setText(ColorWidgets::stringFromColor(p->color, p->show_alpha));
+        setText(QWidgetEx::stringFromColor(p->color, p->show_alpha));
         Q_EMIT showAlphaChanged(p->show_alpha);
     }
 }
@@ -146,7 +146,7 @@ void ColorLineEdit::dragEnterEvent(QDragEnterEvent *event)
 
     if ( event->mimeData()->hasColor() ||
          ( event->mimeData()->hasText() &&
-            ColorWidgets::colorFromString(event->mimeData()->text(), p->show_alpha).isValid() ) )
+            QWidgetEx::colorFromString(event->mimeData()->text(), p->show_alpha).isValid() ) )
     {
         event->acceptProposedAction();
     }
@@ -165,7 +165,7 @@ void ColorLineEdit::dropEvent(QDropEvent *event)
     }
     else if ( event->mimeData()->hasText() )
     {
-        QColor col =  ColorWidgets::colorFromString(event->mimeData()->text(), p->show_alpha);
+        QColor col =  QWidgetEx::colorFromString(event->mimeData()->text(), p->show_alpha);
         if ( col.isValid() )
         {
             setColor(col);

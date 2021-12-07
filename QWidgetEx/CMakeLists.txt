@@ -23,6 +23,7 @@ include_directories(
     Widgets
     Window
     Effect
+    ..
 )
 
 qt6_add_resources(QRC_FILES resources.qrc)
@@ -35,6 +36,7 @@ add_library(QWidgetEx
     ${QRC_FILES}
 )
 
-target_link_libraries(QWidgetEx PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::CorePrivate ksuser ole32)
+target_link_libraries(QWidgetEx PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ksuser ole32)
+target_link_libraries(QWidgetEx PUBLIC QTypeEx)
 
 

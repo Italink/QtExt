@@ -27,7 +27,7 @@
 #include <QLineEdit>
 #include <QColor>
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief A line edit used to define a color name

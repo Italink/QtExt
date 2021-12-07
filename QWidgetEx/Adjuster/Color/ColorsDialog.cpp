@@ -10,7 +10,7 @@
 
 
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class ColorsDialog::Private
 {

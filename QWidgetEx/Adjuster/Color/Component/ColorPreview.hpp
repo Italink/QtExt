@@ -27,7 +27,7 @@
 
 #include <QWidget>
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * Simple widget that shows a preview of a color
@@ -111,6 +111,6 @@ private:
 };
 
 } // namespace color_widgets
-Q_DECLARE_METATYPE(ColorWidgets::ColorPreview::DisplayMode)
+Q_DECLARE_METATYPE(QWidgetEx::ColorPreview::DisplayMode)
 
 #endif // COLOR_PREVIEW_HPP

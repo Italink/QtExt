@@ -7,7 +7,7 @@
 #include "Component\GradientHelper.hpp"
 class QAbstractButton;
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 class ColorsDialog : public QDialog
 {
     Q_OBJECT

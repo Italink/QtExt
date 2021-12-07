@@ -28,7 +28,7 @@
 
 
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 namespace utils {
 
 

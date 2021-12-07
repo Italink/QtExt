@@ -15,7 +15,6 @@ file(GLOB_RECURSE PROJECT_SOURCES FILES  *.h *.cpp *.hpp)
 
 set(QTYPE_EX_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-
 add_library(QTypeEx 
     STATIC
     ${PROJECT_SOURCES}

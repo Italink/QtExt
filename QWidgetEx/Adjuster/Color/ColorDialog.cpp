@@ -10,7 +10,7 @@
 
 #include "QBrush"
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class ColorDialog::Private
 {

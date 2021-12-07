@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 class GradientBarItem : public QWidget
 {

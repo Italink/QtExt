@@ -2,6 +2,8 @@
 #include <QApplication>
 #include <QMetaProperty>
 #include "QPropertyItem.h"
+#include "QFile"
+#include "QObjectEx.h"
 
 QObjectPanel::QObjectPanel(QObject* object /*= nullptr*/){
 	setObject(object);
@@ -48,5 +50,13 @@ void QObjectPanel::updatePanel(){
 			item->setUp(this);
 		}
 	}
+}
+
+void QObjectPanel::closeEvent(QCloseEvent* event)
+{
+	QFile file("test.txt");
+	file.open(QFile::WriteOnly);
+	file.write(QObjectEx::dump(object_));
+	file.close();
 }
 

@@ -27,7 +27,7 @@
 #include "ColorPalette.hpp"
 
 
-namespace ColorWidgets {
+namespace QWidgetEx {
 
 /**
  * \brief A widget drawing a palette

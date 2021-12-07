@@ -17,6 +17,7 @@ public:
 private:
 	QGradientStops stops_;
 };
-Q_DECLARE_BUILTIN_METATYPE(QColors,200,QColors);
+
+Q_DECLARE_METATYPE(QColors)
 
 #endif // QColors_h__
