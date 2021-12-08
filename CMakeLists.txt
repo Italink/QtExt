@@ -12,6 +12,7 @@ include_directories(.)
 add_subdirectory(QWidgetEx)
 add_subdirectory(QTypeEx)
 add_subdirectory(QObjectEx)
+add_subdirectory(QMocEx)
 
 option(BUILD_QTEXT_EXMAPLE "build Example" ON)
 
