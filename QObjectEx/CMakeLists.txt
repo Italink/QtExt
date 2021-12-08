@@ -16,7 +16,7 @@ file(GLOB_RECURSE PROJECT_SOURCES FILES *.h *.cpp *.hpp)
 
 include_directories( .. )
 
-add_executable(QObjectEx ${PROJECT_SOURCES})
+add_library(QObjectEx STATIC ${PROJECT_SOURCES})
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
 

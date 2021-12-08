@@ -1,7 +1,5 @@
 #include <QApplication>
-#include "Binds\BindAdjuster.h"
 #include "Test.h"
-#include "QObjectEx.h"
 #include "QFile"
 #include "QWidgetEx\Window\FramlessWindow.h"
 #include "QJsonDocument"

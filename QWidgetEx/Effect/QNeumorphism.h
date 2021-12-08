@@ -1,5 +1,5 @@
-#ifndef QNEUMORPHISM_H
-#define QNEUMORPHISM_H
+#ifndef QNeumorphism_h__
+#define QNeumorphism_h__
 
 #include <QGraphicsEffect>
 
@@ -7,6 +7,7 @@ class QNeumorphism : public QGraphicsEffect
 {
 public:
     QNeumorphism( qreal blurRadius = 10, qreal distance = 3,qreal strength = 0.8, qreal angle = 45, bool inset = false);
+    ~QNeumorphism();
 
     qreal strength() const;
     void setStrength(const qreal &strength);
@@ -23,6 +24,7 @@ public:
     bool inset() const;
     void setInset(bool inset);
 
+    static QList<QNeumorphism*> instances;
 protected:
     QRectF boundingRectFor(const QRectF &rect) const override;
     void draw(QPainter *painter) override;
@@ -34,4 +36,4 @@ private:
     bool inset_;
 };
 
-#endif // QNEUMORPHISM_H
+#endif // QNeumorphism_h__

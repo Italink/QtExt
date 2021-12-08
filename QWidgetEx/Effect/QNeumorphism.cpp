@@ -8,6 +8,12 @@ QNeumorphism::QNeumorphism(qreal blurRadius, qreal distance, qreal strength, qre
     ,angle_(angle)
     ,inset_(inset)
 {
+    instances.push_back(this);
+}
+
+QNeumorphism::~QNeumorphism()
+{
+	instances.removeOne(this);
 }
 
 qreal QNeumorphism::strength() const
@@ -181,3 +187,5 @@ void QNeumorphism::setInset(bool inset)
     inset_ = inset;
     update();
 }
+
+QList<QNeumorphism*> QNeumorphism::instances;

@@ -3,7 +3,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QLineEdit>
-#include "Binds\BindAdjuster.h"
+#include "Factory\AdjusterFactory.h"
 
 QPropertyItem::QPropertyItem(QObject* object, QMetaProperty property)
 	: object_(object)
@@ -29,7 +29,7 @@ QWidget* QPropertyItem::createWidget()
 {
 	if (object_ == nullptr)
 		return nullptr;
-	return createAdjuster(object_,property_);
+	return AdjusterFactory::create(object_, property_);
 }
 
 void QPropertyItem::setUp(QTreeWidgetItem* tree)
