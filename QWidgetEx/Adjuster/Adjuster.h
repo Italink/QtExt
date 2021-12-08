@@ -7,8 +7,14 @@
 class Adjuster :public QWidget {
 	Q_OBJECT
 public:
-	Adjuster(QWidget *parent = nullptr){}
-	Q_INVOKABLE virtual void flush(QVariant var){}
+	Adjuster(QWidget* parent = nullptr) {}
+	virtual QVariant getValue() = 0;
+	virtual void setValue(QVariant var) = 0;
+	Q_INVOKABLE virtual void flush(QVariant var) {
+		if (var != getValue()) {
+			setValue(var);
+		}
+	}
 Q_SIGNALS:
 	void valueChanged(QVariant);
 };

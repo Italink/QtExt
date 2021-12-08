@@ -1,12 +1,12 @@
 #include "SwitcherAnimRect.h"
 
 template<typename T>
-T interp(const T& from, const T& to, qreal progress){
+T interp(const T& from, const T& to, qreal progress) {
 	return (from + (to - from) * progress);
 }
 
 template<>
-QRect interp(const QRect& f, const QRect& t, qreal process){
+QRect interp(const QRect& f, const QRect& t, qreal process) {
 	QRect ret;
 	ret.setCoords(interp<int>(f.left(), t.left(), process),
 		interp<int>(f.top(), t.top(), process),
@@ -16,18 +16,18 @@ QRect interp(const QRect& f, const QRect& t, qreal process){
 }
 
 void SwitcherAnimRect::paint(QPainter& painter, qreal process)
-{	
+{
 	if (stages.isEmpty())
 		return;
-	QList<QPair<QRect,QRect>> anims = stages[qBound(0, int(stages.size() * process), stages.size() - 1)];
-	qreal stageProcess = process== 0.0? 0 : fmod(process, 1.0 / stages.size()) * stages.size();
+	QList<QPair<QRect, QRect>> anims = stages[qBound(0, int(stages.size() * process), stages.size() - 1)];
+	qreal stageProcess = process == 0.0 ? 0 : fmod(process, 1.0 / stages.size()) * stages.size();
 	for (auto& rects : anims) {
 		QRect rect = interp(rects.first, rects.second, stageProcess);
-		painter.fillRect(rect, QColor(255,255,255,200));
+		painter.fillRect(rect, QColor(255, 255, 255, 200));
 	}
 }
 
-void SwitcherAnimRect::setupLayer(WindowSwitcher::WidgetLayer from, WindowSwitcher::WidgetLayer to){
+void SwitcherAnimRect::setupLayer(WindowSwitcher::WidgetLayer from, WindowSwitcher::WidgetLayer to) {
 	SwitcherAnimBase::setupLayer(from, to);
 	stages.clear();
 	if (from_.root == to_.root) {		//分裂动画
@@ -41,7 +41,7 @@ void SwitcherAnimRect::setupLayer(WindowSwitcher::WidgetLayer from, WindowSwitch
 	}
 	else {
 		QList<QPair<QRect, QRect>> mergeStage;	//合并阶段
-		for (auto& it : from.children) {		
+		for (auto& it : from.children) {
 			mergeStage.push_back({ it->geometry(),from.root->geometry() });
 		}
 		if (!mergeStage.isEmpty())
@@ -57,4 +57,3 @@ void SwitcherAnimRect::setupLayer(WindowSwitcher::WidgetLayer from, WindowSwitch
 			stages.push_back(spreadStage);
 	}
 }
-

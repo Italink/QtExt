@@ -9,40 +9,42 @@
 #include "QNeumorphism.h"
 
 IntBox::IntBox(int value/*= 0*/, QString name, QWidget* parent /*= nullptr*/)
-    : Adjuster(parent)
-    , nameLabel_(new QLabel(name))
-    , numberEditer_(new QFocusLineEdit)
-    , arrowLabel_(new QLabel)
+	: Adjuster(parent)
+	, nameLabel_(new QLabel(name))
+	, numberEditer_(new QFocusLineEdit)
+	, arrowLabel_(new QLabel)
 {
-    setFixedHeight(20);
+	setFixedHeight(20);
 	QNeumorphism* neum = new QNeumorphism;
 	neum->setInset(true);
 	setGraphicsEffect(neum);
 
-    QHBoxLayout *h = new QHBoxLayout(this);
-    h->setContentsMargins(0,0,0,0);
-    h->addWidget(nameLabel_);
-    h->addWidget(numberEditer_);
-    h->addWidget(arrowLabel_);
-    nameLabel_->setContentsMargins(0,0,0,2);
-    nameLabel_->setAlignment(Qt::AlignCenter);
-    nameLabel_->setFixedHeight(height());
-    arrowLabel_->setFixedSize(height(),height());
-    createPixmap();
-    arrowLabel_->setCursor(Qt::CursorShape::SizeHorCursor);
-    numberEditer_->setFixedHeight(height());
-    numberEditer_->setFrame(QFrame::NoFrame);
-    numberEditer_->setValidator(new QIntValidator);
-    numberEditer_->setStyleSheet("background-color:transparent;");
-    //numberEditer_->setAlignment(Qt::AlignRight);
-    setNumber(value);
-    setEditEnabled(false);
-    connect(numberEditer_,&QFocusLineEdit::loseFocus,this,[this](){
-        setEditEnabled(false);
-    });
-    connect(numberEditer_,&QLineEdit::textChanged,this,[this](QString){
-        Q_EMIT valueChanged(number());
-    });
+	QHBoxLayout* h = new QHBoxLayout(this);
+	h->setContentsMargins(0, 0, 0, 0);
+	h->addWidget(nameLabel_);
+	h->addWidget(numberEditer_);
+	h->addWidget(arrowLabel_);
+	nameLabel_->setContentsMargins(0, 0, 0, 2);
+	nameLabel_->setAlignment(Qt::AlignCenter);
+	nameLabel_->setFixedHeight(height());
+	if (nameLabel_->text().isEmpty())
+		nameLabel_->setVisible(false);
+	arrowLabel_->setFixedSize(height(), height());
+	createPixmap();
+	arrowLabel_->setCursor(Qt::CursorShape::SizeHorCursor);
+	numberEditer_->setFixedHeight(height());
+	numberEditer_->setFrame(QFrame::NoFrame);
+	numberEditer_->setValidator(new QIntValidator);
+	numberEditer_->setStyleSheet("background-color:transparent;");
+	//numberEditer_->setAlignment(Qt::AlignRight);
+	setNumber(value);
+	setEditEnabled(false);
+	connect(numberEditer_, &QFocusLineEdit::loseFocus, this, [this]() {
+		setEditEnabled(false);
+		});
+	connect(numberEditer_, &QLineEdit::textChanged, this, [this](QString) {
+		Q_EMIT valueChanged(number());
+		});
 }
 
 IntBox::~IntBox()
@@ -50,39 +52,49 @@ IntBox::~IntBox()
 }
 int IntBox::number()
 {
-    return numberEditer_->text().toDouble();
+	return numberEditer_->text().toDouble();
 }
 
-void IntBox::setNumber(int num){
-    numberEditer_->setText(QString::number(num));
+void IntBox::setNumber(int num) {
+	numberEditer_->setText(QString::number(num));
 }
 
-void IntBox::setEditEnabled(bool enable){
-    if (enable) {
+void IntBox::setEditEnabled(bool enable) {
+	if (enable) {
 		numberEditer_->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-        numberEditer_->setAttribute(Qt::WA_TransparentForMouseEvents,false);
-        setCursor(Qt::CursorShape::IBeamCursor);
-		numberEditer_ -> activateWindow();
-        numberEditer_->setFocus();
-        numberEditer_->setReadOnly(false);
-        numberEditer_->selectAll();
-    }
-    else {
+		numberEditer_->setAttribute(Qt::WA_TransparentForMouseEvents, false);
+		setCursor(Qt::CursorShape::IBeamCursor);
+		numberEditer_->activateWindow();
+		numberEditer_->setFocus();
+		numberEditer_->setReadOnly(false);
+		numberEditer_->selectAll();
+	}
+	else {
 		numberEditer_->setFocusPolicy(Qt::FocusPolicy::NoFocus);
-        numberEditer_->setAttribute(Qt::WA_TransparentForMouseEvents,true);
+		numberEditer_->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 		setCursor(Qt::CursorShape::SizeHorCursor);
-        numberEditer_->setReadOnly(true);
-    }
+		numberEditer_->setReadOnly(true);
+	}
 }
 
 bool IntBox::getEditEnabled()
 {
-    return numberEditer_->focusPolicy() == Qt::FocusPolicy::StrongFocus;
+	return numberEditer_->focusPolicy() == Qt::FocusPolicy::StrongFocus;
+}
+
+QVariant IntBox::getValue()
+{
+	return number();
+}
+
+void IntBox::setValue(QVariant var)
+{
+	setNumber(var.toInt());
 }
 
 void IntBox::moveBox(QPointF offset)
 {
-    setNumber(number()+ offset.x() * qMax(qAbs(number()/200),1));
+	setNumber(number() + offset.x() * qMax(qAbs(number() / 200), 1));
 }
 
 void IntBox::createPixmap()
@@ -104,54 +116,46 @@ void IntBox::createPixmap()
 	points.clear();
 	points << rect.topLeft() + QPoint(4, 0) << rect.topRight() << rect.bottomRight() + QPoint(0, -4);
 	painter.drawPolygon(points.data(), points.size());
-    arrowLabel_->setPixmap(image);
+	arrowLabel_->setPixmap(image);
 }
 
 void IntBox::mousePressEvent(QMouseEvent* event)
 {
-    if (event->buttons() & Qt::LeftButton ) {
-        clickPosition_ = event->pos();
-        if (getEditEnabled()&& arrowLabel_->geometry().contains(event->pos())) {
-            setEditEnabled(false);
-        }
-    }
+	if (event->buttons() & Qt::LeftButton) {
+		clickPosition_ = event->pos();
+		if (getEditEnabled() && arrowLabel_->geometry().contains(event->pos())) {
+			setEditEnabled(false);
+		}
+	}
 }
 
 void IntBox::mouseReleaseEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton) {
-        if (this->cursor() == Qt::BlankCursor) {
-            setCursor(Qt::CursorShape::SizeHorCursor);
-            arrowLabel_->setCursor(Qt::CursorShape::SizeHorCursor);
-        }
-        else if (clickPosition_ == event->pos() && !getEditEnabled() &&this->cursor()!=Qt::BlankCursor) {
-            setEditEnabled(true);
-        }
+		if (this->cursor() == Qt::BlankCursor) {
+			setCursor(Qt::CursorShape::SizeHorCursor);
+			arrowLabel_->setCursor(Qt::CursorShape::SizeHorCursor);
+		}
+		else if (clickPosition_ == event->pos() && !getEditEnabled() && this->cursor() != Qt::BlankCursor) {
+			setEditEnabled(true);
+		}
 	}
 }
 
 void IntBox::mouseMoveEvent(QMouseEvent* event)
 {
 	if (!getEditEnabled()) {
-        setCursor(Qt::BlankCursor);
-        arrowLabel_->setCursor(Qt::CursorShape::BlankCursor);
-        QPointF offset = event->position() - clickPosition_;
-        moveBox(offset);
-        QCursor::setPos(mapToGlobal(clickPosition_.toPoint()));
+		setCursor(Qt::BlankCursor);
+		arrowLabel_->setCursor(Qt::CursorShape::BlankCursor);
+		QPointF offset = event->position() - clickPosition_;
+		moveBox(offset);
+		QCursor::setPos(mapToGlobal(clickPosition_.toPoint()));
 	}
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
 void IntBox::paintEvent(QPaintEvent* event)
 {
-    QPainter painter(this);
-    painter.fillRect(rect(),Qt::white);
-    QWidget::paintEvent(event);
+	QPainter painter(this);
+	painter.fillRect(rect(), Qt::white);
+	QWidget::paintEvent(event);
 }
-
-void IntBox::flush(QVariant var)
-{
-    if (number() != var.toInt()) {
-        setNumber(var.toInt());
-    }
-}
-

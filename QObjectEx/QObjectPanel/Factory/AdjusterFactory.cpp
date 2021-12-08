@@ -21,7 +21,10 @@
 #include "QWidgetEx\Adjuster\Color\ColorButton.hpp"
 #include "QWidgetEx\Adjuster\BoolBox.h"
 #include "QWidgetEx\Adjuster\LineEdit.h"
-
+#include "QWidgetEx\Adjuster\Vec4Box.h"
+#include "QWidgetEx\Adjuster\Vec3Box.h"
+#include "QWidgetEx\Adjuster\Vec2Box.h"
+#include "QWidgetEx\Adjuster\ComboBox.h"
 
 #define BIND_ADJUSTER(Type,Adjuster) \
 	AdjusterCreator_[QMetaTypeId2<Type>::qt_metatype_id()] = [](QObject* object,QMetaProperty property) {\
@@ -34,17 +37,20 @@
 		return adjuster;\
 	};
 
-AdjusterFactory::AdjusterFactory()
-{
+AdjusterFactory::AdjusterFactory() {
 	BIND_ADJUSTER(double, DoubleBox)
-	BIND_ADJUSTER(float, DoubleBox)
-	BIND_ADJUSTER(int, IntBox)
-	BIND_ADJUSTER(bool, BoolBox)
-	BIND_ADJUSTER(QString, LineEdit)
-	BIND_ADJUSTER(QBoundedDouble, DoubleSlider)
-	BIND_ADJUSTER(QBoundedInt, IntSlider)
-	BIND_ADJUSTER(QColor, ColorButton)
-	BIND_ADJUSTER(QColors, ColorsButton)
+		BIND_ADJUSTER(float, DoubleBox)
+		BIND_ADJUSTER(int, IntBox)
+		BIND_ADJUSTER(bool, BoolBox)
+		BIND_ADJUSTER(QString, LineEdit)
+		BIND_ADJUSTER(QBoundedDouble, DoubleSlider)
+		BIND_ADJUSTER(QBoundedInt, IntSlider)
+		BIND_ADJUSTER(QColor, ColorButton)
+		BIND_ADJUSTER(QColors, ColorsButton)
+		BIND_ADJUSTER(QVector2D, Vec2Box)
+		BIND_ADJUSTER(QVector3D, Vec3Box)
+		BIND_ADJUSTER(QVector4D, Vec4Box)
+		BIND_ADJUSTER(QCombo, ComboBox)
 }
 
 AdjusterFactory* AdjusterFactory::getInstance()
@@ -55,10 +61,25 @@ AdjusterFactory* AdjusterFactory::getInstance()
 
 Adjuster* AdjusterFactory::create(QObject* object /*= nullptr*/, QMetaProperty property /*= {}*/)
 {
-	if (getInstance()->AdjusterCreator_.contains(property.typeId())) {
-		return getInstance()->AdjusterCreator_[property.typeId()](object,property);
+	if (property.isEnumType()) {
+		QMetaEnum meta = property.enumerator();
+		QStringList enumItems;
+		for (int i = 0; i < meta.keyCount(); i++) {
+			enumItems << meta.valueToKey(meta.value(i));
+		}
+		ComboBox* comboBox = new ComboBox(QCombo(meta.valueToKey(property.read(object).toInt()), enumItems));
+		QObject::connect(comboBox, &Adjuster::valueChanged, object, [=](QVariant var) {
+			QCombo combo = var.value<QCombo>();
+			property.write(object, meta.value(combo.currentIndex_));
+			});
+
+		int index = comboBox->staticMetaObject.indexOfMethod("flush(QVariant)");
+		//QObject::connect(object, property.notifySignal(), comboBox, comboBox->metaObject()->method(index));
+		return comboBox;
 	}
-	else {
-		return nullptr;
+	else if (getInstance()->AdjusterCreator_.contains(property.typeId())) {
+		return getInstance()->AdjusterCreator_[property.typeId()](object, property);
 	}
+
+	return nullptr;
 }

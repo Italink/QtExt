@@ -9,9 +9,10 @@ class BoolBox : public Button
 public:
 	BoolBox(bool value = 0, QWidget* parent = nullptr);
 	void setChecked(bool value);
+	QVariant getValue() override;
+	void setValue(QVariant var) override;
 protected:
 	void paintEvent(QPaintEvent* event) override;
-	void flush(QVariant var) override;
 	void mouseReleaseEvent(QMouseEvent* event) override;
 protected:
 	QPoint clickPosition_;

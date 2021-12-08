@@ -28,13 +28,14 @@ void ColorsButton::setColors(QColors colors)
 	update();
 }
 
-void ColorsButton::flush(QVariant var)
+QVariant ColorsButton::getValue()
 {
-	QColors colors = var.value<QColors>();
-	if (colors_ == colors) {
-		return;
-	}
-	setColors(colors);
+	return QVariant::fromValue(colors_);
+}
+
+void ColorsButton::setValue(QVariant var)
+{
+	setColors(var.value<QColors>());
 }
 
 void ColorsButton::paintEvent(QPaintEvent* event)
@@ -44,5 +45,5 @@ void ColorsButton::paintEvent(QPaintEvent* event)
 	linearGradient.setStops(colors_.getStops());
 	linearGradient.setStart({ 0,0 });
 	linearGradient.setFinalStop({ (qreal)width(),0.0 });
-	painter.fillRect(rect(),linearGradient);
+	painter.fillRect(rect(), linearGradient);
 }

@@ -10,22 +10,23 @@ LineEdit::LineEdit(QString str)
 	QNeumorphism* neum = new QNeumorphism;
 	neum->setInset(true);
 	setGraphicsEffect(neum);
-	QHBoxLayout *h = new QHBoxLayout(this);
-	h->setContentsMargins(0,0,0,0);
+	QHBoxLayout* h = new QHBoxLayout(this);
+	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(lineEdit_);
 	lineEdit_->setFixedHeight(20);
 	lineEdit_->setText(str);
 	lineEdit_->setFrame(QFrame::NoFrame);
-	connect(lineEdit_,&QLineEdit::textChanged,this,[&](QString str){
+	connect(lineEdit_, &QLineEdit::textChanged, this, [&](QString str) {
 		Q_EMIT valueChanged(str);
-	});
+		});
 }
 
-void LineEdit::flush(QVariant var)
+QVariant LineEdit::getValue()
 {
-	QString text = var.toString();
-	if (text != lineEdit_->text()) {
-		lineEdit_->setText(text);
-	}
+	return lineEdit_->text();
 }
 
+void LineEdit::setValue(QVariant var)
+{
+	lineEdit_->setText(var.toString());
+}

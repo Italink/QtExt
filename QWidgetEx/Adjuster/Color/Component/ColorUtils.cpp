@@ -25,70 +25,69 @@
 #include <QDesktopServices>
 #include "ColorUtils.hpp"
 
-QColor QWidgetEx::utils::color_from_lch(float hue, float chroma, float luma, float alpha )
+QColor QWidgetEx::utils::color_from_lch(float hue, float chroma, float luma, float alpha)
 {
-    qreal h1 = hue*6;
-    qreal x = chroma*(1-qAbs(std::fmod(h1,2)-1));
-    QColor col;
-    if ( h1 >= 0 && h1 < 1 )
-        col = QColor::fromRgbF(chroma,x,0);
-    else if ( h1 < 2 )
-        col = QColor::fromRgbF(x,chroma,0);
-    else if ( h1 < 3 )
-        col = QColor::fromRgbF(0,chroma,x);
-    else if ( h1 < 4 )
-        col = QColor::fromRgbF(0,x,chroma);
-    else if ( h1 < 5 )
-        col = QColor::fromRgbF(x,0,chroma);
-    else if ( h1 < 6 )
-        col = QColor::fromRgbF(chroma,0,x);
+	qreal h1 = hue * 6;
+	qreal x = chroma * (1 - qAbs(std::fmod(h1, 2) - 1));
+	QColor col;
+	if (h1 >= 0 && h1 < 1)
+		col = QColor::fromRgbF(chroma, x, 0);
+	else if (h1 < 2)
+		col = QColor::fromRgbF(x, chroma, 0);
+	else if (h1 < 3)
+		col = QColor::fromRgbF(0, chroma, x);
+	else if (h1 < 4)
+		col = QColor::fromRgbF(0, x, chroma);
+	else if (h1 < 5)
+		col = QColor::fromRgbF(x, 0, chroma);
+	else if (h1 < 6)
+		col = QColor::fromRgbF(chroma, 0, x);
 
-    qreal m = luma - color_lumaF(col);
+	qreal m = luma - color_lumaF(col);
 
-    return QColor::fromRgbF(
-        qBound(0.0,col.redF()+m,1.0),
-        qBound(0.0,col.greenF()+m,1.0),
-        qBound(0.0,col.blueF()+m,1.0),
-        alpha);
+	return QColor::fromRgbF(
+		qBound(0.0, col.redF() + m, 1.0),
+		qBound(0.0, col.greenF() + m, 1.0),
+		qBound(0.0, col.blueF() + m, 1.0),
+		alpha);
 }
 
-QColor QWidgetEx::utils::color_from_hsl(float hue, float sat, float lig, float alpha )
+QColor QWidgetEx::utils::color_from_hsl(float hue, float sat, float lig, float alpha)
 {
-    qreal chroma = (1 - qAbs(2*lig-1))*sat;
-    qreal h1 = hue*6;
-    qreal x = chroma*(1-qAbs(std::fmod(h1,2)-1));
-    QColor col;
-    if ( h1 >= 0 && h1 < 1 )
-        col = QColor::fromRgbF(chroma,x,0);
-    else if ( h1 < 2 )
-        col = QColor::fromRgbF(x,chroma,0);
-    else if ( h1 < 3 )
-        col = QColor::fromRgbF(0,chroma,x);
-    else if ( h1 < 4 )
-        col = QColor::fromRgbF(0,x,chroma);
-    else if ( h1 < 5 )
-        col = QColor::fromRgbF(x,0,chroma);
-    else if ( h1 < 6 )
-        col = QColor::fromRgbF(chroma,0,x);
+	qreal chroma = (1 - qAbs(2 * lig - 1)) * sat;
+	qreal h1 = hue * 6;
+	qreal x = chroma * (1 - qAbs(std::fmod(h1, 2) - 1));
+	QColor col;
+	if (h1 >= 0 && h1 < 1)
+		col = QColor::fromRgbF(chroma, x, 0);
+	else if (h1 < 2)
+		col = QColor::fromRgbF(x, chroma, 0);
+	else if (h1 < 3)
+		col = QColor::fromRgbF(0, chroma, x);
+	else if (h1 < 4)
+		col = QColor::fromRgbF(0, x, chroma);
+	else if (h1 < 5)
+		col = QColor::fromRgbF(x, 0, chroma);
+	else if (h1 < 6)
+		col = QColor::fromRgbF(chroma, 0, x);
 
-    qreal m = lig-chroma/2;
+	qreal m = lig - chroma / 2;
 
-    return QColor::fromRgbF(
-        qBound(0.0,col.redF()+m,1.0),
-        qBound(0.0,col.greenF()+m,1.0),
-        qBound(0.0,col.blueF()+m,1.0),
-        alpha);
+	return QColor::fromRgbF(
+		qBound(0.0, col.redF() + m, 1.0),
+		qBound(0.0, col.greenF() + m, 1.0),
+		qBound(0.0, col.blueF() + m, 1.0),
+		alpha);
 }
 
-
-QColor QWidgetEx::utils::get_screen_color(const QPoint &global_pos)
+QColor QWidgetEx::utils::get_screen_color(const QPoint& global_pos)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    QScreen *screen = QApplication::screenAt(global_pos);
+	QScreen* screen = QApplication::screenAt(global_pos);
 #else
-    int screenNum = QApplication::desktop()->screenNumber(global_pos);
-    QScreen *screen = QApplication::screens().at(screenNum);
+	int screenNum = QApplication::desktop()->screenNumber(global_pos);
+	QScreen* screen = QApplication::screens().at(screenNum);
 #endif
-    QImage img = screen->grabWindow(0, global_pos.x(), global_pos.y(), 1, 1).toImage();
-    return img.pixel(0,0);
+	QImage img = screen->grabWindow(0, global_pos.x(), global_pos.y(), 1, 1).toImage();
+	return img.pixel(0, 0);
 }

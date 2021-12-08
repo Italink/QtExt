@@ -2,15 +2,13 @@
 
 QColors::QColors()
 {
-	stops_.push_back({0.5,Qt::white});
+	stops_.push_back({ 0.5,Qt::white });
 }
 
 QColors::QColors(QGradientStops stops)
 	:stops_(stops)
 {
 }
-
-
 
 QGradientStops QColors::getStops() const
 {
@@ -38,4 +36,3 @@ bool QColors::operator==(const QColors& other)
 {
 	return other.stops_ == this->stops_;
 }
-

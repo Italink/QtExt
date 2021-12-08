@@ -1,9 +1,9 @@
+#include "Factory\AdjusterFactory.h"
 #include "QPropertyItem.h"
 #include <QBoxLayout>
-#include <QLabel>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QLineEdit>
-#include "Factory\AdjusterFactory.h"
 
 QPropertyItem::QPropertyItem(QObject* object, QMetaProperty property)
 	: object_(object)
@@ -21,7 +21,7 @@ QPropertyItem::QPropertyItem(QObject* object, QMetaProperty property)
 
 QPropertyItem::~QPropertyItem()
 {
-	if(itemWidget_)
+	if (itemWidget_)
 		itemWidget_->deleteLater();
 }
 
@@ -41,7 +41,7 @@ void QPropertyItem::setUp(QTreeWidgetItem* tree)
 
 void QPropertyItem::setUp(QTreeWidget* tree)
 {
-	layout_->addWidget(createWidget(),0,Qt::AlignRight);
+	layout_->addWidget(createWidget(), 0, Qt::AlignRight);
 	tree->addTopLevelItem(this);
 	treeWidget()->setItemWidget(this, 0, itemWidget_);
 }
@@ -63,4 +63,3 @@ void QPropertyItem::rename()
 	//    lineEdit->deleteLater();
 	//});
 }
-

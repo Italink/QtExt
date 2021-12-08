@@ -8,15 +8,13 @@
 
 class Adjuster;
 class AdjusterFactory {
-	typedef std::function<Adjuster*(QObject*,QMetaProperty)> CreateAdjuster;
+	typedef std::function<Adjuster* (QObject*, QMetaProperty)> CreateAdjuster;
 	AdjusterFactory();
-	static AdjusterFactory *getInstance();
+	static AdjusterFactory* getInstance();
 public:
 	static Adjuster* create(QObject* object = nullptr, QMetaProperty property = {});
 private:
-	QHash<int,CreateAdjuster> AdjusterCreator_;
+	QHash<int, CreateAdjuster> AdjusterCreator_;
 };
-
-
 
 #endif // BindAdjuster_h__

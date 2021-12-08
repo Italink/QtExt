@@ -4,7 +4,6 @@ QBoundedDouble::QBoundedDouble(double number, double min, double max) : value_(n
 , min_(min)
 , max_(max)
 {
-
 }
 
 void QBoundedDouble::setRange(double min, double max)
@@ -33,7 +32,6 @@ void QBoundedDouble::setMax(double max)
 	max_ = max;
 }
 
-
 double QBoundedDouble::number() const
 {
 	return value_;
@@ -55,12 +53,12 @@ bool QBoundedDouble::operator==(const QBoundedDouble& other)
 
 QDataStream& operator<<(QDataStream& out, const QBoundedDouble& var)
 {
-	out<<var.number()<<var.min()<<var.max();
+	out << var.number() << var.min() << var.max();
 	return out;
 }
 
 QDataStream& operator>>(QDataStream& in, QBoundedDouble& var)
 {
-	in >> var.value_ >> var.min_ >> var.max_ ;
+	in >> var.value_ >> var.min_ >> var.max_;
 	return in;
 }

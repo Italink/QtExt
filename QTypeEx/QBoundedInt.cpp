@@ -32,7 +32,6 @@ void QBoundedInt::setMax(int max)
 	max_ = max;
 }
 
-
 int QBoundedInt::number() const
 {
 	return value_;
@@ -54,12 +53,12 @@ bool QBoundedInt::operator==(const QBoundedInt& other)
 
 QDataStream& operator<<(QDataStream& out, const QBoundedInt& var)
 {
-	out<<var.number()<<var.min()<<var.max();
+	out << var.number() << var.min() << var.max();
 	return out;
 }
 
 QDataStream& operator>>(QDataStream& in, QBoundedInt& var)
 {
-	in >> var.value_ >> var.min_ >> var.max_ ;
+	in >> var.value_ >> var.min_ >> var.max_;
 	return in;
 }

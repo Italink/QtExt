@@ -9,7 +9,7 @@ BoolBox::BoolBox(bool value/*= 0*/, QWidget* parent /*= nullptr*/)
 	: Button(parent)
 	, checked_(false)
 {
-	setFixedSize(20,20);
+	setFixedSize(20, 20);
 	setChecked(value);
 }
 
@@ -21,7 +21,15 @@ void BoolBox::setChecked(bool value)
 		update();
 	}
 }
+QVariant BoolBox::getValue()
+{
+	return checked_;
+}
 
+void BoolBox::setValue(QVariant var)
+{
+	setChecked(var.toBool());
+}
 
 void BoolBox::paintEvent(QPaintEvent* event)
 {
@@ -49,14 +57,6 @@ void BoolBox::paintEvent(QPaintEvent* event)
 	}
 }
 
-void BoolBox::flush(QVariant var)
-{
-	bool value = var.toBool();
-	if (value != checked_) {
-		setChecked(value);
-	}
-}
-
 void BoolBox::mouseReleaseEvent(QMouseEvent* event)
 {
 	Button::mouseReleaseEvent(event);
@@ -64,4 +64,3 @@ void BoolBox::mouseReleaseEvent(QMouseEvent* event)
 		setChecked(!checked_);
 	}
 }
-

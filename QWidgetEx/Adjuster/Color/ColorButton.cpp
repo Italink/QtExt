@@ -27,17 +27,18 @@ void ColorButton::setColor(QColor color)
 	update();
 }
 
-void ColorButton::flush(QVariant var)
+QVariant ColorButton::getValue()
 {
-	QColor color = var.value<QColor>();
-	if (color_ == color) {
-		return;
-	}
-	setColor(color);
+	return color_;
+}
+
+void ColorButton::setValue(QVariant var)
+{
+	setColor(var.value<QColor>());
 }
 
 void ColorButton::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-	painter.fillRect(rect(),color_);
+	painter.fillRect(rect(), color_);
 }

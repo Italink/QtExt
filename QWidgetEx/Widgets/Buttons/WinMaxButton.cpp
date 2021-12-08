@@ -17,4 +17,3 @@ void WinMaxButton::paintEvent(QPaintEvent* e) {
 	painter.setPen(pen);
 	painter.drawRect(rect().adjusted(8, 8, -8, -8));
 }
-

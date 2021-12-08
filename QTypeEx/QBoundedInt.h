@@ -3,8 +3,7 @@
 
 #include <QMetaType>
 
-class QBoundedInt{
-
+class QBoundedInt {
 public:
 	QBoundedInt() {};
 	QBoundedInt(int number, int min, int max);

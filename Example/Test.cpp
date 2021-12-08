@@ -35,6 +35,4 @@ Test::Test()
 			ins->setAngle(var.value<QBoundedDouble>().number());
 		}
 		});
-
 }
-

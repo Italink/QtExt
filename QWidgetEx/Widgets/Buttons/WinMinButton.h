@@ -10,5 +10,4 @@ protected:
 	void paintEvent(QPaintEvent*) override;
 };
 
-
 #endif // WinMinButton_h__

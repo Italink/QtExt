@@ -5,4 +5,3 @@ void SwitcherAnimBase::setupLayer(WindowSwitcher::WidgetLayer from, WindowSwitch
 	from_ = from;
 	to_ = to;
 }
-

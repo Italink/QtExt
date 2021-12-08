@@ -5,13 +5,14 @@
 #include "QTypeEx\QColors.h"
 #include "QWidgetEx\Adjuster\Button.h"
 
-
-class ColorsButton : public Button{
+class ColorsButton : public Button {
 public:
 	ColorsButton(QColors colors);
 	void setColors(QColors colors);
+
+	QVariant getValue() override;
+	void setValue(QVariant var) override;
 protected:
-	virtual void flush(QVariant var) override;
 	void paintEvent(QPaintEvent* event) override;
 private:
 	QColors colors_;

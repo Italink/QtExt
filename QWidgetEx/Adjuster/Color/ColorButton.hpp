@@ -9,8 +9,10 @@ class ColorButton : public Button {
 public:
 	ColorButton(QColor colors);
 	void setColor(QColor colors);
+
+	QVariant getValue() override;
+	void setValue(QVariant var) override;
 protected:
-	virtual void flush(QVariant var) override;
 	void paintEvent(QPaintEvent* event) override;
 private:
 	QColor color_;

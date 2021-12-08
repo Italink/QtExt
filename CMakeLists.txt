@@ -13,8 +13,8 @@ add_subdirectory(QWidgetEx)
 add_subdirectory(QTypeEx)
 add_subdirectory(QObjectEx)
 
-option(BUILD_EXMAPLE "build Example" ON)
+option(BUILD_QTEXT_EXMAPLE "build Example" ON)
 
-if(BUILD_EXAMPLE)
+if(BUILD_QTEXT_EXMAPLE)
 	add_subdirectory(Example)
 endif()

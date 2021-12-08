@@ -17,7 +17,7 @@ WindowSwitcher::WindowSwitcher()
 	animPainters[SwitcherAnimType::Rect] = new SwitcherAnimRect;
 }
 
-void WindowSwitcher::turnTo(QWidget* widget, bool createNewLayer,bool clearChildren ,bool alignRightTop /*= false*/)
+void WindowSwitcher::turnTo(QWidget* widget, bool createNewLayer, bool clearChildren, bool alignRightTop /*= false*/)
 {
 	Q_ASSERT(widget != nullptr);
 	WidgetLayer layer;
@@ -40,13 +40,13 @@ void WindowSwitcher::turnTo(QWidget* widget, bool createNewLayer,bool clearChild
 		}
 	}
 	playAnim(widgetStack_.back(), layer);
-	if(clearChildren)
+	if (clearChildren)
 		widgetStack_.back().children.clear();
 	if (createNewLayer)
 		widgetStack_.push_back(layer);
 }
 
-void WindowSwitcher::popLayer(){
+void WindowSwitcher::popLayer() {
 	if (widgetStack_.size() <= 1)
 		return;
 	WidgetLayer layer = widgetStack_.back();
@@ -56,13 +56,13 @@ void WindowSwitcher::popLayer(){
 
 void WindowSwitcher::splitTo(QWidget* widget)
 {
-	Q_ASSERT(widget != nullptr&& !widgetStack_.isEmpty());
+	Q_ASSERT(widget != nullptr && !widgetStack_.isEmpty());
 	WidgetLayer layer = widgetStack_.back();
 	widget->show();
 	widget->setVisible(false);
 	widget->installEventFilter(this);
 	layer.children.push_back(widget);
-	playAnim(widgetStack_.back() , layer);
+	playAnim(widgetStack_.back(), layer);
 	widgetStack_.back() = layer;
 }
 
@@ -96,7 +96,6 @@ void WindowSwitcher::playAnim(WidgetLayer from, WidgetLayer to)
 		currentState_.process = -1;
 		hide();
 		});
-
 }
 
 SwitcherAnimBase* WindowSwitcher::getCurrentAnim()
@@ -113,15 +112,14 @@ void WindowSwitcher::paintEvent(QPaintEvent* event)
 
 bool WindowSwitcher::eventFilter(QObject* watched, QEvent* event)
 {
-	if (event->type() == QEvent::Close&&widgetStack_.size()>1) {
+	if (event->type() == QEvent::Close && widgetStack_.size() > 1) {
 		if (watched == widgetStack_.back().root) {
 			popLayer();
 		}
-		else if(widgetStack_.back().children.contains(watched)) {
+		else if (widgetStack_.back().children.contains(watched)) {
 			widgetStack_.back().children.removeOne(watched);
 		}
 		watched->removeEventFilter(this);
 	}
 	return QObject::eventFilter(watched, event);
 }
-

@@ -3,8 +3,7 @@
 
 #include <QMetaType>
 
-class QBoundedDouble{
-
+class QBoundedDouble {
 public:
 	QBoundedDouble() {};
 	QBoundedDouble(double number, double min, double max);

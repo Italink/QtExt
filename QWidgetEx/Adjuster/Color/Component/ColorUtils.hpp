@@ -26,56 +26,50 @@
 #include <QPoint>
 #include <qmath.h>
 
-
-
 namespace QWidgetEx {
 namespace utils {
-
-
- inline qreal color_chromaF(const QColor& c)
+inline qreal color_chromaF(const QColor& c)
 {
-    qreal max = qMax(c.redF(), qMax(c.greenF(), c.blueF()));
-    qreal min = qMin(c.redF(), qMin(c.greenF(), c.blueF()));
-    return max - min;
+	qreal max = qMax(c.redF(), qMax(c.greenF(), c.blueF()));
+	qreal min = qMin(c.redF(), qMin(c.greenF(), c.blueF()));
+	return max - min;
 }
 
- inline qreal color_lumaF(const QColor& c)
+inline qreal color_lumaF(const QColor& c)
 {
-    return 0.30 * c.redF() + 0.59 * c.greenF() + 0.11 * c.blueF();
+	return 0.30 * c.redF() + 0.59 * c.greenF() + 0.11 * c.blueF();
 }
 
- QColor color_from_lch(float hue, float chroma, float luma, float alpha = 1 );
+QColor color_from_lch(float hue, float chroma, float luma, float alpha = 1);
 
- inline QColor rainbow_lch(qreal hue)
+inline QColor rainbow_lch(qreal hue)
 {
-    return color_from_lch(hue,1,1);
+	return color_from_lch(hue, 1, 1);
 }
 
- inline QColor rainbow_hsv(qreal hue)
+inline QColor rainbow_hsv(qreal hue)
 {
-    return QColor::fromHsvF(hue,1,1);
+	return QColor::fromHsvF(hue, 1, 1);
 }
 
- inline qreal color_lightnessF(const QColor& c)
+inline qreal color_lightnessF(const QColor& c)
 {
-    return ( qMax(c.redF(),qMax(c.greenF(),c.blueF())) +
-             qMin(c.redF(),qMin(c.greenF(),c.blueF())) ) / 2;
+	return (qMax(c.redF(), qMax(c.greenF(), c.blueF())) +
+		qMin(c.redF(), qMin(c.greenF(), c.blueF()))) / 2;
 }
 
- inline qreal color_HSL_saturationF(const QColor& col)
+inline qreal color_HSL_saturationF(const QColor& col)
 {
-    qreal c = color_chromaF(col);
-    qreal l = color_lightnessF(col);
-    if ( qFuzzyCompare(l+1,1) || qFuzzyCompare(l+1,2) )
-        return 0;
-    return c / (1-qAbs(2*l-1));
+	qreal c = color_chromaF(col);
+	qreal l = color_lightnessF(col);
+	if (qFuzzyCompare(l + 1, 1) || qFuzzyCompare(l + 1, 2))
+		return 0;
+	return c / (1 - qAbs(2 * l - 1));
 }
 
+QColor color_from_hsl(float hue, float sat, float lig, float alpha = 1);
 
- QColor color_from_hsl(float hue, float sat, float lig, float alpha = 1 );
-
- QColor get_screen_color(const QPoint &global_pos);
-
+QColor get_screen_color(const QPoint& global_pos);
 } // namespace utils
 } // namespace color_widgets
 

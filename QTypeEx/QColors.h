@@ -4,7 +4,7 @@
 #include <QBrush>
 #include <QMetaType>
 
-class QColors{
+class QColors {
 public:
 	QColors();
 	QColors(QGradientStops stops);

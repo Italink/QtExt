@@ -3,7 +3,6 @@
 
 WinCloseButton::WinCloseButton()
 {
-
 }
 
 void WinCloseButton::paintEvent(QPaintEvent* e)
@@ -18,4 +17,3 @@ void WinCloseButton::paintEvent(QPaintEvent* e)
 	painter.drawLine(re.bottomLeft(), re.topRight());
 	painter.drawLine(re.topLeft(), re.bottomRight());
 }
-

@@ -17,7 +17,6 @@ void HoverButton::paintEvent(QPaintEvent*)
 {
 	if (hovered) {
 		QPainter painter(this);
-		painter.fillRect(rect(),hoverColor);
+		painter.fillRect(rect(), hoverColor);
 	}
 }
-

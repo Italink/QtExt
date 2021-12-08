@@ -13,14 +13,13 @@
     Q_SIGNAL void name##Changed(QVariant); \
     type name
 
-
 namespace QObjectEx {
-	QObjectPanel* createQObjectPanel(QObject *object);
-	QJsonObject toJson(QObject * object);
-	void fromJson(QJsonObject info, QObject * object);
+QObjectPanel* createQObjectPanel(QObject* object);
+QJsonObject toJson(QObject* object);
+void fromJson(QJsonObject info, QObject* object);
 
-	QObject* createFromJson(QJsonObject json);
-	QByteArray  dump(QObject *object);
-	QByteArray toByteArray(QObject * object);
-	QObject* fromByteArray(QByteArray byteArray);
+QObject* createFromJson(QJsonObject json);
+QByteArray  dump(QObject* object);
+QByteArray toByteArray(QObject* object);
+QObject* fromByteArray(QByteArray byteArray);
 }

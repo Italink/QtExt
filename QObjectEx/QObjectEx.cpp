@@ -6,7 +6,7 @@
 #include <QDataStream>
 #include "QFile"
 
-QObjectPanel* QObjectEx::createQObjectPanel(QObject* object){
+QObjectPanel* QObjectEx::createQObjectPanel(QObject* object) {
 	return new QObjectPanel(object);
 }
 
@@ -19,8 +19,8 @@ static QJsonObject createJson(const QMetaObject* meta, QObject* object) {
 		QJsonObject propInfo;
 		propInfo["Type"] = property.typeName();
 		QByteArray data;
-		QDataStream stream(&data,QFile::WriteOnly);
-		stream<<property.read(object);
+		QDataStream stream(&data, QFile::WriteOnly);
+		stream << property.read(object);
 		propInfo["Data"] = data.toBase64().data();
 		properties[property.name()] = propInfo;
 	}
@@ -29,18 +29,16 @@ static QJsonObject createJson(const QMetaObject* meta, QObject* object) {
 	}
 
 	if (meta->superClass() != nullptr) {
-		ObjectInfo["SuperClass"] = createJson(meta->superClass(),object);
+		ObjectInfo["SuperClass"] = createJson(meta->superClass(), object);
 	}
 	return ObjectInfo;
 }
 
-
-
-QJsonObject QObjectEx::toJson(QObject* object){
+QJsonObject QObjectEx::toJson(QObject* object) {
 	QJsonObject json;
 	const QMetaObject* meta = object->metaObject();
 	if (meta) {
-		return createJson(meta,object);
+		return createJson(meta, object);
 	}
 	return QJsonObject();
 }
@@ -83,4 +81,3 @@ QObject* QObjectEx::fromByteArray(QByteArray byteArray)
 {
 	return nullptr;
 }
-
