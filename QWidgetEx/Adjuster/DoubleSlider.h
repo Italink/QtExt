@@ -17,7 +17,6 @@ public:
 	void setNumber(double num);
 	void setEditEnabled(bool enable);
 	bool getEditEnabled();
-
 	QVariant getValue() override;
 	void setValue(QVariant var) override;
 protected:

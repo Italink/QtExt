@@ -11,6 +11,7 @@
 #include <QVector2D>
 #include <QVector3D>
 #include <QVector4D>
+#include "QTypeEx/QRange.h"
 
 class Test : public QObject {
 	Q_OBJECT
@@ -29,7 +30,7 @@ public:
 	Q_AUTO(QColor, Color) = Qt::red;
 	Q_AUTO(QColors, Colors) = { {{0.5,Qt::red},{0.8, Qt::blue}} };
 	Q_AUTO(QCombo, Combo) = { 1,{"A","B","C"} };
-
+	Q_AUTO(QRange, Range) = QRange(50, 100, 0, 200);
 	enum MCustomEnum {
 		Left = 1, Right, Top, Bottom
 	};

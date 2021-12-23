@@ -8,7 +8,7 @@ public:
 	QBoundedDouble() {};
 	QBoundedDouble(double number, double min, double max);
 
-	void setRange(double min, double max);
+	void setBound(double min, double max);
 
 	double min() const;
 

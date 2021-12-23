@@ -20,4 +20,8 @@ add_library(QTypeEx
 
 target_link_libraries(QTypeEx PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
 
+target_include_directories(QTypeEx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+
 

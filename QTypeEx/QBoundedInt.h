@@ -8,7 +8,7 @@ public:
 	QBoundedInt() {};
 	QBoundedInt(int number, int min, int max);
 
-	void setRange(int min, int max);
+	void setBound(int min, int max);
 
 	int min() const;
 

@@ -6,7 +6,7 @@ QBoundedDouble::QBoundedDouble(double number, double min, double max) : value_(n
 {
 }
 
-void QBoundedDouble::setRange(double min, double max)
+void QBoundedDouble::setBound(double min, double max)
 {
 	min_ = min;
 	max_ = max;

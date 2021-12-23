@@ -6,7 +6,7 @@ QBoundedInt::QBoundedInt(int number, int min, int max) : value_(number)
 {
 }
 
-void QBoundedInt::setRange(int min, int max)
+void QBoundedInt::setBound(int min, int max)
 {
 	min_ = min;
 	max_ = max;

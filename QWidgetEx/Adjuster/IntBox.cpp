@@ -44,26 +44,26 @@ IntBox::IntBox(int value/*= 0*/, QString name, QWidget* parent /*= nullptr*/)
 		Q_EMIT valueChanged(number());
 	});
 
-	QImage image(128, 128, QImage::Format_RGBA8888);
-	image.fill(Qt::transparent);
-	QPainter painter(&image);
-	painter.setRenderHint(QPainter::Antialiasing);
-	QPen pen;
-	pen.setBrush(QColor(100, 100, 100));
-	pen.setCapStyle(Qt::RoundCap);
-	painter.setPen(pen);
-	painter.setBrush(Qt::black);
-	QRect rect(0, 0, image.width(), image.height());
-	rect.adjust(30, 30, -30, -30);
-	QVector<QPoint> points;
-	int inset = 30;
-	points << rect.topLeft() + QPoint(0, inset) << rect.bottomLeft() << rect.bottomRight() + QPoint(-inset, 0);
-	painter.drawPolygon(points.data(), points.size());
-	points.clear();
-	points << rect.topLeft() + QPoint(inset, 0) << rect.topRight() << rect.bottomRight() + QPoint(0, -inset);
-	painter.drawPolygon(points.data(), points.size());
-	painter.end();
-	image.save("box_arrow.png");
+	//QImage image(128, 128, QImage::Format_RGBA8888);
+	//image.fill(Qt::transparent);
+	//QPainter painter(&image);
+	//painter.setRenderHint(QPainter::Antialiasing);
+	//QPen pen;
+	//pen.setBrush(QColor(100, 100, 100));
+	//pen.setCapStyle(Qt::RoundCap);
+	//painter.setPen(pen);
+	//painter.setBrush(Qt::black);
+	//QRect rect(0, 0, image.width(), image.height());
+	//rect.adjust(30, 30, -30, -30);
+	//QVector<QPoint> points;
+	//int inset = 30;
+	//points << rect.topLeft() + QPoint(0, inset) << rect.bottomLeft() << rect.bottomRight() + QPoint(-inset, 0);
+	//painter.drawPolygon(points.data(), points.size());
+	//points.clear();
+	//points << rect.topLeft() + QPoint(inset, 0) << rect.topRight() << rect.bottomRight() + QPoint(0, -inset);
+	//painter.drawPolygon(points.data(), points.size());
+	//painter.end();
+	//image.save("box_arrow.png");
 }
 
 IntBox::~IntBox()

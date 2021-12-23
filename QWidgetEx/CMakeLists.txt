@@ -39,6 +39,8 @@ add_library(QWidgetEx
     ${QRC_FILES}
 )
 
+target_include_directories(QWidgetEx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 target_link_libraries(QWidgetEx PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ksuser ole32)
 target_link_libraries(QWidgetEx PUBLIC QTypeEx)
 

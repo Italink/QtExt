@@ -1,0 +1,27 @@
+#ifndef RangeSlider_h__
+#define RangeSlider_h__
+
+#include "Adjuster.h"
+#include "QTypeEx\QBoundedDouble.h"
+#include "..\..\QTypeEx\QRange.h"
+
+class QFocusLineEdit;
+class QLabel;
+
+class RangeSlider : public Adjuster
+{
+	Q_OBJECT
+public:
+	RangeSlider(QRange range, QWidget* parent = nullptr);
+	~RangeSlider();
+	QVariant getValue() override;
+	void setValue(QVariant var) override;
+protected:
+	void paintEvent(QPaintEvent* event) override;
+private:
+	QRange range_;
+	QFocusLineEdit* lowerEditer_;
+	QFocusLineEdit* upperEditer_;
+};
+
+#endif // RangeSlider_h__
