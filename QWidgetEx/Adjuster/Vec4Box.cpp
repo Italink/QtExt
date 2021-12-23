@@ -1,6 +1,7 @@
 #include "Vec4Box.h"
 #include <QHBoxLayout>
 #include "DoubleBox.h"
+#include "QNeumorphism.h"
 
 Vec4Box::Vec4Box(QVector4D value, QWidget* parent /*= nullptr*/)
 	: x(new DoubleBox(value.x(), "X"))
@@ -8,8 +9,14 @@ Vec4Box::Vec4Box(QVector4D value, QWidget* parent /*= nullptr*/)
 	, z(new DoubleBox(value.z(), "Z"))
 	, w(new DoubleBox(value.w(), "W"))
 {
+	x->setGraphicsEffect(nullptr);
+	y->setGraphicsEffect(nullptr);
+	z->setGraphicsEffect(nullptr);
+	w->setGraphicsEffect(nullptr);
+	setGraphicsEffect(new QNeumorphism);
+
 	QHBoxLayout* h = new QHBoxLayout(this);
-	h->setSpacing(1);
+	h->setSpacing(2);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(x);
 	h->addWidget(y);

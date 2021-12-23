@@ -16,9 +16,9 @@ ColorButton::ColorButton(QColor color)
 		QObject::connect(&dialog, &QWidgetEx::ColorDialog::colorChanged, this, [&](const QColor& color) {
 			setColor(color);
 			Q_EMIT valueChanged(QVariant::fromValue(color_));
-			});
-		dialog.exec();
 		});
+		dialog.exec();
+	});
 }
 
 void ColorButton::setColor(QColor color)
@@ -40,5 +40,8 @@ void ColorButton::setValue(QVariant var)
 void ColorButton::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-	painter.fillRect(rect(), color_);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(color_);
+	painter.drawRoundedRect(rect(), 2, 2);
 }

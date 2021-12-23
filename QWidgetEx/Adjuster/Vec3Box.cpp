@@ -1,14 +1,19 @@
 #include "Vec3Box.h"
 #include <QHBoxLayout>
 #include "DoubleBox.h"
+#include "QNeumorphism.h"
 
 Vec3Box::Vec3Box(QVector3D value, QWidget* parent /*= nullptr*/)
 	: x(new DoubleBox(value.x(), "X"))
 	, y(new DoubleBox(value.y(), "Y"))
 	, z(new DoubleBox(value.z(), "Z"))
 {
+	x->setGraphicsEffect(nullptr);
+	y->setGraphicsEffect(nullptr);
+	z->setGraphicsEffect(nullptr);
+	setGraphicsEffect(new QNeumorphism);
 	QHBoxLayout* h = new QHBoxLayout(this);
-	h->setSpacing(1);
+	h->setSpacing(2);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(x);
 	h->addWidget(y);

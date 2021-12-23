@@ -16,13 +16,10 @@ static QJsonObject createJson(const QMetaObject* meta, QObject* object) {
 	QJsonObject properties;
 	for (int i = meta->propertyOffset(); i < meta->propertyCount(); i++) {
 		QMetaProperty property = meta->property(i);
-		QJsonObject propInfo;
-		propInfo["Type"] = property.typeName();
 		QByteArray data;
 		QDataStream stream(&data, QFile::WriteOnly);
 		stream << property.read(object);
-		propInfo["Data"] = data.toBase64().data();
-		properties[property.name()] = propInfo;
+		properties[property.name()] = data.toBase64().data();
 	}
 	if (!properties.isEmpty()) {
 		ObjectInfo["Properties"] = properties;
@@ -51,7 +48,7 @@ void QObjectEx::fromJson(QJsonObject info, QObject* object)
 	QJsonObject properties = info["Properties"].toObject();
 	for (auto& key : properties.keys()) {
 		QVariant var = object->property(key.toLocal8Bit().data());
-		QByteArray data = QByteArray::fromBase64(properties[key].toObject()["Data"].toString().toLocal8Bit());
+		QByteArray data = QByteArray::fromBase64(properties[key].toString().toLocal8Bit());
 		QDataStream stream(&data, QFile::ReadOnly);
 		stream >> var;
 		object->setProperty(key.toLocal8Bit().data(), var);

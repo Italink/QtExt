@@ -15,9 +15,7 @@ DoubleBox::DoubleBox(double value /*= 0*/, QString name, QWidget* parent /*= nul
 	, arrowLabel_(new QLabel)
 {
 	setFixedHeight(20);
-	QNeumorphism* neum = new QNeumorphism;
-	neum->setInset(true);
-	setGraphicsEffect(neum);
+	setGraphicsEffect(new QNeumorphism);
 	QHBoxLayout* h = new QHBoxLayout(this);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(nameLabel_);
@@ -26,11 +24,10 @@ DoubleBox::DoubleBox(double value /*= 0*/, QString name, QWidget* parent /*= nul
 	nameLabel_->setContentsMargins(2, 0, 0, 2);
 	nameLabel_->setAlignment(Qt::AlignCenter);
 	nameLabel_->setFixedHeight(height());
-
 	if (nameLabel_->text().isEmpty())
 		nameLabel_->setVisible(false);
 	arrowLabel_->setFixedSize(height(), height());
-	createPixmap();
+	arrowLabel_->setPixmap(QPixmap(":/Icons/box_arrow"));
 	arrowLabel_->setCursor(Qt::CursorShape::SizeHorCursor);
 	numberEditer_->setFixedHeight(height());
 	numberEditer_->setFrame(QFrame::NoFrame);
@@ -42,10 +39,10 @@ DoubleBox::DoubleBox(double value /*= 0*/, QString name, QWidget* parent /*= nul
 	setEditEnabled(false);
 	connect(numberEditer_, &QFocusLineEdit::loseFocus, this, [this]() {
 		setEditEnabled(false);
-		});
+	});
 	connect(numberEditer_, &QLineEdit::textChanged, this, [this](QString) {
 		Q_EMIT valueChanged(number());
-		});
+	});
 }
 
 DoubleBox::~DoubleBox()
@@ -106,28 +103,6 @@ void DoubleBox::moveBox(QPointF offset)
 	setNumber(number() + offset.x() * qMax(qAbs(number() / 200), 0.001));
 }
 
-void DoubleBox::createPixmap()
-{
-	QPixmap image(arrowLabel_->size());
-	image.fill(Qt::transparent);
-	QPainter painter(&image);
-	painter.setRenderHint(QPainter::Antialiasing);
-	QPen pen;
-	pen.setBrush(QColor(100, 100, 100));
-	pen.setCapStyle(Qt::RoundCap);
-	painter.setPen(pen);
-	painter.setBrush(Qt::black);
-	QRect rect(0, 0, image.width(), image.height());
-	rect.adjust(4, 4, -4, -4);
-	QVector<QPoint> points;
-	points << rect.topLeft() + QPoint(0, 4) << rect.bottomLeft() << rect.bottomRight() + QPoint(-4, 0);
-	painter.drawPolygon(points.data(), points.size());
-	points.clear();
-	points << rect.topLeft() + QPoint(4, 0) << rect.topRight() << rect.bottomRight() + QPoint(0, -4);
-	painter.drawPolygon(points.data(), points.size());
-	arrowLabel_->setPixmap(image);
-}
-
 void DoubleBox::mousePressEvent(QMouseEvent* event)
 {
 	if (event->buttons() & Qt::LeftButton) {
@@ -165,6 +140,9 @@ void DoubleBox::mouseMoveEvent(QMouseEvent* event)
 void DoubleBox::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-	painter.fillRect(rect(), Qt::white);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(QColor(200, 200, 200));
+	painter.drawRoundedRect(rect(), 2, 2);
 	QWidget::paintEvent(event);
 }

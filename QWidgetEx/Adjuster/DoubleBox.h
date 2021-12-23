@@ -20,7 +20,6 @@ public:
 	void setValue(QVariant var) override;
 protected:
 	void moveBox(QPointF offset);
-	void createPixmap();
 	void mousePressEvent(QMouseEvent* event) override;
 	void mouseReleaseEvent(QMouseEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;

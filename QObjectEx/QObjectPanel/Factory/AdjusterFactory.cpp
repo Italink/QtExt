@@ -38,19 +38,19 @@
 	};
 
 AdjusterFactory::AdjusterFactory() {
-	BIND_ADJUSTER(double, DoubleBox)
-		BIND_ADJUSTER(float, DoubleBox)
-		BIND_ADJUSTER(int, IntBox)
-		BIND_ADJUSTER(bool, BoolBox)
-		BIND_ADJUSTER(QString, LineEdit)
-		BIND_ADJUSTER(QBoundedDouble, DoubleSlider)
-		BIND_ADJUSTER(QBoundedInt, IntSlider)
-		BIND_ADJUSTER(QColor, ColorButton)
-		BIND_ADJUSTER(QColors, ColorsButton)
-		BIND_ADJUSTER(QVector2D, Vec2Box)
-		BIND_ADJUSTER(QVector3D, Vec3Box)
-		BIND_ADJUSTER(QVector4D, Vec4Box)
-		BIND_ADJUSTER(QCombo, ComboBox)
+	BIND_ADJUSTER(double, DoubleBox);
+	BIND_ADJUSTER(float, DoubleBox);
+	BIND_ADJUSTER(int, IntBox);
+	BIND_ADJUSTER(bool, BoolBox);
+	BIND_ADJUSTER(QString, LineEdit);
+	BIND_ADJUSTER(QBoundedDouble, DoubleSlider);
+	BIND_ADJUSTER(QBoundedInt, IntSlider);
+	BIND_ADJUSTER(QColor, ColorButton);
+	BIND_ADJUSTER(QColors, ColorsButton);
+	BIND_ADJUSTER(QVector2D, Vec2Box);
+	BIND_ADJUSTER(QVector3D, Vec3Box);
+	BIND_ADJUSTER(QVector4D, Vec4Box);
+	BIND_ADJUSTER(QCombo, ComboBox);
 }
 
 AdjusterFactory* AdjusterFactory::getInstance()
@@ -71,7 +71,7 @@ Adjuster* AdjusterFactory::create(QObject* object /*= nullptr*/, QMetaProperty p
 		QObject::connect(comboBox, &Adjuster::valueChanged, object, [=](QVariant var) {
 			QCombo combo = var.value<QCombo>();
 			property.write(object, meta.value(combo.currentIndex_));
-			});
+		});
 
 		int index = comboBox->staticMetaObject.indexOfMethod("flush(QVariant)");
 		//QObject::connect(object, property.notifySignal(), comboBox, comboBox->metaObject()->method(index));

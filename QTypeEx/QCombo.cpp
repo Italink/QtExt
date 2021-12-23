@@ -2,7 +2,7 @@
 #include <QDataStream>
 
 QCombo::QCombo(int currentIndex, QStringList items)
-	:currentIndex_(currentIndex)
+	: currentIndex_(currentIndex)
 	, items_(items)
 {
 }

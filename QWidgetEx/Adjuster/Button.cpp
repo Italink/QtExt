@@ -8,9 +8,7 @@ Button::Button(QWidget* parent)
 	: Adjuster(parent)
 	, hovered_(false)
 {
-	QNeumorphism* neum = new QNeumorphism;
-	neum->setInset(true);
-	this->setGraphicsEffect(neum);
+	this->setGraphicsEffect(new QNeumorphism);
 }
 
 void Button::enterEvent(QEnterEvent* event)

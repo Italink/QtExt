@@ -9,11 +9,10 @@ class LineEdit : public Adjuster
 	Q_OBJECT
 public:
 	LineEdit(QString str);
-
 	QVariant getValue() override;
-
 	void setValue(QVariant var) override;
-
+protected:
+	void paintEvent(QPaintEvent* event) override;
 private:
 	QFocusLineEdit* lineEdit_;
 };

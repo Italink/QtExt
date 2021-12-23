@@ -16,9 +16,7 @@ IntSlider::IntSlider(QBoundedInt number  /*= 0*/, QString name, QWidget* parent 
 	, value_(number)
 {
 	setFixedHeight(20);
-	QNeumorphism* neum = new QNeumorphism;
-	neum->setInset(true);
-	setGraphicsEffect(neum);
+	setGraphicsEffect(new QNeumorphism);
 	QHBoxLayout* h = new QHBoxLayout(this);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->setSpacing(0);
@@ -31,7 +29,7 @@ IntSlider::IntSlider(QBoundedInt number  /*= 0*/, QString name, QWidget* parent 
 	nameLabel_->setAlignment(Qt::AlignCenter);
 	nameLabel_->setFixedHeight(height());
 	arrowLabel_->setFixedSize(height(), height());
-	createPixmap();
+	arrowLabel_->setPixmap(QPixmap(":/Icons/box_arrow"));
 	arrowLabel_->setCursor(Qt::CursorShape::SizeHorCursor);
 	numberEditer_->setFixedHeight(height());
 	numberEditer_->setFrame(QFrame::NoFrame);
@@ -42,7 +40,7 @@ IntSlider::IntSlider(QBoundedInt number  /*= 0*/, QString name, QWidget* parent 
 	setEditEnabled(false);
 	connect(numberEditer_, &QFocusLineEdit::loseFocus, this, [this]() {
 		setEditEnabled(false);
-		});
+	});
 	connect(numberEditer_, &QLineEdit::textChanged, this, [this](QString) {
 		int num = this->number();
 		if (num == value_.number()) {
@@ -54,7 +52,7 @@ IntSlider::IntSlider(QBoundedInt number  /*= 0*/, QString name, QWidget* parent 
 		else {
 			setNumber(value_.number());
 		}
-		});
+	});
 }
 
 IntSlider::~IntSlider()
@@ -108,28 +106,6 @@ void IntSlider::moveBox(QPointF offset)
 	setNumber(number() + offset.x() * qMax(1, (value_.max() - value_.min()) / 2000));
 }
 
-void IntSlider::createPixmap()
-{
-	QPixmap image(arrowLabel_->size());
-	image.fill(Qt::transparent);
-	QPainter painter(&image);
-	painter.setRenderHint(QPainter::Antialiasing);
-	QPen pen;
-	pen.setBrush(QColor(100, 100, 100));
-	pen.setCapStyle(Qt::RoundCap);
-	painter.setPen(pen);
-	painter.setBrush(Qt::black);
-	QRect rect(0, 0, image.width(), image.height());
-	rect.adjust(4, 4, -4, -4);
-	QVector<QPoint> points;
-	points << rect.topLeft() + QPoint(0, 4) << rect.bottomLeft() << rect.bottomRight() + QPoint(-4, 0);
-	painter.drawPolygon(points.data(), points.size());
-	points.clear();
-	points << rect.topLeft() + QPoint(4, 0) << rect.topRight() << rect.bottomRight() + QPoint(0, -4);
-	painter.drawPolygon(points.data(), points.size());
-	arrowLabel_->setPixmap(image);
-}
-
 void IntSlider::mousePressEvent(QMouseEvent* event)
 {
 	if (event->buttons() & Qt::LeftButton) {
@@ -167,9 +143,14 @@ void IntSlider::mouseMoveEvent(QMouseEvent* event)
 void IntSlider::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-	painter.fillRect(rect(), Qt::white);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(QColor(200, 200, 200));
+	painter.drawRoundedRect(rect(), 2, 2);
+
 	QRect slider = numberEditer_->geometry();
 	slider.setRight(slider.left() + slider.width() * (value_.number() / double(value_.max() - value_.min())));
-	painter.fillRect(slider, QColor(200, 200, 200));
+	painter.setBrush(QColor(140, 140, 140));
+	painter.drawRoundedRect(slider, 2, 2);
 	QWidget::paintEvent(event);
 }

@@ -17,9 +17,9 @@ ColorsButton::ColorsButton(QColors colors)
 		QObject::connect(&dialog, &QWidgetEx::ColorsDialog::colorsChanged, this, [&](const QGradientStops& stops) {
 			setColors(QColors(stops));
 			Q_EMIT valueChanged(QVariant::fromValue(colors_));
-			});
-		dialog.exec();
 		});
+		dialog.exec();
+	});
 }
 
 void ColorsButton::setColors(QColors colors)
@@ -45,5 +45,9 @@ void ColorsButton::paintEvent(QPaintEvent* event)
 	linearGradient.setStops(colors_.getStops());
 	linearGradient.setStart({ 0,0 });
 	linearGradient.setFinalStop({ (qreal)width(),0.0 });
-	painter.fillRect(rect(), linearGradient);
+
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(linearGradient);
+	painter.drawRoundedRect(rect(), 2, 2);
 }

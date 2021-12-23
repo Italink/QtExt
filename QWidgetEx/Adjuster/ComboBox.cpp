@@ -11,17 +11,15 @@ ComboBox::ComboBox(QCombo value /*= 0*/, QWidget* parent /*= nullptr*/)
 		comboBox_->addItem(item);
 	}
 	comboBox_->setCurrentIndex(value.currentIndex_);
+	comboBox_->setFrame(QFrame::NoFrame);
 	QHBoxLayout* h = new QHBoxLayout(this);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(comboBox_);
-
-	QNeumorphism* neum = new QNeumorphism;
-	neum->setInset(true);
-	setGraphicsEffect(neum);
+	setGraphicsEffect(new QNeumorphism);
 	connect(comboBox_, &QComboBox::currentIndexChanged, this, [this](int index) {
 		value_.currentIndex_ = index;
 		Q_EMIT valueChanged(QVariant::fromValue(value_));
-		});
+	});
 }
 
 QVariant ComboBox::getValue()

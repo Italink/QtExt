@@ -1,13 +1,17 @@
 #include "Vec2Box.h"
 #include <QHBoxLayout>
 #include "DoubleBox.h"
+#include "QNeumorphism.h"
 
 Vec2Box::Vec2Box(QVector2D value, QWidget* parent /*= nullptr*/)
 	: x(new DoubleBox(value.x(), "X"))
 	, y(new DoubleBox(value.y(), "Y"))
 {
+	x->setGraphicsEffect(nullptr);
+	y->setGraphicsEffect(nullptr);
+	setGraphicsEffect(new QNeumorphism);
 	QHBoxLayout* h = new QHBoxLayout(this);
-	h->setSpacing(1);
+	h->setSpacing(2);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(x);
 	h->addWidget(y);

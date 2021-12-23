@@ -1,7 +1,7 @@
 #include "QObjectPanel\QObejctPanel.h"
 #include <QJsonObject>
 
-#define IK_AUTO(type,name)\
+#define Q_AUTO(type,name)\
     Q_PROPERTY(type name READ get_##name WRITE set_##name NOTIFY name##Changed) \
     type get_##name(){ return name; } \
     void set_##name(type var){ \
