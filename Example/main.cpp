@@ -2,21 +2,16 @@
 #include "Test.h"
 #include "QFile"
 #include "QWidgetEx\Window\FramlessWindow.h"
-#include "QJsonDocument"
 
 int main(int argc, char* argv[]) {
 	QApplication a(argc, argv);
-
 	Q_INIT_RESOURCE(resources);
-
 	Test t;
 	qDebug() << QObjectEx::dump(&t);
 	QFile file("test.txt");
 	file.open(QFile::ReadOnly);
-	QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+	QObjectEx::unserialize(file.readAll(), &t);
 	file.close();
-
-	QObjectEx::fromJson(doc.object(), &t);
 	QObjectEx::createQObjectPanel(&t)->show();
 	return a.exec();
 }

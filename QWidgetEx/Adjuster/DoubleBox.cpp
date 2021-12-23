@@ -27,7 +27,7 @@ DoubleBox::DoubleBox(double value /*= 0*/, QString name, QWidget* parent /*= nul
 	if (nameLabel_->text().isEmpty())
 		nameLabel_->setVisible(false);
 	arrowLabel_->setFixedSize(height(), height());
-	arrowLabel_->setPixmap(QPixmap(":/Icons/box_arrow"));
+	arrowLabel_->setPixmap(QPixmap(":/Icons/box_arrow").scaled(arrowLabel_->size(), Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation));
 	arrowLabel_->setCursor(Qt::CursorShape::SizeHorCursor);
 	numberEditer_->setFixedHeight(height());
 	numberEditer_->setFrame(QFrame::NoFrame);
@@ -100,7 +100,9 @@ void DoubleBox::setValue(QVariant var)
 
 void DoubleBox::moveBox(QPointF offset)
 {
-	setNumber(number() + offset.x() * qMax(qAbs(number() / 200), 0.001));
+	double adjuster = number() + offset.x() * qMax(qAbs(number() / 200), 0.01);
+	adjuster = int(adjuster * 100) / 100.0;
+	setNumber(adjuster);
 }
 
 void DoubleBox::mousePressEvent(QMouseEvent* event)

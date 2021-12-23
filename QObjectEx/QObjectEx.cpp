@@ -1,80 +1,60 @@
 #include "QObjectEx.h"
 #include <QMetaObject>
-#include <QJsonArray>
 #include <QMetaProperty>
-#include <QJsonDocument>
 #include <QDataStream>
+#include <QCborStreamReader>
+#include <QCborStreamWriter>
+#include <QCborMap>
 #include "QFile"
 
 QObjectPanel* QObjectEx::createQObjectPanel(QObject* object) {
 	return new QObjectPanel(object);
 }
 
-static QJsonObject createJson(const QMetaObject* meta, QObject* object) {
-	QJsonObject ObjectInfo;
-	ObjectInfo["ClassName"] = meta->className();
-	QJsonObject properties;
-	for (int i = meta->propertyOffset(); i < meta->propertyCount(); i++) {
-		QMetaProperty property = meta->property(i);
-		QByteArray data;
-		QDataStream stream(&data, QFile::WriteOnly);
-		stream << property.read(object);
-		properties[property.name()] = data.toBase64().data();
-	}
-	if (!properties.isEmpty()) {
-		ObjectInfo["Properties"] = properties;
-	}
-
-	if (meta->superClass() != nullptr) {
-		ObjectInfo["SuperClass"] = createJson(meta->superClass(), object);
-	}
-	return ObjectInfo;
+QString QObjectEx::dump(QObject* object)
+{
+	QCborValue cbor = QCborValue::fromCbor(serialize(object));
+	return cbor.toDiagnosticNotation();
 }
 
-QJsonObject QObjectEx::toJson(QObject* object) {
-	QJsonObject json;
+QByteArray QObjectEx::serialize(QObject* object)
+{
+	QByteArray data;
+	QCborStreamWriter writer(&data);
 	const QMetaObject* meta = object->metaObject();
 	if (meta) {
-		return createJson(meta, object);
+		writer.startMap(2);
+		writer.append(QLatin1String("ClassName"));
+		writer.append(QLatin1String(meta->className()));
+
+		writer.append(QLatin1String("Properties"));
+		writer.startMap(meta->propertyCount());
+		for (int i = 0; i < meta->propertyCount(); i++) {
+			QMetaProperty property = meta->property(i);
+			QByteArray data;
+			QDataStream stream(&data, QFile::WriteOnly);
+			stream << property.read(object);
+			writer.append(QLatin1String(property.name()));
+			writer.append(data);
+		}
+		writer.endMap();
+		writer.endMap();
 	}
-	return QJsonObject();
+	return data;
 }
 
-void QObjectEx::fromJson(QJsonObject info, QObject* object)
+bool QObjectEx::unserialize(QByteArray byteArray, QObject* object)
 {
-	if (info["ClassName"].toString() != object->metaObject()->className()) {
-		return;
+	QCborMap cbor = QCborValue::fromCbor(byteArray).toMap();
+	if (cbor.value("ClassName") == object->metaObject()->className()) {
+		QCborMap properties = cbor.value("Properties").toMap();
+		for (auto prop : properties.keys()) {
+			QVariant var = object->property(prop.toString().toLocal8Bit());
+			QByteArray data = properties[prop].toByteArray();
+			QDataStream stream(&data, QFile::ReadOnly);
+			stream >> var;
+			object->setProperty(prop.toString().toLocal8Bit(), var);
+		}
 	}
-	QJsonObject properties = info["Properties"].toObject();
-	for (auto& key : properties.keys()) {
-		QVariant var = object->property(key.toLocal8Bit().data());
-		QByteArray data = QByteArray::fromBase64(properties[key].toString().toLocal8Bit());
-		QDataStream stream(&data, QFile::ReadOnly);
-		stream >> var;
-		object->setProperty(key.toLocal8Bit().data(), var);
-	}
-	if (info.contains("SuperClass")) {
-		fromJson(info["SuperClass"].toObject(), object);
-	}
-}
-
-QObject* QObjectEx::createFromJson(QJsonObject json)
-{
-	return nullptr;
-}
-
-QByteArray QObjectEx::dump(QObject* object)
-{
-	QJsonDocument doc(toJson(object));
-	return 	(doc.toJson());
-}
-
-QByteArray QObjectEx::toByteArray(QObject* object)
-{
-	return QByteArray();
-}
-
-QObject* QObjectEx::fromByteArray(QByteArray byteArray)
-{
-	return nullptr;
+	return true;
 }

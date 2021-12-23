@@ -18,7 +18,7 @@ QObjectPanel::QObjectPanel(QObject* object /*= nullptr*/) {
 		if (qApp->mouseButtons() & Qt::RightButton) {
 			/*show menu*/
 		}
-		});
+	});
 	setStyleSheet(
 		"QTreeView{"
 		" background-color: rgb(255,255,255);"
@@ -56,6 +56,6 @@ void QObjectPanel::closeEvent(QCloseEvent* event)
 {
 	QFile file("test.txt");
 	file.open(QFile::WriteOnly);
-	file.write(QObjectEx::dump(object_));
+	file.write(QObjectEx::serialize(object_));
 	file.close();
 }

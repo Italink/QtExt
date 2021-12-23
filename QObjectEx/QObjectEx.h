@@ -1,5 +1,4 @@
 #include "QObjectPanel\QObejctPanel.h"
-#include <QJsonObject>
 
 #define Q_AUTO(type,name)\
     Q_PROPERTY(type name READ get_##name WRITE set_##name NOTIFY name##Changed) \
@@ -15,11 +14,7 @@
 
 namespace QObjectEx {
 QObjectPanel* createQObjectPanel(QObject* object);
-QJsonObject toJson(QObject* object);
-void fromJson(QJsonObject info, QObject* object);
-
-QObject* createFromJson(QJsonObject json);
-QByteArray  dump(QObject* object);
-QByteArray toByteArray(QObject* object);
-QObject* fromByteArray(QByteArray byteArray);
+QString dump(QObject* object);
+QByteArray serialize(QObject* object);
+bool unserialize(QByteArray byteArray, QObject* object);
 }
