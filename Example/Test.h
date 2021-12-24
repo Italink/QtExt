@@ -13,7 +13,6 @@
 #include <QVector4D>
 #include "QTypeEx/QRange.h"
 
-Q_NAMESPACE
 
 class InlineObject : public QObject {
 	Q_OBJECT

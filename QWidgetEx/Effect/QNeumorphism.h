@@ -25,15 +25,19 @@ public:
 	void setInset(bool inset);
 
 	static QList<QNeumorphism*> instances;
+	static void setEffectEnabled(bool enabled);
+
 protected:
 	QRectF boundingRectFor(const QRectF& rect) const override;
 	void draw(QPainter* painter) override;
+
 private:
 	qreal blurRadius_;
 	qreal distance_;
 	qreal strength_;
 	qreal angle_;
 	bool inset_;
+	static bool enabled_;
 };
 
 #endif // QNeumorphism_h__

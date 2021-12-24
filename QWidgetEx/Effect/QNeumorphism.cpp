@@ -9,6 +9,7 @@ QNeumorphism::QNeumorphism(qreal blurRadius, qreal distance, qreal strength, qre
 	, inset_(inset)
 {
 	instances.push_back(this);
+	setEnabled(enabled_);
 }
 
 QNeumorphism::~QNeumorphism()
@@ -188,3 +189,13 @@ void QNeumorphism::setInset(bool inset)
 }
 
 QList<QNeumorphism*> QNeumorphism::instances;
+
+void QNeumorphism::setEffectEnabled(bool enabled)
+{
+	enabled_ = enabled;
+	for (auto ins : QNeumorphism::instances) {
+		ins->setEnabled(enabled_);
+	}
+}
+
+bool QNeumorphism::enabled_ = false;
