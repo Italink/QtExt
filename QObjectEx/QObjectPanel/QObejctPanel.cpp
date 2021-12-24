@@ -39,6 +39,25 @@ void QObjectPanel::setObject(QObject* val) {
 	}
 }
 
+void setupItemInternal(QObject* object, QPropertyItem* parentItem) {
+	if (object == nullptr)
+		return;
+
+	for (int i = object->metaObject()->propertyOffset(); i < object->metaObject()->propertyCount(); i++) {
+		QMetaProperty property = object->metaObject()->property(i);
+		QPropertyItem* item = new QPropertyItem(object, property);
+		item->setUp(parentItem);
+
+		const QMetaObject* meta = property.metaType().metaObject();
+		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
+			QObject* obj = property.read(object).value<QObject*>();
+			if (obj != nullptr) {
+				setupItemInternal(obj, item);
+			}
+		}
+	}
+}
+
 void QObjectPanel::updatePanel() {
 	this->clear();
 	if (object_ == nullptr)
@@ -46,16 +65,21 @@ void QObjectPanel::updatePanel() {
 	for (int i = object_->metaObject()->propertyOffset(); i < object_->metaObject()->propertyCount(); i++) {
 		QMetaProperty property = object_->metaObject()->property(i);
 		QPropertyItem* item = new QPropertyItem(object_, property);
-		if (item) {
-			item->setUp(this);
+		item->setUp(this);
+
+		const QMetaObject* meta = property.metaType().metaObject();
+
+		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
+			QObject* obj = property.read(object_).value<QObject*>();
+			if (obj != nullptr) {
+				setupItemInternal(obj, item);
+			}
 		}
 	}
+	this->expandAll();
 }
 
 void QObjectPanel::closeEvent(QCloseEvent* event)
 {
-	QFile file("test.txt");
-	file.open(QFile::WriteOnly);
-	file.write(QObjectEx::serialize(object_));
-	file.close();
+	Q_EMIT closed();
 }

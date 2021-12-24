@@ -4,7 +4,7 @@
 #include <functional>
 #include <QMetaProperty>
 #include <QHash>
-#include "QWidgetEx\Adjuster\Adjuster.h"
+#include "Adjuster\Adjuster.h"
 
 class Adjuster;
 class AdjusterFactory {

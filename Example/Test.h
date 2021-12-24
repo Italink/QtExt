@@ -13,8 +13,16 @@
 #include <QVector4D>
 #include "QTypeEx/QRange.h"
 
-class Test : public QObject {
+Q_NAMESPACE
+
+class InlineObject : public QObject {
 	Q_OBJECT
+public:
+	Q_AUTO(QString, str) = "Hello";
+};
+
+class Test : public QObject {
+	Q_OBJECT_EX
 public:
 	Test();
 	Q_AUTO(int, Int) = 1;
@@ -29,14 +37,14 @@ public:
 	Q_AUTO(QVector4D, Vec4) = QVector4D(1, 2, 3, 4);
 	Q_AUTO(QColor, Color) = Qt::red;
 	Q_AUTO(QColors, Colors) = { {{0.5,Qt::red},{0.8, Qt::blue}} };
+	Q_AUTO(QRange, Range) = QRange(50, 100, 0, 48000);
 	Q_AUTO(QCombo, Combo) = { 1,{"A","B","C"} };
-	Q_AUTO(QRange, Range) = QRange(50, 100, 0, 200);
-	enum MCustomEnum {
+	enum CustomEnum {
 		Left = 1, Right, Top, Bottom
 	};
-	Q_ENUM(MCustomEnum);
+	Q_ENUM(CustomEnum);
 
-	Q_AUTO(MCustomEnum, CustomEnum) = Right;
+	Q_AUTO(CustomEnum, Enum) = Right;
 
 	Q_AUTO(bool, enable_effect) = true;;
 	Q_AUTO(bool, inset) = true;;
@@ -44,6 +52,7 @@ public:
 	Q_AUTO(QBoundedDouble, distance) = QBoundedDouble(5, 0, 100);
 	Q_AUTO(QBoundedDouble, angle) = QBoundedDouble(0, 0, 360);
 	Q_AUTO(QBoundedDouble, strength) = QBoundedDouble(0.8, 0, 1);
+	Q_AUTO(InlineObject*, Object) = new InlineObject();
 };
 
 #endif // Test_h__

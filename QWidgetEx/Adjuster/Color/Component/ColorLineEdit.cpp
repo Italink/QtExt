@@ -62,7 +62,7 @@ public:
 ColorLineEdit::ColorLineEdit(QWidget* parent)
 	: QLineEdit(parent), p(new Private)
 {
-	p->background.setTexture(QPixmap(QStringLiteral(":/Icons/alphaback.png")));
+	p->background.setTexture(QPixmap(QStringLiteral(":/Icons/alphaback")));
 	setColor(Qt::white);
 	/// \todo determine if having this connection might be useful
 	/*connect(this, &QLineEdit::textChanged, [this](const QString& text){
@@ -79,7 +79,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
 			Q_EMIT colorEdited(color);
 			Q_EMIT colorChanged(color);
 		}
-		});
+	});
 	connect(this, &QLineEdit::editingFinished, [this]() {
 		QColor color = QWidgetEx::colorFromString(text(), p->show_alpha);
 		if (color.isValid())
@@ -95,7 +95,7 @@ ColorLineEdit::ColorLineEdit(QWidget* parent)
 			Q_EMIT colorChanged(color);
 		}
 		p->setPalette(p->color, this);
-		});
+	});
 }
 
 ColorLineEdit::~ColorLineEdit()
@@ -142,7 +142,7 @@ void ColorLineEdit::dragEnterEvent(QDragEnterEvent* event)
 
 	if (event->mimeData()->hasColor() ||
 		(event->mimeData()->hasText() &&
-			QWidgetEx::colorFromString(event->mimeData()->text(), p->show_alpha).isValid()))
+		QWidgetEx::colorFromString(event->mimeData()->text(), p->show_alpha).isValid()))
 	{
 		event->acceptProposedAction();
 	}

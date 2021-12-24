@@ -4,7 +4,6 @@ project(QWidgetEx VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
@@ -30,8 +29,6 @@ include_directories(
 qt6_add_resources(QRC_FILES resources.qrc)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
-
-message(WARNING "TEST ${QRC_FILES}")
 
 add_library(QWidgetEx
     STATIC

@@ -13,7 +13,7 @@ public:
 
 Q_SIGNALS:
 	void objectChanged(QObject*);
-
+	void closed();
 private:
 	void updatePanel();
 

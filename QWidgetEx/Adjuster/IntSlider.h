@@ -2,7 +2,7 @@
 #define IntSlider_h__
 
 #include "Adjuster.h"
-#include "QTypeEx\QBoundedInt.h"
+#include "QBoundedInt.h"
 
 class QFocusLineEdit;
 class QLabel;

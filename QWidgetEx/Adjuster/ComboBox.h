@@ -1,7 +1,7 @@
 #ifndef ComboBox_h__
 #define ComboBox_h__
 #include "Adjuster.h"
-#include "QTypeEx\QCombo.h"
+#include "QCombo.h"
 
 class QComboBox;
 
@@ -9,14 +9,12 @@ class ComboBox : public Adjuster
 {
 	Q_OBJECT
 public:
-	ComboBox(QCombo value , QWidget* parent = nullptr);
+	ComboBox(QCombo value, QWidget* parent = nullptr);
 	QVariant getValue() override;
 	void setValue(QVariant var) override;
 protected:
 	QCombo value_;
-	QComboBox *comboBox_;
+	QComboBox* comboBox_;
 };
 
 #endif // ComboBox_h__
-
-

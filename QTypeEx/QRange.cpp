@@ -1,6 +1,6 @@
 #include "QRange.h"
 
-QRange::QRange(double lower, double upper, double min, double max)
+QRange::QRange(int lower, int upper, int min, int max)
 	: lower_(lower)
 	, upper_(upper)
 	, min_(min)
@@ -8,53 +8,53 @@ QRange::QRange(double lower, double upper, double min, double max)
 {
 }
 
-void QRange::setLimite(double min, double max)
+void QRange::setLimite(int min, int max)
 {
 	min_ = min;
 	max_ = max;
 }
 
-double QRange::min() const
+int QRange::min() const
 {
 	return min_;
 }
 
-void QRange::setMin(double min)
+void QRange::setMin(int min)
 {
 	min_ = min;
 }
 
-double QRange::max() const
+int QRange::max() const
 {
 	return max_;
 }
 
-void QRange::setMax(double max)
+void QRange::setMax(int max)
 {
 	max_ = max;
 }
 
-double QRange::getLower() const
+int QRange::getLower() const
 {
 	return lower_;
 }
 
-void QRange::setLower(double val)
+void QRange::setLower(int val)
 {
 	lower_ = val;
 }
 
-double QRange::getUpper() const
+int QRange::getUpper() const
 {
 	return upper_;
 }
 
-void QRange::setUpper(double val)
+void QRange::setUpper(int val)
 {
 	upper_ = val;
 }
 
-void QRange::setRange(double lower, double upper)
+void QRange::setRange(int lower, int upper)
 {
 	lower_ = lower;
 	upper_ = upper;

@@ -2,11 +2,12 @@
 #define RangeSlider_h__
 
 #include "Adjuster.h"
-#include "QTypeEx\QBoundedDouble.h"
-#include "..\..\QTypeEx\QRange.h"
+#include "QBoundedDouble.h"
+#include "QRange.h"
 
 class QFocusLineEdit;
 class QLabel;
+class CustomSlider;
 
 class RangeSlider : public Adjuster
 {
@@ -21,6 +22,7 @@ protected:
 private:
 	QRange range_;
 	QFocusLineEdit* lowerEditer_;
+	CustomSlider* slider_;
 	QFocusLineEdit* upperEditer_;
 };
 

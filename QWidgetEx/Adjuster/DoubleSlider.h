@@ -2,7 +2,7 @@
 #define DoubleSlider_h__
 
 #include "Adjuster.h"
-#include "QTypeEx\QBoundedDouble.h"
+#include "QBoundedDouble.h"
 
 class QFocusLineEdit;
 class QLabel;

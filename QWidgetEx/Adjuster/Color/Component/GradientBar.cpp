@@ -43,7 +43,7 @@ public:
 		, currentItem(nullptr)
 	{
 		//loadResource();
-		back.setTexture(QPixmap(QStringLiteral(":/Icons/alphaback.png")));
+		back.setTexture(QPixmap(QStringLiteral(":/Icons/alphaback")));
 		gradient.setCoordinateMode(QLinearGradient::StretchToDeviceMode);
 		gradient.setSpread(QLinearGradient::RepeatSpread);
 	}
@@ -112,7 +112,7 @@ GradientBarItem* GradientBar::addItem(QGradientStop stop)
 		updateItemPositon(item);
 		flushGradinetBar();
 		emit currentItemPositionChanged(item->getPos());
-		});
+	});
 	connect(item, &GradientBarItem::itemRemoved, this, &GradientBar::removeItem);
 	connect(item, &GradientBarItem::itemHighLight, this, &GradientBar::setCurrentItem);
 	if (this->isVisible())
@@ -169,7 +169,7 @@ void GradientBar::paintEvent(QPaintEvent*) {
 
 void GradientBar::mouseReleaseEvent(QMouseEvent* ev)
 {
-	float fatcor = ev->x() / (float)width();
+	double fatcor = ev->position().x() / width();
 	addItem({ fatcor,gradientBlendedColor(p->gradient.stops(),fatcor) });
 }
 

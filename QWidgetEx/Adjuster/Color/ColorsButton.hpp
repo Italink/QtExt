@@ -2,8 +2,8 @@
 #define ColorsButton_h__
 
 #include <QPushButton>
-#include "QTypeEx\QColors.h"
-#include "QWidgetEx\Adjuster\Button.h"
+#include "QColors.h"
+#include "Adjuster\Button.h"
 
 class ColorsButton : public Button {
 public:

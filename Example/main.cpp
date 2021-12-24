@@ -6,12 +6,23 @@
 int main(int argc, char* argv[]) {
 	QApplication a(argc, argv);
 	Q_INIT_RESOURCE(resources);
-	Test t;
-	qDebug() << QObjectEx::dump(&t);
-	QFile file("test.txt");
+
+	Test test;
+	qDebug() << test.dump();
+
+	QFile file("save.txt");
 	file.open(QFile::ReadOnly);
-	QObjectEx::unserialize(file.readAll(), &t);
+	test.unserialize(file.readAll());
 	file.close();
-	QObjectEx::createQObjectPanel(&t)->show();
+
+	QObjectPanel* panel = test.createQObjectPane();
+	QObject::connect(panel, &QObjectPanel::closed, &a, [&]() {
+		QFile file("save.txt");
+		file.open(QFile::WriteOnly);
+		file.write(test.serialize());
+		file.close();
+	});
+
+	panel->show();
 	return a.exec();
 }

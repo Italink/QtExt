@@ -34,14 +34,20 @@ QWidget* QPropertyItem::createWidget()
 
 void QPropertyItem::setUp(QTreeWidgetItem* tree)
 {
-	layout_->addWidget(createWidget(), 0, Qt::AlignRight);
+	QWidget* widget = createWidget();
+	if (widget != nullptr) {
+		layout_->addWidget(widget, 0, Qt::AlignRight);
+	}
 	tree->addChild(this);
 	treeWidget()->setItemWidget(this, 0, itemWidget_);
 }
 
 void QPropertyItem::setUp(QTreeWidget* tree)
 {
-	layout_->addWidget(createWidget(), 0, Qt::AlignRight);
+	QWidget* widget = createWidget();
+	if (widget != nullptr) {
+		layout_->addWidget(widget, 0, Qt::AlignRight);
+	}
 	tree->addTopLevelItem(this);
 	treeWidget()->setItemWidget(this, 0, itemWidget_);
 }

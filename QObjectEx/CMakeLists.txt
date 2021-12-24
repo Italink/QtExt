@@ -14,12 +14,10 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Core  REQUIRED)
 
 file(GLOB_RECURSE PROJECT_SOURCES FILES *.h *.cpp *.hpp)
 
-include_directories( .. )
-
 add_library(QObjectEx STATIC ${PROJECT_SOURCES})
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
 
-target_include_directories(QObjectEx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(QObjectEx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ..)
 
 target_link_libraries(QObjectEx PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core QWidgetEx QTypeEx)

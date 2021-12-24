@@ -36,7 +36,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#include "ppkeywords.inl"
 #include "keywords.inl"
 
 // transform \r\n into \n
@@ -116,11 +115,11 @@ void Preprocessor::skipUntilEndif()
 		case PP_IF:
 		case PP_IFDEF:
 		case PP_IFNDEF:
-			++index;
-			skipUntilEndif();
-			break;
+		++index;
+		skipUntilEndif();
+		break;
 		default:
-			;
+		;
 		}
 		++index;
 	}
@@ -130,18 +129,18 @@ bool Preprocessor::skipBranch()
 {
 	while (index < symbols.size() - 1
 		&& (symbols.at(index).token != PP_ENDIF
-			&& symbols.at(index).token != PP_ELIF
-			&& symbols.at(index).token != PP_ELSE)
+		   && symbols.at(index).token != PP_ELIF
+		   && symbols.at(index).token != PP_ELSE)
 		) {
 		switch (symbols.at(index).token) {
 		case PP_IF:
 		case PP_IFDEF:
 		case PP_IFNDEF:
-			++index;
-			skipUntilEndif();
-			break;
+		++index;
+		skipUntilEndif();
+		break;
 		default:
-			;
+		;
 		}
 		++index;
 	}
@@ -202,92 +201,92 @@ Symbols Preprocessor::tokenize(const QByteArray& input, int lineNum, Preprocesso
 			if (token > SPECIAL_TREATMENT_MARK) {
 				switch (token) {
 				case QUOTE:
-					data = skipQuote(data);
-					token = STRING_LITERAL;
-					// concatenate multi-line strings for easier
-					// STRING_LITERAL handling in moc
-					if (!Preprocessor::preprocessOnly
-						&& !symbols.isEmpty()
-						&& symbols.constLast().token == STRING_LITERAL) {
-						const QByteArray newString
-							= '\"'
-							+ symbols.constLast().unquotedLexem()
-							+ input.mid(lexem - begin + 1, data - lexem - 2)
-							+ '\"';
-						symbols.last() = Symbol(symbols.constLast().lineNum,
-							STRING_LITERAL,
-							newString);
-						continue;
-					}
-					break;
-				case SINGLEQUOTE:
-					while (*data && (*data != '\''
-						|| (*(data - 1) == '\\'
-							&& *(data - 2) != '\\')))
-						++data;
-					if (*data)
-						++data;
-					token = CHARACTER_LITERAL;
-					break;
-				case LANGLE_SCOPE:
-					// split <:: into two tokens, < and ::
-					token = LANGLE;
-					data -= 2;
-					break;
-				case DIGIT:
-					while (is_digit_char(*data) || *data == '\'')
-						++data;
-					if (!*data || *data != '.') {
-						token = INTEGER_LITERAL;
-						if (data - lexem == 1 &&
-							(*data == 'x' || *data == 'X'
-								|| *data == 'b' || *data == 'B')
-							&& *lexem == '0') {
-							++data;
-							while (is_hex_char(*data) || *data == '\'')
-								++data;
-						}
-						break;
-					}
-					token = FLOATING_LITERAL;
-					++data;
-					Q_FALLTHROUGH();
-				case FLOATING_LITERAL:
-					while (is_digit_char(*data) || *data == '\'')
-						++data;
-					if (*data == '+' || *data == '-')
-						++data;
-					if (*data == 'e' || *data == 'E') {
-						++data;
-						while (is_digit_char(*data) || *data == '\'')
-							++data;
-					}
-					if (*data == 'f' || *data == 'F'
-						|| *data == 'l' || *data == 'L')
-						++data;
-					break;
-				case HASH:
-					if (column == 1 && mode == TokenizeCpp) {
-						mode = PreparePreprocessorStatement;
-						while (*data && (*data == ' ' || *data == '\t'))
-							++data;
-						if (is_ident_char(*data))
-							mode = TokenizePreprocessorStatement;
-						continue;
-					}
-					break;
-				case PP_HASHHASH:
-					if (mode == TokenizeCpp)
-						continue;
-					break;
-				case NEWLINE:
-					++lineNum;
-					if (mode == TokenizeDefine) {
-						mode = TokenizeCpp;
-						// emit the newline token
-						break;
-					}
+				data = skipQuote(data);
+				token = STRING_LITERAL;
+				// concatenate multi-line strings for easier
+				// STRING_LITERAL handling in moc
+				if (!Preprocessor::preprocessOnly
+					&& !symbols.isEmpty()
+					&& symbols.constLast().token == STRING_LITERAL) {
+					const QByteArray newString
+						= '\"'
+						+ symbols.constLast().unquotedLexem()
+						+ input.mid(lexem - begin + 1, data - lexem - 2)
+						+ '\"';
+					symbols.last() = Symbol(symbols.constLast().lineNum,
+						STRING_LITERAL,
+						newString);
 					continue;
+				}
+				break;
+				case SINGLEQUOTE:
+				while (*data && (*data != '\''
+					   || (*(data - 1) == '\\'
+					   && *(data - 2) != '\\')))
+					++data;
+				if (*data)
+					++data;
+				token = CHARACTER_LITERAL;
+				break;
+				case LANGLE_SCOPE:
+				// split <:: into two tokens, < and ::
+				token = LANGLE;
+				data -= 2;
+				break;
+				case DIGIT:
+				while (is_digit_char(*data) || *data == '\'')
+					++data;
+				if (!*data || *data != '.') {
+					token = INTEGER_LITERAL;
+					if (data - lexem == 1 &&
+						(*data == 'x' || *data == 'X'
+						|| *data == 'b' || *data == 'B')
+						&& *lexem == '0') {
+						++data;
+						while (is_hex_char(*data) || *data == '\'')
+							++data;
+					}
+					break;
+				}
+				token = FLOATING_LITERAL;
+				++data;
+				Q_FALLTHROUGH();
+				case FLOATING_LITERAL:
+				while (is_digit_char(*data) || *data == '\'')
+					++data;
+				if (*data == '+' || *data == '-')
+					++data;
+				if (*data == 'e' || *data == 'E') {
+					++data;
+					while (is_digit_char(*data) || *data == '\'')
+						++data;
+				}
+				if (*data == 'f' || *data == 'F'
+					|| *data == 'l' || *data == 'L')
+					++data;
+				break;
+				case HASH:
+				if (column == 1 && mode == TokenizeCpp) {
+					mode = PreparePreprocessorStatement;
+					while (*data && (*data == ' ' || *data == '\t'))
+						++data;
+					if (is_ident_char(*data))
+						mode = TokenizePreprocessorStatement;
+					continue;
+				}
+				break;
+				case PP_HASHHASH:
+				if (mode == TokenizeCpp)
+					continue;
+				break;
+				case NEWLINE:
+				++lineNum;
+				if (mode == TokenizeDefine) {
+					mode = TokenizeCpp;
+					// emit the newline token
+					break;
+				}
+				continue;
 				case BACKSLASH:
 				{
 					const char* rewind = data;
@@ -300,42 +299,42 @@ Symbols Preprocessor::tokenize(const QByteArray& input, int lineNum, Preprocesso
 					data = rewind;
 				} break;
 				case CHARACTER:
-					while (is_ident_char(*data))
-						++data;
-					token = IDENTIFIER;
-					break;
+				while (is_ident_char(*data))
+					++data;
+				token = IDENTIFIER;
+				break;
 				case C_COMMENT:
+				if (*data) {
+					if (*data == '\n')
+						++lineNum;
+					++data;
 					if (*data) {
 						if (*data == '\n')
 							++lineNum;
 						++data;
-						if (*data) {
-							if (*data == '\n')
-								++lineNum;
-							++data;
-						}
 					}
-					while (*data && (*(data - 1) != '/' || *(data - 2) != '*')) {
-						if (*data == '\n')
-							++lineNum;
-						++data;
-					}
-					token = WHITESPACE; // one comment, one whitespace
-					Q_FALLTHROUGH();
+				}
+				while (*data && (*(data - 1) != '/' || *(data - 2) != '*')) {
+					if (*data == '\n')
+						++lineNum;
+					++data;
+				}
+				token = WHITESPACE; // one comment, one whitespace
+				Q_FALLTHROUGH();
 				case WHITESPACE:
-					if (column == 1)
-						column = 0;
-					while (*data && (*data == ' ' || *data == '\t'))
-						++data;
-					if (Preprocessor::preprocessOnly) // tokenize whitespace
-						break;
-					continue;
+				if (column == 1)
+					column = 0;
+				while (*data && (*data == ' ' || *data == '\t'))
+					++data;
+				if (Preprocessor::preprocessOnly) // tokenize whitespace
+					break;
+				continue;
 				case CPP_COMMENT:
-					while (*data && *data != '\n')
-						++data;
-					continue; // ignore safely, the newline is a separator
+				while (*data && *data != '\n')
+					++data;
+				continue; // ignore safely, the newline is a separator
 				default:
-					continue; //ignore
+				continue; //ignore
 				}
 			}
 #ifdef USE_LEXEM_STORE
@@ -380,120 +379,120 @@ Symbols Preprocessor::tokenize(const QByteArray& input, int lineNum, Preprocesso
 
 			switch (token) {
 			case NOTOKEN:
-				if (*data)
-					++data;
-				break;
-			case PP_DEFINE:
-				mode = PrepareDefine;
-				break;
-			case PP_IFDEF:
-				symbols += Symbol(lineNum, PP_IF);
-				symbols += Symbol(lineNum, PP_DEFINED);
-				continue;
-			case PP_IFNDEF:
-				symbols += Symbol(lineNum, PP_IF);
-				symbols += Symbol(lineNum, PP_NOT);
-				symbols += Symbol(lineNum, PP_DEFINED);
-				continue;
-			case PP_INCLUDE:
-				mode = TokenizeInclude;
-				break;
-			case PP_QUOTE:
-				data = skipQuote(data);
-				token = PP_STRING_LITERAL;
-				break;
-			case PP_SINGLEQUOTE:
-				while (*data && (*data != '\''
-					|| (*(data - 1) == '\\'
-						&& *(data - 2) != '\\')))
-					++data;
-				if (*data)
-					++data;
-				token = PP_CHARACTER_LITERAL;
-				break;
-			case PP_DIGIT:
-				while (is_digit_char(*data) || *data == '\'')
-					++data;
-				if (!*data || *data != '.') {
-					token = PP_INTEGER_LITERAL;
-					if (data - lexem == 1 &&
-						(*data == 'x' || *data == 'X')
-						&& *lexem == '0') {
-						++data;
-						while (is_hex_char(*data) || *data == '\'')
-							++data;
-					}
-					break;
-				}
-				token = PP_FLOATING_LITERAL;
+			if (*data)
 				++data;
-				Q_FALLTHROUGH();
-			case PP_FLOATING_LITERAL:
-				while (is_digit_char(*data) || *data == '\'')
+			break;
+			case PP_DEFINE:
+			mode = PrepareDefine;
+			break;
+			case PP_IFDEF:
+			symbols += Symbol(lineNum, PP_IF);
+			symbols += Symbol(lineNum, PP_DEFINED);
+			continue;
+			case PP_IFNDEF:
+			symbols += Symbol(lineNum, PP_IF);
+			symbols += Symbol(lineNum, PP_NOT);
+			symbols += Symbol(lineNum, PP_DEFINED);
+			continue;
+			case PP_INCLUDE:
+			mode = TokenizeInclude;
+			break;
+			case PP_QUOTE:
+			data = skipQuote(data);
+			token = PP_STRING_LITERAL;
+			break;
+			case PP_SINGLEQUOTE:
+			while (*data && (*data != '\''
+				   || (*(data - 1) == '\\'
+				   && *(data - 2) != '\\')))
+				++data;
+			if (*data)
+				++data;
+			token = PP_CHARACTER_LITERAL;
+			break;
+			case PP_DIGIT:
+			while (is_digit_char(*data) || *data == '\'')
+				++data;
+			if (!*data || *data != '.') {
+				token = PP_INTEGER_LITERAL;
+				if (data - lexem == 1 &&
+					(*data == 'x' || *data == 'X')
+					&& *lexem == '0') {
 					++data;
-				if (*data == '+' || *data == '-')
-					++data;
-				if (*data == 'e' || *data == 'E') {
-					++data;
-					while (is_digit_char(*data) || *data == '\'')
+					while (is_hex_char(*data) || *data == '\'')
 						++data;
 				}
-				if (*data == 'f' || *data == 'F'
-					|| *data == 'l' || *data == 'L')
-					++data;
 				break;
+			}
+			token = PP_FLOATING_LITERAL;
+			++data;
+			Q_FALLTHROUGH();
+			case PP_FLOATING_LITERAL:
+			while (is_digit_char(*data) || *data == '\'')
+				++data;
+			if (*data == '+' || *data == '-')
+				++data;
+			if (*data == 'e' || *data == 'E') {
+				++data;
+				while (is_digit_char(*data) || *data == '\'')
+					++data;
+			}
+			if (*data == 'f' || *data == 'F'
+				|| *data == 'l' || *data == 'L')
+				++data;
+			break;
 			case PP_CHARACTER:
-				if (mode == PreparePreprocessorStatement) {
-					// rewind entire token to begin
-					data = lexem;
-					mode = TokenizePreprocessorStatement;
-					continue;
-				}
-				while (is_ident_char(*data))
-					++data;
-				token = PP_IDENTIFIER;
+			if (mode == PreparePreprocessorStatement) {
+				// rewind entire token to begin
+				data = lexem;
+				mode = TokenizePreprocessorStatement;
+				continue;
+			}
+			while (is_ident_char(*data))
+				++data;
+			token = PP_IDENTIFIER;
 
-				if (mode == PrepareDefine) {
-					symbols += Symbol(lineNum, token, input, lexem - begin, data - lexem);
-					// make sure we explicitly add the whitespace here if the next char
-					// is not an opening brace, so we can distinguish correctly between
-					// regular and function macros
-					if (*data != '(')
-						symbols += Symbol(lineNum, WHITESPACE);
-					mode = TokenizeDefine;
-					continue;
-				}
-				break;
+			if (mode == PrepareDefine) {
+				symbols += Symbol(lineNum, token, input, lexem - begin, data - lexem);
+				// make sure we explicitly add the whitespace here if the next char
+				// is not an opening brace, so we can distinguish correctly between
+				// regular and function macros
+				if (*data != '(')
+					symbols += Symbol(lineNum, WHITESPACE);
+				mode = TokenizeDefine;
+				continue;
+			}
+			break;
 			case PP_C_COMMENT:
+			if (*data) {
+				if (*data == '\n')
+					++lineNum;
+				++data;
 				if (*data) {
 					if (*data == '\n')
 						++lineNum;
 					++data;
-					if (*data) {
-						if (*data == '\n')
-							++lineNum;
-						++data;
-					}
 				}
-				while (*data && (*(data - 1) != '/' || *(data - 2) != '*')) {
-					if (*data == '\n')
-						++lineNum;
-					++data;
-				}
-				token = PP_WHITESPACE; // one comment, one whitespace
-				Q_FALLTHROUGH();
+			}
+			while (*data && (*(data - 1) != '/' || *(data - 2) != '*')) {
+				if (*data == '\n')
+					++lineNum;
+				++data;
+			}
+			token = PP_WHITESPACE; // one comment, one whitespace
+			Q_FALLTHROUGH();
 			case PP_WHITESPACE:
-				while (*data && (*data == ' ' || *data == '\t'))
-					++data;
-				continue; // the preprocessor needs no whitespace
+			while (*data && (*data == ' ' || *data == '\t'))
+				++data;
+			continue; // the preprocessor needs no whitespace
 			case PP_CPP_COMMENT:
-				while (*data && *data != '\n')
-					++data;
-				continue; // ignore safely, the newline is a separator
+			while (*data && *data != '\n')
+				++data;
+			continue; // ignore safely, the newline is a separator
 			case PP_NEWLINE:
-				++lineNum;
-				mode = TokenizeCpp;
-				break;
+			++lineNum;
+			mode = TokenizeCpp;
+			break;
 			case PP_BACKSLASH:
 			{
 				const char* rewind = data;
@@ -506,14 +505,14 @@ Symbols Preprocessor::tokenize(const QByteArray& input, int lineNum, Preprocesso
 				data = rewind;
 			} break;
 			case PP_LANGLE:
-				if (mode != TokenizeInclude)
-					break;
-				token = PP_STRING_LITERAL;
-				while (*data && *data != '\n' && *(data - 1) != '>')
-					++data;
+			if (mode != TokenizeInclude)
 				break;
+			token = PP_STRING_LITERAL;
+			while (*data && *data != '\n' && *(data - 1) != '>')
+				++data;
+			break;
 			default:
-				break;
+			break;
 			}
 			if (mode == PreparePreprocessorStatement)
 				continue;
@@ -834,12 +833,12 @@ int PP_Expression::equality_expression()
 	int value = relational_expression();
 	switch (next()) {
 	case PP_EQEQ:
-		return value == equality_expression();
+	return value == equality_expression();
 	case PP_NE:
-		return value != equality_expression();
+	return value != equality_expression();
 	default:
-		prev();
-		return value;
+	prev();
+	return value;
 	}
 }
 
@@ -848,16 +847,16 @@ int PP_Expression::relational_expression()
 	int value = shift_expression();
 	switch (next()) {
 	case PP_LANGLE:
-		return value < relational_expression();
+	return value < relational_expression();
 	case PP_RANGLE:
-		return value > relational_expression();
+	return value > relational_expression();
 	case PP_LE:
-		return value <= relational_expression();
+	return value <= relational_expression();
 	case PP_GE:
-		return value >= relational_expression();
+	return value >= relational_expression();
 	default:
-		prev();
-		return value;
+	prev();
+	return value;
 	}
 }
 
@@ -866,12 +865,12 @@ int PP_Expression::shift_expression()
 	int value = additive_expression();
 	switch (next()) {
 	case PP_LTLT:
-		return value << shift_expression();
+	return value << shift_expression();
 	case PP_GTGT:
-		return value >> shift_expression();
+	return value >> shift_expression();
 	default:
-		prev();
-		return value;
+	prev();
+	return value;
 	}
 }
 
@@ -880,12 +879,12 @@ int PP_Expression::additive_expression()
 	int value = multiplicative_expression();
 	switch (next()) {
 	case PP_PLUS:
-		return value + additive_expression();
+	return value + additive_expression();
 	case PP_MINUS:
-		return value - additive_expression();
+	return value - additive_expression();
 	default:
-		prev();
-		return value;
+	prev();
+	return value;
 	}
 }
 
@@ -914,8 +913,8 @@ int PP_Expression::multiplicative_expression()
 		return div ? value / div : 0;
 	}
 	default:
-		prev();
-		return value;
+	prev();
+	return value;
 	};
 }
 
@@ -923,20 +922,20 @@ int PP_Expression::unary_expression()
 {
 	switch (next()) {
 	case PP_PLUS:
-		return unary_expression();
+	return unary_expression();
 	case PP_MINUS:
-		return -unary_expression();
+	return -unary_expression();
 	case PP_NOT:
-		return !unary_expression();
+	return !unary_expression();
 	case PP_TILDE:
-		return ~unary_expression();
+	return ~unary_expression();
 	case PP_MOC_TRUE:
-		return 1;
+	return 1;
 	case PP_MOC_FALSE:
-		return 0;
+	return 0;
 	default:
-		prev();
-		return primary_expression();
+	prev();
+	return primary_expression();
 	}
 }
 
@@ -1193,31 +1192,31 @@ void Preprocessor::preprocess(const QByteArray& filename, Symbols& preprocessed)
 			continue;
 		}
 		case PP_HASH:
-			until(PP_NEWLINE);
-			continue; // skip unknown preprocessor statement
+		until(PP_NEWLINE);
+		continue; // skip unknown preprocessor statement
 		case PP_IFDEF:
 		case PP_IFNDEF:
 		case PP_IF:
-			while (!evaluateCondition()) {
-				if (!skipBranch())
-					break;
-				if (test(PP_ELIF)) {
-				}
-				else {
-					until(PP_NEWLINE);
-					break;
-				}
+		while (!evaluateCondition()) {
+			if (!skipBranch())
+				break;
+			if (test(PP_ELIF)) {
 			}
-			continue;
+			else {
+				until(PP_NEWLINE);
+				break;
+			}
+		}
+		continue;
 		case PP_ELIF:
 		case PP_ELSE:
-			skipUntilEndif();
-			Q_FALLTHROUGH();
+		skipUntilEndif();
+		Q_FALLTHROUGH();
 		case PP_ENDIF:
-			until(PP_NEWLINE);
-			continue;
+		until(PP_NEWLINE);
+		continue;
 		case PP_NEWLINE:
-			continue;
+		continue;
 		case SIGNALS:
 		case SLOTS: {
 			Symbol sym = symbol();
@@ -1228,7 +1227,7 @@ void Preprocessor::preprocess(const QByteArray& filename, Symbols& preprocessed)
 			preprocessed += sym;
 		} continue;
 		default:
-			break;
+		break;
 		}
 		preprocessed += symbol();
 	}

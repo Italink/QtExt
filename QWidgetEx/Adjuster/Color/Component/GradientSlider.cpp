@@ -38,7 +38,7 @@ public:
 	Private() :
 		back(Qt::darkGray, Qt::DiagCrossPattern)
 	{
-		back.setTexture(QPixmap(QStringLiteral(":/Icons/alphaback.png")));
+		back.setTexture(QPixmap(QStringLiteral(":/Icons/alphaback")));
 		gradient.setCoordinateMode(QGradient::StretchToDeviceMode);
 		gradient.setSpread(QGradient::RepeatSpread);
 	}
@@ -49,7 +49,7 @@ public:
 			static_cast<qreal>(ev->pos().x() - 2.5) / (owner->geometry().width() - 5) : 0;
 		pos = qMax(qMin(pos, 1.0), 0.0);
 		owner->setSliderPosition(qRound(owner->minimum() +
-			pos * (owner->maximum() - owner->minimum())));
+								 pos * (owner->maximum() - owner->minimum())));
 	}
 };
 

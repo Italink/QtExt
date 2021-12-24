@@ -6,19 +6,19 @@
 class QRange {
 public:
 	QRange() {};
-	QRange(double lower, double upper, double min, double max);
+	QRange(int lower, int upper, int min, int max);
 
-	void setLimite(double min, double max);
-	double min() const;
-	void setMin(double min);
-	double max() const;
-	void setMax(double max);
+	void setLimite(int min, int max);
+	int min() const;
+	void setMin(int min);
+	int max() const;
+	void setMax(int max);
 
-	double getLower() const;
-	void setLower(double val);
-	double getUpper() const;
-	void setUpper(double val);
-	void setRange(double lower, double upper);
+	int getLower() const;
+	void setLower(int val);
+	int getUpper() const;
+	void setUpper(int val);
+	void setRange(int lower, int upper);
 
 	bool operator==(const QRange& other);
 
@@ -26,9 +26,9 @@ public:
 	friend QDataStream& operator>>(QDataStream& in, QRange& var);
 
 private:
-	double lower_ = 0;
-	double upper_ = 100;
-	double min_ = 0, max_ = 100;
+	int lower_ = 0;
+	int upper_ = 100;
+	int min_ = 0, max_ = 100;
 };
 
 Q_DECLARE_METATYPE(QRange)
