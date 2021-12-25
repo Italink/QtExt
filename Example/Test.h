@@ -13,7 +13,6 @@
 #include <QVector4D>
 #include "QTypeEx/QRange.h"
 
-
 class InlineObject : public QObject {
 	Q_OBJECT
 public:
@@ -37,6 +36,8 @@ public:
 	Q_AUTO(QColor, Color) = Qt::red;
 	Q_AUTO(QColors, Colors) = { {{0.5,Qt::red},{0.8, Qt::blue}} };
 	Q_AUTO(QRange, Range) = QRange(50, 100, 0, 48000);
+	Q_AUTO(QImage, Image);
+	Q_AUTO(QByteArray, ByteArray);
 	Q_AUTO(QCombo, Combo) = { 1,{"A","B","C"} };
 	enum CustomEnum {
 		Left = 1, Right, Top, Bottom

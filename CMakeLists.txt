@@ -8,13 +8,11 @@ set(MOC_EX_PATH)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Core REQUIRED)
 
-option(QtExt_USE_MOC_EXT "MOC Ex" ON)
 option(QtExt_BUILD_EXAMPLE "Build Example" ON)
 
+list(APPEND CMAKE_AUTOMOC_MACRO_NAMES "Q_OBJECT_EX")
 
-if(QtExt_USE_MOC_EXT)	
-	add_subdirectory(QMocEx)
-endif()
+add_subdirectory(QMocEx)
 
 add_subdirectory(QWidgetEx)
 add_subdirectory(QTypeEx)

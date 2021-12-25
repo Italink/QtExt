@@ -26,6 +26,8 @@
 #include "Adjuster\Vec2Box.h"
 #include "Adjuster\ComboBox.h"
 #include "Adjuster\RangeSlider.h"
+#include "Adjuster\ByteArrayLoader.h"
+#include "Adjuster\ImageLoader.h"
 
 #define BIND_ADJUSTER(Type,Adjuster) \
 	AdjusterCreator_[QMetaTypeId2<Type>::qt_metatype_id()] = [](QObject* object,QMetaProperty property) {\
@@ -53,6 +55,9 @@ AdjusterFactory::AdjusterFactory() {
 	BIND_ADJUSTER(QVector4D, Vec4Box);
 	BIND_ADJUSTER(QCombo, ComboBox);
 	BIND_ADJUSTER(QRange, RangeSlider);
+	BIND_ADJUSTER(QByteArray, ByteArrayLoader);
+	BIND_ADJUSTER(QImage, ImageLoader);
+	
 }
 
 AdjusterFactory* AdjusterFactory::getInstance()
