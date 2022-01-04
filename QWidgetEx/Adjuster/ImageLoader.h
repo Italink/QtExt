@@ -3,10 +3,12 @@
 
 #include "Adjuster.h"
 #include <QImage>
+#include "Button.h"
 
 class QPushButton;
 class QLabel;
-class ImageLoader : public Adjuster
+
+class ImageLoader : public Button
 {
 	Q_OBJECT
 public:
@@ -16,9 +18,8 @@ public:
 protected:
 	void loadFile();
 	QImage data_;
-	QLabel* lbDisplay_;
-	QPushButton* btLoad_;
+	QPixmap cache_;
+	void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // ImageLoader_h__
-

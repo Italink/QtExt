@@ -57,7 +57,6 @@ AdjusterFactory::AdjusterFactory() {
 	BIND_ADJUSTER(QRange, RangeSlider);
 	BIND_ADJUSTER(QByteArray, ByteArrayLoader);
 	BIND_ADJUSTER(QImage, ImageLoader);
-	
 }
 
 AdjusterFactory* AdjusterFactory::getInstance()

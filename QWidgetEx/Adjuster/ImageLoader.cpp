@@ -1,24 +1,15 @@
 #include "ImageLoader.h"
-#include <QBoxLayout>
-#include <QFile>
 #include <QFileDialog>
-#include <QPushButton>
 #include "QNeumorphism.h"
-#include "QLabel"
+#include "QPainter"
+#include "QBrush"
 
 ImageLoader::ImageLoader(QImage value, QWidget* parent /*= nullptr*/)
-	: lbDisplay_(new QLabel)
-	, btLoad_(new QPushButton("Load"))
 {
-	lbDisplay_->setFixedSize(60, 60);
-	btLoad_->setFixedHeight(60);
+	setFixedSize(60, 60);
 	setValue(value);
 	setGraphicsEffect(new QNeumorphism);
-	QHBoxLayout* h = new QHBoxLayout(this);
-	h->setContentsMargins(0, 0, 0, 0);
-	h->addWidget(lbDisplay_);
-	h->addWidget(btLoad_);
-	connect(btLoad_, &QPushButton::clicked, this, &ImageLoader::loadFile);
+	connect(this, &Button::clicked, this, &ImageLoader::loadFile);
 }
 
 QVariant ImageLoader::getValue()
@@ -32,21 +23,44 @@ void ImageLoader::setValue(QVariant var)
 	if (data_.isNull())
 		return;
 	double wh = data_.width() / (double)data_.height();
+	QSize cacheSize;
 	if (wh < 1) {
-		lbDisplay_->setFixedSize(60 * wh, 60);
+		cacheSize.setWidth(60 * wh);
+		cacheSize.setHeight(60);
 	}
 	else {
-		lbDisplay_->setFixedSize(60, 60 / wh);
+		cacheSize.setWidth(60);
+		cacheSize.setHeight(60 / wh);
 	}
-	lbDisplay_->setPixmap(QPixmap::fromImage(data_.scaled(lbDisplay_->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
+	cache_ = QPixmap::fromImage(data_.scaled(cacheSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 	Q_EMIT valueChanged(data_);
 }
 
 void ImageLoader::loadFile()
 {
-	QString filePath =  QFileDialog::getOpenFileName(nullptr, "Load File");
+	QString filePath = QFileDialog::getOpenFileName(nullptr, "Load File");
 	if (!QFile::exists(filePath))
 		return;
 	setValue(QVariant::fromValue(QImage(filePath)));
 }
 
+void ImageLoader::paintEvent(QPaintEvent* event)
+{
+	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setPen(Qt::NoPen);
+	if (hovered_) {
+		painter.setBrush(QColor(150, 150, 150));
+	}
+	else
+		painter.setBrush(QColor(185, 185, 185));
+	painter.drawRoundedRect(rect(), 2, 2);
+	if (cache_.isNull()) {
+		painter.drawText(rect(), Qt::AlignCenter, "Load Image");
+	}
+	else {
+		QRect showRect(0, 0, cache_.width(), cache_.height());
+		showRect.moveCenter(rect().center());
+		painter.drawPixmap(showRect, cache_);
+	}
+}
