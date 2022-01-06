@@ -6,14 +6,15 @@
 #include <QCborStreamWriter>
 #include <QCborMap>
 #include "QFile"
+#include "QMetaType"
 
-QObjectPanel* QObjectEx::createQObjectPanel(QObject* object) {
-	return new QObjectPanel(object);
+QObjectPanel* QObjectEx::createQObjectPanel() {
+	return new QObjectPanel(this);
 }
 
-QString QObjectEx::dump(QObject* object)
+QString QObjectEx::dump()
 {
-	QCborValue cbor = QCborValue::fromCbor(serialize(object));
+	QCborValue cbor = QCborValue::fromCbor(serialize());
 	return cbor.toDiagnosticNotation(QCborValue::DiagnosticNotationOption::LineWrapped);
 }
 
@@ -48,11 +49,11 @@ void serializeInternal(QObject* object, QCborStreamWriter& writer) {
 	}
 }
 
-QByteArray QObjectEx::serialize(QObject* object)
+QByteArray QObjectEx::serialize()
 {
 	QByteArray data;
 	QCborStreamWriter writer(&data);
-	serializeInternal(object, writer);
+	serializeInternal(this, writer);
 	return data;
 }
 
@@ -76,8 +77,19 @@ void unserializeInternal(QObject* object, QCborMap cbor)
 	}
 }
 
-void QObjectEx::unserialize(QByteArray byteArray, QObject* object)
+void QObjectEx::unserialize(QByteArray byteArray)
 {
 	QCborMap cbor = QCborValue::fromCbor(byteArray).toMap();
-	unserializeInternal(object, cbor);
+	unserializeInternal(this, cbor);
+}
+
+QObjectEx* QObjectEx::createFromData(QByteArray byteArray)
+{
+	QCborMap cbor = QCborValue::fromCbor(byteArray).toMap();
+	int typeId = QMetaType::type(cbor.value("ClassName").toString().toLatin1());
+	QObjectEx* obj = static_cast<QObjectEx*>(QMetaType::create(typeId));
+	if (obj) {
+		unserializeInternal(obj, cbor);
+	}
+	return obj;
 }

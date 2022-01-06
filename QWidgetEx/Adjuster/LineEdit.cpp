@@ -2,7 +2,7 @@
 #include "QFocusLineEdit.h"
 
 #include <QHBoxLayout>
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 #include "QPainter"
 
 LineEdit::LineEdit(QString str)

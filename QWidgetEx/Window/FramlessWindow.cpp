@@ -2,9 +2,9 @@
 #include "FramlessWindow.h"
 #include <windows.h>        //注意头文件
 #include <windowsx.h>
-#include "Buttons/WinMaxButton.h"
-#include "Buttons/WinCloseButton.h"
-#include "Buttons/WinMinButton.h"
+#include "QWidgetEx/Widgets/Buttons/WinMaxButton.h"
+#include "QWidgetEx/Widgets/Buttons/WinCloseButton.h"
+#include "QWidgetEx/Widgets/Buttons/WinMinButton.h"
 
 class CustomHeaderBar : public QWidget {
 public:
@@ -108,16 +108,16 @@ FramelessWidget::FramelessWidget(const QString& title, QWidget* parent)
 
 	connect(&headerBar->minButton, &QPushButton::clicked, this, [this]() {
 		this->showMinimized();
-		});
+	});
 	connect(&headerBar->maxButton, &QPushButton::clicked, this, [this]() {
 		if (isFullScreen())
 			this->showNormal();
 		else
 			this->showFullScreen();
-		});
+	});
 	connect(&headerBar->closeButton, &QPushButton::clicked, this, [this]() {
 		this->close();
-		});
+	});
 	HWND hWnd = HWND(winId());
 	HMODULE hUser = GetModuleHandle(L"user32.dll");
 	if (hUser)

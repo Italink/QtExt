@@ -1,4 +1,5 @@
-#include "QObjectPanel\QObejctPanel.h"
+#include "QObjectPanel/QObjectPanel.h"
+#include <QVariant>
 
 #define Q_AUTO(type,name)\
     Q_PROPERTY(type name READ get_##name WRITE set_##name NOTIFY name##Changed) \
@@ -12,18 +13,11 @@
     Q_SIGNAL void name##Changed(QVariant); \
     type name
 
-#define Q_OBJECT_EX \
-    Q_OBJECT \
-    public: \
-        QByteArray serialize() { return QObjectEx::serialize(this);} \
-        void unserialize(QByteArray data) { QObjectEx::unserialize(data, this); } \
-        QString dump() { return QObjectEx::dump(this); } \
-        QObjectPanel* createQObjectPane (){ return QObjectEx::createQObjectPanel(this); } \
-    private:
-
-namespace QObjectEx {
-QObjectPanel* createQObjectPanel(QObject* object);
-QString dump(QObject* object);
-QByteArray serialize(QObject* object);
-void unserialize(QByteArray byteArray, QObject* object);
-}
+class QObjectEx : public QObject {
+public:
+	virtual QObjectPanel* createQObjectPanel();
+	virtual QString dump();
+	virtual QByteArray serialize();
+	virtual void unserialize(QByteArray byteArray);
+	static QObjectEx* createFromData(QByteArray byteArray);
+};

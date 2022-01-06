@@ -1,4 +1,4 @@
-#include "QBoundedDouble.h"
+#include "QTypeEx/QBoundedDouble.h"
 #include <QDebug>
 QBoundedDouble::QBoundedDouble(double number, double min, double max) : value_(number)
 , min_(min)

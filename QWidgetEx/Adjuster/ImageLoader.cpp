@@ -1,6 +1,6 @@
 #include "ImageLoader.h"
 #include <QFileDialog>
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 #include "QPainter"
 #include "QBrush"
 

@@ -6,7 +6,7 @@
 #include <QDoubleValidator>
 #include <QPainter>
 #include "QFocusLineEdit.h"
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 
 IntBox::IntBox(int value/*= 0*/, QString name, QWidget* parent /*= nullptr*/)
 	: Adjuster(parent)

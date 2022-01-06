@@ -1,7 +1,7 @@
 #include "Vec2Box.h"
 #include <QHBoxLayout>
 #include "DoubleBox.h"
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 
 Vec2Box::Vec2Box(QVector2D value, QWidget* parent /*= nullptr*/)
 	: x(new DoubleBox(value.x(), "X"))

@@ -1,7 +1,7 @@
 #ifndef LineEdit_h__
 #define LineEdit_h__
 
-#include "Adjuster/Adjuster.h"
+#include "QWidgetEx/Adjuster/Adjuster.h"
 
 class QFocusLineEdit;
 

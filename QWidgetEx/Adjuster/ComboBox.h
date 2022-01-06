@@ -1,7 +1,8 @@
 #ifndef ComboBox_h__
 #define ComboBox_h__
 #include "Adjuster.h"
-#include "QCombo.h"
+
+#include "QTypeEx/QCombo.h"
 
 class QComboBox;
 

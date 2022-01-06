@@ -2,8 +2,8 @@
 #define RangeSlider_h__
 
 #include "Adjuster.h"
-#include "QBoundedDouble.h"
-#include "QRange.h"
+#include "QTypeEx/QBoundedDouble.h"
+#include "QTypeEx/QRange.h"
 
 class QFocusLineEdit;
 class QLabel;

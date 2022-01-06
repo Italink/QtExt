@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPainter>
 #include "QFocusLineEdit.h"
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 #include "QValidator"
 
 IntSlider::IntSlider(QBoundedInt number  /*= 0*/, QString name, QWidget* parent /*= nullptr*/)

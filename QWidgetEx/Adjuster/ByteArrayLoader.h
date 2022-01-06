@@ -20,4 +20,3 @@ protected:
 };
 
 #endif // ByteArrayLoader_h__
-

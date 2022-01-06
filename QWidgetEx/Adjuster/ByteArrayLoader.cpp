@@ -3,7 +3,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QPushButton>
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 
 ByteArrayLoader::ByteArrayLoader(QByteArray value, QWidget* parent /*= nullptr*/)
 	: btLoad_(new QPushButton("Load"))
@@ -24,13 +24,13 @@ QVariant ByteArrayLoader::getValue()
 void ByteArrayLoader::setValue(QVariant var)
 {
 	data_ = var.toByteArray();
-	btLoad_->setToolTip(data_.size()>1024?data_.mid(0,1024)+"..." : data_);
+	btLoad_->setToolTip(data_.size() > 1024 ? data_.mid(0, 1024) + "..." : data_);
 	Q_EMIT valueChanged(data_);
 }
 
 void ByteArrayLoader::loadFile()
 {
-	QString filePath =  QFileDialog::getOpenFileName(nullptr, "Load File");
+	QString filePath = QFileDialog::getOpenFileName(nullptr, "Load File");
 	if (!QFile::exists(filePath))
 		return;
 	QFile file(filePath);
@@ -39,4 +39,3 @@ void ByteArrayLoader::loadFile()
 		file.close();
 	}
 }
-

@@ -2,7 +2,7 @@
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QPainter>
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 
 Button::Button(QWidget* parent)
 	: Adjuster(parent)

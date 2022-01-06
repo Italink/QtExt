@@ -1,7 +1,6 @@
 #ifndef Test_h__
 #define Test_h__
 
-#include "QObjectEx/QObjectEx.h"
 #include "QTypeEx/QBoundedDouble.h"
 #include "QTypeEx/QBoundedInt.h"
 #include "QTypeEx/QColors.h"
@@ -12,17 +11,18 @@
 #include <QVector3D>
 #include <QVector4D>
 #include "QTypeEx/QRange.h"
+#include "QObjectEx/QObjectEx.h"
 
-class InlineObject : public QObject {
+class InlineObject : public QObjectEx {
 	Q_OBJECT
 public:
 	Q_AUTO(QString, str) = "Hello";
 };
 
-class Test : public QObject {
-	Q_OBJECT_EX
+class Test : public QObjectEx {
+	Q_OBJECT
 public:
-	Test();
+	Q_INVOKABLE Test();
 	Q_AUTO(int, Int) = 1;
 	Q_AUTO(float, Float) = 2;
 	Q_AUTO(double, Double) = 3;

@@ -1,4 +1,4 @@
-#include "QColors.h"
+#include "QTypeEx/QColors.h"
 
 QColors::QColors()
 {

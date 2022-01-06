@@ -1,4 +1,4 @@
-#include "QRange.h"
+#include "QTypeEx/QRange.h"
 
 QRange::QRange(int lower, int upper, int min, int max)
 	: lower_(lower)

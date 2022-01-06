@@ -14,10 +14,11 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Core  REQUIRED)
 
 file(GLOB_RECURSE PROJECT_SOURCES FILES *.h *.cpp *.hpp)
 
+
 add_library(QObjectEx STATIC ${PROJECT_SOURCES})
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
 
 target_include_directories(QObjectEx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ..)
 
-target_link_libraries(QObjectEx PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core QWidgetEx QTypeEx)
+target_link_libraries(QObjectEx PUBLIC Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core QWidgetEx QTypeEx QScintilla sol2 liblua-5.3.5)

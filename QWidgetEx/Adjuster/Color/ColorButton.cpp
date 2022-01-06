@@ -1,5 +1,5 @@
 #include "ColorButton.hpp"
-#include "QNeumorphism.h"
+#include "QWidgetEx/Effect/QNeumorphism.h"
 #include "ColorDialog.hpp"
 #include <QPainter>
 
