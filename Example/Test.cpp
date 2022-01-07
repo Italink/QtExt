@@ -1,8 +1,10 @@
 #include "Test.h"
 #include "QWidgetEx\Effect\QNeumorphism.h"
+#include "QObjectEx\StaticRegister.h"
 
 Test::Test()
 {
+	this->setProperty("test", 5.0);
 	QNeumorphism::setEffectEnabled(enable_effect);
 	for (auto ins : QNeumorphism::instances) {
 		ins->setInset(inset);

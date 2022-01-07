@@ -5,8 +5,9 @@
 #include <QSplitter>
 
 class QPropertyPanel;
-class QsciScintilla;
+class ScriptPanel;
 class QObjectEx;
+class ImageButton;
 
 class QObjectPanel :public QWidget {
 	Q_OBJECT
@@ -20,10 +21,12 @@ Q_SIGNALS:
 	void objectChanged(QObject*);
 	void closed();
 private:
+	ImageButton* btRedo_;
+	ImageButton* btUndo_;
 	QObjectEx* object_;
 	QSplitter splitter_;
 	QPropertyPanel* propertyPanel_;
-	QsciScintilla* codeEditor_;
+	ScriptPanel* scriptPanel_;
 	int propertyPanelWidth_;
 };
 

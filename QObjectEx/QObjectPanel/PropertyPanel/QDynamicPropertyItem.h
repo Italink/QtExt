@@ -1,5 +1,5 @@
-#ifndef QPropertyItem_h__
-#define QPropertyItem_h__
+#ifndef QDynamicPropertyItem_h__
+#define QDynamicPropertyItem_h__
 
 #include <QMetaProperty>
 #include <QTreeWidgetItem>
@@ -8,21 +8,21 @@ class QObjectEx;
 class QLabel;
 class QHBoxLayout;
 
-class QPropertyItem : public QTreeWidgetItem
+class QDynamicPropertyItem : public QTreeWidgetItem
 {
 public:
-	explicit QPropertyItem(QObjectEx* object, QMetaProperty property);
-	~QPropertyItem();
+	explicit QDynamicPropertyItem(QObjectEx* object, QString propertyName);
+	~QDynamicPropertyItem();
 	virtual QWidget* createWidget();
 	virtual void setUp(QTreeWidgetItem* tree);
 	virtual void setUp(QTreeWidget* tree);
 	void rename();
 protected:
 	QObjectEx* object_ = nullptr;
-	QMetaProperty property_;
+	QString propertyName_;
 	QWidget* itemWidget_ = nullptr;
 	QHBoxLayout* layout_ = nullptr;
 	QLabel* name_ = nullptr;
 };
 
-#endif // QPropertyItem_h__
+#endif // QDynamicPropertyItem_h__

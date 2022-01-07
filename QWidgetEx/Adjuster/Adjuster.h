@@ -10,7 +10,7 @@ public:
 	Adjuster(QWidget* parent = nullptr) {}
 	virtual QVariant getValue() = 0;
 	virtual void setValue(QVariant var) = 0;
-	Q_INVOKABLE virtual void flush(QVariant var) {
+	Q_INVOKABLE virtual void updateValue(QVariant var) {
 		if (var != getValue()) {
 			setValue(var);
 		}

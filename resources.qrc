@@ -1,7 +1,8 @@
 <RCC>
-	<qresource prefix="/Icons">
-		<file alias="hide_right">Resources/Icons/hide_right.png</file>
-		<file alias="alphaback">Resources/Icons/alphaback.png</file>
-		<file alias="box_arrow">Resources/Icons/box_arrow.png</file>
-	</qresource>
+    <qresource prefix="/Icons">
+        <file alias="hide_right">Resources/Icons/hide_right.png</file>
+        <file alias="alphaback">Resources/Icons/alphaback.png</file>
+        <file alias="box_arrow">Resources/Icons/box_arrow.png</file>
+        <file alias="redo">Resources/Icons/redo.png</file>
+    </qresource>
 </RCC>

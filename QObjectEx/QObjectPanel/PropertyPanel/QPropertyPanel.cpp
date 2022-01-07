@@ -3,8 +3,9 @@
 #include <QMetaProperty>
 #include "QPropertyItem.h"
 #include "QFile"
+#include "QDynamicPropertyItem.h"
 
-QPropertyPanel::QPropertyPanel(QObject* object /*= nullptr*/) {
+QPropertyPanel::QPropertyPanel(QObjectEx* object /*= nullptr*/) {
 	setObject(object);
 	setColumnCount(1);
 	setIndentation(8);
@@ -25,19 +26,19 @@ QPropertyPanel::QPropertyPanel(QObject* object /*= nullptr*/) {
 	);
 }
 
-QObject* QPropertyPanel::getObject() const
+QObjectEx* QPropertyPanel::getObject() const
 {
 	return object_;
 }
 
-void QPropertyPanel::setObject(QObject* val) {
+void QPropertyPanel::setObject(QObjectEx* val) {
 	if (val != object_) {
 		object_ = val;
 		updatePanel();
 	}
 }
 
-void setupItemInternal(QObject* object, QPropertyItem* parentItem) {
+void setupItemInternal(QObjectEx* object, QTreeWidgetItem* parentItem) {
 	if (object == nullptr)
 		return;
 
@@ -48,7 +49,7 @@ void setupItemInternal(QObject* object, QPropertyItem* parentItem) {
 
 		const QMetaObject* meta = property.metaType().metaObject();
 		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
-			QObject* obj = property.read(object).value<QObject*>();
+			QObjectEx* obj = property.read(object).value<QObjectEx*>();
 			if (obj != nullptr) {
 				setupItemInternal(obj, item);
 			}
@@ -67,12 +68,25 @@ void QPropertyPanel::updatePanel() {
 
 		const QMetaObject* meta = property.metaType().metaObject();
 
-		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
-			QObject* obj = property.read(object_).value<QObject*>();
+		if (meta != nullptr && meta->inherits(&QObjectEx::staticMetaObject)) {
+			QObjectEx* obj = property.read(object_).value<QObjectEx*>();
 			if (obj != nullptr) {
 				setupItemInternal(obj, item);
 			}
 		}
 	}
 	this->expandAll();
+
+	for (auto& dpName : object_->dynamicPropertyNames()) {
+		QDynamicPropertyItem* item = new QDynamicPropertyItem(object_, dpName);
+		item->setUp(this);
+		QVariant var = object_->property(dpName);
+		const QMetaObject* meta = var.metaType().metaObject();
+		if (meta != nullptr && meta->inherits(&QObjectEx::staticMetaObject)) {
+			QObjectEx* obj = var.value<QObjectEx*>();
+			if (obj != nullptr) {
+				setupItemInternal(obj, item);
+			}
+		}
+	}
 }

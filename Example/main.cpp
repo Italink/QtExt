@@ -1,6 +1,7 @@
 #include <QApplication>
 #include "Test.h"
 #include "QFile"
+#include "QObjectEx\StaticRegister.h"
 
 int main(int argc, char* argv[]) {
 	QApplication a(argc, argv);
@@ -22,8 +23,11 @@ int main(int argc, char* argv[]) {
 		file.open(QFile::WriteOnly);
 		file.write(test->serialize());
 		file.close();
+		test->dump();
 	});
 
 	panel->show();
 	return a.exec();
 }
+
+//马爷，我在非工作时间还可以做技术博客吗？就是Vulkan和图形学的一些东西

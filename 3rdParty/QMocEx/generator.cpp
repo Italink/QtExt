@@ -947,9 +947,9 @@ void Generator::registerEnumStrings()
 
 void Generator::generateLuaRegister()
 {
-	fprintf(out, "struct %sStaticRegister : public StaticRegisterBase{ \n", cdef->classname.constData());
-	fprintf(out, "    %sStaticRegister(const char* typeName) :StaticRegisterBase(typeName) {} \n", cdef->classname.constData());
-	fprintf(out, "    void registerLua(sol::state &lua) override{ \n");
+	fprintf(out, "struct %sStaticRegister : public LuaRegisterBase{ \n", cdef->classname.constData());
+	fprintf(out, "    %sStaticRegister(const char* typeName) :LuaRegisterBase(typeName) {} \n", cdef->classname.constData());
+	fprintf(out, "    void typeToLua(sol::state &lua) override{ \n");
 	fprintf(out, "        lua.new_usertype<%s>(\"%s\"\n", cdef->classname.constData(), cdef->classname.constData());
 	for (auto& property : cdef->propertyList) {
 		fprintf(out, "            ,\"%s\",sol::property(&%s::%s,&%s::%s)\n", property.name.constData(), cdef->classname.constData(), property.read.constData(), cdef->classname.constData(), property.write.constData());
@@ -957,12 +957,16 @@ void Generator::generateLuaRegister()
 	fprintf(out, "        );\n");
 	fprintf(out, "    }\n");
 
-	fprintf(out, "    std::vector<VarInfo> subVars() override{ \n");
+	fprintf(out, "    std::vector<propertyInfo> propertyDescription() override{ \n");
 	fprintf(out, "        return {\n");
 	for (auto& property : cdef->propertyList) {
 		fprintf(out, "            {\"%s\",\"%s\"},\n", property.type.constData(), property.name.constData());
 	}
 	fprintf(out, "        };\n");
+	fprintf(out, "    }\n");
+
+	fprintf(out, "    void objectToLua(QObjectEx* object, std::string varName, sol::state& lua) override { \n");
+	fprintf(out, "        lua[varName] = dynamic_cast<%s*>(object); \n", cdef->classname.constData());
 	fprintf(out, "    }\n");
 	fprintf(out, "}%sRegister(\"%s\");\n\n", cdef->classname.constData(), cdef->classname.constData());
 }

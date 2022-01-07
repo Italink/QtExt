@@ -10,7 +10,7 @@ Vec2Box::Vec2Box(QVector2D value, QWidget* parent /*= nullptr*/)
 	x->setGraphicsEffect(nullptr);
 	y->setGraphicsEffect(nullptr);
 	setGraphicsEffect(new QNeumorphism);
-	QHBoxLayout* h = new QHBoxLayout(this);
+	QVBoxLayout* h = new QVBoxLayout(this);
 	h->setSpacing(2);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(x);

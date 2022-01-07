@@ -1,13 +1,13 @@
-#include "QPropertyItem.h"
+#include "QDynamicPropertyItem.h"
 #include <QBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include "AdjusterFactory.h"
 
-QPropertyItem::QPropertyItem(QObjectEx* object, QMetaProperty property)
+QDynamicPropertyItem::QDynamicPropertyItem(QObjectEx* object, QString propertyName)
 	: object_(object)
-	, property_(property)
+	, propertyName_(propertyName)
 	, itemWidget_(new QWidget)
 	, name_(new QLabel)
 {
@@ -15,24 +15,24 @@ QPropertyItem::QPropertyItem(QObjectEx* object, QMetaProperty property)
 	layout_->setAlignment(Qt::AlignCenter);
 	layout_->setContentsMargins(10, 2, 10, 2);
 	layout_->addWidget(name_, 100, Qt::AlignLeft);
-	name_->setText(QString(property.name()).replace("_", " "));
+	name_->setText(QString(propertyName).replace("_", " "));
 	name_->setStyleSheet("background-color:rgba(0,0,0,0)");
 }
 
-QPropertyItem::~QPropertyItem()
+QDynamicPropertyItem::~QDynamicPropertyItem()
 {
 	if (itemWidget_)
 		itemWidget_->deleteLater();
 }
 
-QWidget* QPropertyItem::createWidget()
+QWidget* QDynamicPropertyItem::createWidget()
 {
 	if (object_ == nullptr)
 		return nullptr;
-	return AdjusterFactory::create(object_, property_);
+	return AdjusterFactory::create(object_, propertyName_);
 }
 
-void QPropertyItem::setUp(QTreeWidgetItem* tree)
+void QDynamicPropertyItem::setUp(QTreeWidgetItem* tree)
 {
 	QWidget* widget = createWidget();
 	if (widget != nullptr) {
@@ -42,7 +42,7 @@ void QPropertyItem::setUp(QTreeWidgetItem* tree)
 	treeWidget()->setItemWidget(this, 0, itemWidget_);
 }
 
-void QPropertyItem::setUp(QTreeWidget* tree)
+void QDynamicPropertyItem::setUp(QTreeWidget* tree)
 {
 	QWidget* widget = createWidget();
 	if (widget != nullptr) {
@@ -52,7 +52,7 @@ void QPropertyItem::setUp(QTreeWidget* tree)
 	treeWidget()->setItemWidget(this, 0, itemWidget_);
 }
 
-void QPropertyItem::rename()
+void QDynamicPropertyItem::rename()
 {
 	QLineEdit* lineEdit = new QLineEdit;
 	//treeWidget()->setItemWidget(this,0,lineEdit);

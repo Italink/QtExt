@@ -15,7 +15,7 @@ Vec4Box::Vec4Box(QVector4D value, QWidget* parent /*= nullptr*/)
 	w->setGraphicsEffect(nullptr);
 	setGraphicsEffect(new QNeumorphism);
 
-	QHBoxLayout* h = new QHBoxLayout(this);
+	QVBoxLayout* h = new QVBoxLayout(this);
 	h->setSpacing(2);
 	h->setContentsMargins(0, 0, 0, 0);
 	h->addWidget(x);

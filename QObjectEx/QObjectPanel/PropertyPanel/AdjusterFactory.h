@@ -5,15 +5,17 @@
 #include <QMetaProperty>
 #include <QHash>
 #include "QWidgetEx\Adjuster\Adjuster.h"
+#include "QObjectEx\QObjectEx.h"
 
 class Adjuster;
 
 class AdjusterFactory {
-	typedef std::function<Adjuster* (QObject*, QMetaProperty)> CreateAdjuster;
+	typedef std::function<Adjuster* (QObjectEx*, QString propertyName)> CreateAdjuster;
 	AdjusterFactory();
 	static AdjusterFactory* getInstance();
 public:
-	static Adjuster* create(QObject* object = nullptr, QMetaProperty property = {});
+	static Adjuster* create(QObjectEx* object = nullptr, QMetaProperty property = {});
+	static Adjuster* create(QObjectEx* object = nullptr, QString propertyName = "");
 private:
 	QHash<int, CreateAdjuster> AdjusterCreator_;
 };

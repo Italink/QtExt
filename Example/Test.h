@@ -27,7 +27,8 @@ public:
 	Q_AUTO(float, Float) = 2;
 	Q_AUTO(double, Double) = 3;
 	Q_AUTO(bool, Bool) = true;
-	Q_AUTO(QString, String) = "Hello";
+	Q_AUTO(std::string, StdString) = "Hello";
+	Q_AUTO(QString, String) = "Man";
 	Q_AUTO(QBoundedDouble, BoundedDouble) = QBoundedDouble(5, 0, 1000);
 	Q_AUTO(QBoundedInt, BoundedInt) = QBoundedInt(5, 0, 1000);
 	Q_AUTO(QVector2D, Vec2) = QVector2D(1, 2);

@@ -9,7 +9,7 @@ protected:
 	virtual void paintEvent(QPaintEvent*) override;
 protected:
 	bool hovered = false;
-	QColor hoverColor;
+	QColor hoverColor = QColor(150, 150, 150);
 public:
 	QColor getHoverColor() const { return hoverColor; }
 	void setHoverColor(QColor val) { hoverColor = val; update(); }

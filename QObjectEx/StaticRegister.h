@@ -4,27 +4,37 @@
 #include <map>
 #include <unordered_map>
 #include <sol/sol.hpp>
+#include <QStringList>
 
-class StaticRegisterFactory;
+class LuaRegisterFactory;
+class QObjectEx;
 
-struct StaticRegisterBase {
-	struct VarInfo {
-		std::string type;
-		std::string name;
+struct LuaRegisterBase {
+	struct propertyInfo {
+		QString type;
+		QString name;
 	};
-	StaticRegisterBase(const char* typeName);
-	virtual void registerLua(sol::state& lua) {};
-	virtual std::vector<VarInfo> subVars() { return {}; }
+	LuaRegisterBase(const char* typeName);
+	virtual void typeToLua(sol::state& lua) {};
+	virtual std::vector<propertyInfo> propertyDescription() { return {}; }
+	virtual void objectToLua(QObjectEx* object, std::string varName, sol::state& lua) {}
 };
 
-class StaticRegisterFactory {
+class LuaRegisterFactory {
 public:
-	static StaticRegisterFactory* instance();
-	void registerLua(sol::state& lua);;
+	static LuaRegisterFactory* instance();
+	void registerAllType(sol::state& lua);
+	void registerType(sol::state& lua, std::string typeName);
+	void registerType(sol::state& lua, QObjectEx* obj);
+	void objectToLua(sol::state& lua, QObjectEx* obj, std::string varName);
+	LuaRegisterBase* getLuaRegister(std::string typeName);
+	QStringList getApis(QString typeName, QString varName);
 private:
-	friend struct StaticRegisterBase;
-	void addRegister(const char* typeName, StaticRegisterBase* staticRegister);
-	std::unordered_map<std::string, StaticRegisterBase*> staticRegisterMap;
+	void processApis(QStringList& apis, QString typeName, QString varName);
+private:
+	friend struct LuaRegisterBase;
+	void addRegister(const char* typeName, LuaRegisterBase* staticRegister);
+	std::unordered_map<std::string, LuaRegisterBase*> staticRegisterMap;
 };
 
 #endif // StaticRegisterBase_h__

@@ -19,11 +19,10 @@ public:
 	}
 };
 
-class LuaEditor : public QsciScintilla
-{
+class LuaEditor : public QsciScintilla {
 	Q_OBJECT
 public:
-	explicit LuaEditor(QWidget* parent = nullptr);
+	explicit LuaEditor(QStringList apis = {}, QWidget* parent = nullptr);
 	QsciLexer* lexer;
 	QsciAPIs* apis;
 };

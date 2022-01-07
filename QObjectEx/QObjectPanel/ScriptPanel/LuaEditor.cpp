@@ -1,12 +1,15 @@
 #include "LuaEditor.h"
 #include <QApplication>
 
-LuaEditor::LuaEditor(QWidget* parent)
+LuaEditor::LuaEditor(QStringList apis_, QWidget* parent)
 	:QsciScintilla(parent)
 	, lexer(new MyLexerLua)
 	, apis(new QsciAPIs(lexer))
 {
 	lexer->setAPIs(apis);
+	for (auto& api : apis_) {
+		apis->add(api);
+	}
 	apis->prepare();
 
 	setFrameStyle(QFrame::NoFrame);
@@ -22,7 +25,7 @@ LuaEditor::LuaEditor(QWidget* parent)
 	setMarginWidth(0, 30);//设置页边宽度
 	setAutoCompletionSource(QsciScintilla::AcsAll);   //设置源，自动补全所有地方出现的
 	setAutoCompletionCaseSensitivity(true);           //设置自动补全大小写敏感
-	setAutoCompletionThreshold(1);                    //设置每输入一个字符就会出现自动补全的提示
+	setAutoCompletionThreshold(1);                    //设置每输入1个字符就会出现自动补全的提示
 	setTabWidth(4);
 	setIndentationGuides(false);
 	setTabIndents(true);
