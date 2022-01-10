@@ -20,4 +20,8 @@ public:
 	void runTest();
 };
 
+bool sol_lua_check(sol::types<QVector3D>, lua_State* L, int index, std::function<sol::check_handler_type> handler, sol::stack::record& tracking);
+QVector3D sol_lua_get(sol::types<QVector3D>, lua_State* L, int index, sol::stack::record& tracking);
+int sol_lua_push(sol::types<QVector3D>, lua_State* L, const QVector3D& v);
+
 #endif // ScriptPanel_h__

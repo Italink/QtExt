@@ -35,6 +35,7 @@
 #include <QThread>
 
 #include "Qsci/qscilexer.h"
+#include "QRegularExpression"
 
 
 
@@ -81,8 +82,12 @@ QStringList QsciAPIsPrepared::apiWords(int api_idx, const QStringList &wseps,
 
     if (wseps.isEmpty())
         return QStringList(base);
-
-    return base.split(wseps.first());
+	QRegularExpression reg;
+	if (wseps.size() == 1)
+		reg = QRegularExpression("\\" + wseps.front());
+	else
+		reg = QRegularExpression("\\" + wseps.join("|\\"));
+	return base.split(reg);
 }
 
 

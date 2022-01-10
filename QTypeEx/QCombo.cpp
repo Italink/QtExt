@@ -17,9 +17,40 @@ QCombo::QCombo(QString currentItem, QStringList items)
 {
 }
 
+int QCombo::getCurrentIndex() const
+{
+	return currentIndex_;
+}
+
+void QCombo::setCurrentIndex(int val)
+{
+	if (items_.isEmpty()) {
+		currentIndex_ = val;
+	}
+	else {
+		currentIndex_ = std::clamp(val, 0, (int)items_.size() - 1);
+	}
+}
+
+QString QCombo::getCurrentItem() const
+{
+	return items_.value(currentIndex_);
+}
+
+void QCombo::setCurrentItem(QString str)
+{
+	setCurrentIndex(items_.indexOf(str));
+}
+
+QDebug operator<<(QDebug debug, const QCombo& combo)
+{
+	debug << "QCombo{ " << "current index : " << combo.getCurrentIndex() <<", current item : " << combo.getCurrentItem()<<  " }";
+	return debug;
+}
+
 bool QCombo::operator==(const QCombo& other)
 {
-	return currentIndex_ == other.currentIndex_ && items_ == other.items_;
+	return getCurrentIndex() == other.getCurrentIndex() && items_ == other.items_;
 }
 
 QDataStream& operator>>(QDataStream& in, QCombo& var)

@@ -4,6 +4,7 @@
 #include "QObjectPanel/QObjectPanel.h"
 #include <QVariant>
 #include <QUndoStack>
+#define SOL_ALL_SAFETIES_ON 1
 #include "sol/state.hpp"
 
 #define Q_AUTO(type,name)\
@@ -33,6 +34,8 @@ public:
 	virtual void unserialize(QByteArray byteArray);
 	static QObjectEx* createFromData(QByteArray byteArray);
 	static QUndoStack undoStack_;
+Q_SIGNALS:
+	void requestUpdate();
 public:
 	Q_AUTO(QString, luaCode_);
 };

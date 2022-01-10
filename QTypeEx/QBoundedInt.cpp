@@ -6,6 +6,21 @@ QBoundedInt::QBoundedInt(int number, int min, int max) : value_(number)
 {
 }
 
+
+QBoundedInt::QBoundedInt(const QBoundedInt & other)
+{
+	if (other.max() != other.min()) {
+		this->max_ = other.max_;
+		this->min_ = other.min_;
+	}
+	if (this->max_ == 0 && this->min_ == 0) {
+		this->value_ = other.value_;
+	}
+	else {
+		setNumber(other.value_);
+	}
+}
+
 void QBoundedInt::setBound(int min, int max)
 {
 	min_ = min;

@@ -2,6 +2,7 @@
 #define QRange_h__
 
 #include <QMetaType>
+#include "QDebug"
 
 class QRange {
 public:
@@ -24,7 +25,7 @@ public:
 
 	friend QDataStream& operator<<(QDataStream& out, const QRange& var);
 	friend QDataStream& operator>>(QDataStream& in, QRange& var);
-
+	friend QDebug operator<<(QDebug debug, const QRange& range);
 private:
 	int lower_ = 0;
 	int upper_ = 100;

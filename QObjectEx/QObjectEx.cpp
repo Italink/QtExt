@@ -7,7 +7,6 @@
 #include <QCborMap>
 #include "QFile"
 #include "QMetaType"
-#include "StaticRegister.h"
 
 QObjectEx::QObjectEx()
 {

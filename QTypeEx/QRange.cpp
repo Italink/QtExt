@@ -39,9 +39,8 @@ int QRange::getLower() const
 	return lower_;
 }
 
-void QRange::setLower(int val)
-{
-	lower_ = val;
+void QRange::setLower(int val){
+	lower_ = std::clamp(val,min_,max_);
 }
 
 int QRange::getUpper() const
@@ -49,15 +48,20 @@ int QRange::getUpper() const
 	return upper_;
 }
 
-void QRange::setUpper(int val)
-{
-	upper_ = val;
+void QRange::setUpper(int val){
+	upper_ = std::clamp(val, min_, max_);
 }
 
 void QRange::setRange(int lower, int upper)
 {
 	lower_ = lower;
 	upper_ = upper;
+}
+
+QDebug operator<<(QDebug debug, const QRange& range)
+{
+	debug <<"QRange(" << range.getLower()<< ", " << range.getUpper()<<")";
+	return debug;
 }
 
 bool QRange::operator==(const QRange& other)

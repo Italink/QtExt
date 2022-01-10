@@ -1112,7 +1112,8 @@ void Moc::generate(FILE* out, FILE* jsonOutput)
 			fprintf(out, "#include %s\n", inc.constData());
 		}
 	}
-	fprintf(out, "#include <QObjectEx/StaticRegister.h>\n");
+	fprintf(out, "#include <QObjectEx/LuaRegister/LuaRegister.h>\n");
+	fprintf(out, "#include <QObjectEx/LuaRegister/TypeRegister.h>\n");
 
 	//if (classList.size() && classList.constFirst().classname == "Qt")
 	//	fprintf(out, "#include <QtCore/qobject.h>\n");

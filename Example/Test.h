@@ -12,7 +12,8 @@
 #include <QVector4D>
 #include "QTypeEx/QRange.h"
 #include "QObjectEx/QObjectEx.h"
-
+#include "QWidgetEx/Window/WallpaperWindow.h"
+#include <QWindow>
 class InlineObject : public QObjectEx {
 	Q_OBJECT
 public:
@@ -27,7 +28,6 @@ public:
 	Q_AUTO(float, Float) = 2;
 	Q_AUTO(double, Double) = 3;
 	Q_AUTO(bool, Bool) = true;
-	Q_AUTO(std::string, StdString) = "Hello";
 	Q_AUTO(QString, String) = "Man";
 	Q_AUTO(QBoundedDouble, BoundedDouble) = QBoundedDouble(5, 0, 1000);
 	Q_AUTO(QBoundedInt, BoundedInt) = QBoundedInt(5, 0, 1000);
@@ -41,12 +41,10 @@ public:
 	Q_AUTO(QByteArray, ByteArray);
 	Q_AUTO(QCombo, Combo) = { 1,{"A","B","C"} };
 	enum CustomEnum {
-		Left = 1, Right, Top, Bottom
+		Top = 0, Normal, Bottom, Wallpaper
 	};
 	Q_ENUM(CustomEnum);
-
-	Q_AUTO(CustomEnum, Enum) = Right;
-
+	Q_AUTO(CustomEnum, Enum) = Normal;
 	Q_AUTO(bool, enable_effect) = true;;
 	Q_AUTO(bool, inset) = true;;
 	Q_AUTO(QBoundedDouble, blur_size) = QBoundedDouble(10, 1, 40);
@@ -54,6 +52,9 @@ public:
 	Q_AUTO(QBoundedDouble, angle) = QBoundedDouble(0, 0, 360);
 	Q_AUTO(QBoundedDouble, strength) = QBoundedDouble(0.8, 0, 1);
 	Q_AUTO(InlineObject*, Object) = new InlineObject();
+
+	WallpaperWindow w;
+	QWindow window;
 };
 
 #endif // Test_h__

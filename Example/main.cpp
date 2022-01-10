@@ -1,11 +1,13 @@
 #include <QApplication>
 #include "Test.h"
 #include "QFile"
-#include "QObjectEx\StaticRegister.h"
+#include "QWidgetEx\Window\FramlessWindow.h"
+#include "QWidgetEx\Application\DesktopApplication.h"
+#include "QWidgetEx\Window\WallpaperWindow.h"
 
 int main(int argc, char* argv[]) {
-	QApplication a(argc, argv);
 	Q_INIT_RESOURCE(resources);
+	DesktopApplication a(":/Icons/redo", argc, argv);
 	qRegisterMetaType<Test>("Test");
 
 	QFile file("save.txt");
@@ -25,9 +27,12 @@ int main(int argc, char* argv[]) {
 		file.close();
 		test->dump();
 	});
+	QColor color = Qt::red;
+	qDebug() << color;
 
+	//FramelessWidget frameLess("hello");
+	//frameLess.show();
 	panel->show();
+
 	return a.exec();
 }
-
-//马爷，我在非工作时间还可以做技术博客吗？就是Vulkan和图形学的一些东西

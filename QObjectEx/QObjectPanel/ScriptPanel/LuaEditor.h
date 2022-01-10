@@ -9,9 +9,9 @@
 
 class MyLexerLua : public QsciLexerLua {
 public:
-	virtual QStringList autoCompletionWordSeparators() const override {
-		return QStringList();
-	}
+	//virtual QStringList autoCompletionWordSeparators() const override {
+	//	return QStringList();
+	//}
 	virtual const char* blockStart(int* style = 0) const override {
 		if (style)
 			*style = Operator;

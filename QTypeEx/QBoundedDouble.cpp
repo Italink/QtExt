@@ -6,6 +6,20 @@ QBoundedDouble::QBoundedDouble(double number, double min, double max) : value_(n
 {
 }
 
+QBoundedDouble::QBoundedDouble(const QBoundedDouble& other)
+{
+	if (other.max() != other.min()) {
+		this->max_ = other.max_;
+		this->min_ = other.min_;
+	}
+	if (this->max_ == 0 && this->min_ == 0) {
+		this->value_ = other.value_;
+	}
+	else {
+		setNumber(other.value_);
+	}
+}
+
 void QBoundedDouble::setBound(double min, double max)
 {
 	min_ = min;

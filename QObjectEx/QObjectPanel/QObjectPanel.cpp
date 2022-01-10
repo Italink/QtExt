@@ -4,7 +4,7 @@
 #include <QEvent>
 #include "QObjectEx\QObjectEx.h"
 #include "QWidgetEx\Widgets\Buttons\ImageButton.h"
-#include "QObjectEx\StaticRegister.h"
+#include "QObjectEx\LuaRegister\LuaRegister.h"
 #include "ScriptPanel\ScriptPanel.h"
 
 QObjectPanel::QObjectPanel(QObjectEx* object)
@@ -22,6 +22,14 @@ QObjectPanel::QObjectPanel(QObjectEx* object)
 	connect(&QObjectEx::undoStack_, &QUndoStack::indexChanged, [this]() {
 		btUndo_->setToolTip(QObjectEx::undoStack_.undoText());
 		btRedo_->setToolTip(QObjectEx::undoStack_.redoText());
+	});
+	connect(btUndo_, &ImageButton::clicked, [this]() {
+		QObjectEx::undoStack_.undo();
+		object_->requestUpdate();
+	});
+	connect(btRedo_, &ImageButton::clicked, [this]() {
+		QObjectEx::undoStack_.redo();
+		object_->requestUpdate();
 	});
 
 	QHBoxLayout* h = new QHBoxLayout(this);

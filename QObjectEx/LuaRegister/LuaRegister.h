@@ -14,10 +14,11 @@ struct LuaRegisterBase {
 		QString type;
 		QString name;
 	};
+	LuaRegisterBase() {}
 	LuaRegisterBase(const char* typeName);
 	virtual void typeToLua(sol::state& lua) {};
 	virtual std::vector<propertyInfo> propertyDescription() { return {}; }
-	virtual void objectToLua(QObjectEx* object, std::string varName, sol::state& lua) {}
+	virtual void objectToLua(void* object, std::string varName, sol::state& lua) {}
 };
 
 class LuaRegisterFactory {
@@ -30,6 +31,7 @@ public:
 	LuaRegisterBase* getLuaRegister(std::string typeName);
 	QStringList getApis(QString typeName, QString varName);
 private:
+	LuaRegisterFactory();
 	void processApis(QStringList& apis, QString typeName, QString varName);
 private:
 	friend struct LuaRegisterBase;

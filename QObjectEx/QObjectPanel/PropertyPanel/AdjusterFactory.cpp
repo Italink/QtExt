@@ -39,12 +39,14 @@ public:
 	{
 		setText(QString("Property: %1  ->  %2").arg(propertyName).arg(pre_.toString()));
 	}
-
-private:
+public:
 	QVariant pre_;	//赋值前
 	QVariant post_;	//赋值后
 	QObjectEx* obejct_;
 	QString propertyName_;
+	void changePost(QVariant var) {
+		post_ = var;
+	}
 	void undo() override {
 		obejct_->setProperty(propertyName_.toLocal8Bit(), pre_);
 	}
@@ -59,39 +61,20 @@ private:
 		QObject::connect(adjuster,&Adjuster::valueChanged,object,[=](QVariant var){	\
 			QVariant pre = object->property(propertyName.toLocal8Bit()); \
 			object->setProperty(propertyName.toLocal8Bit(),var); \
-			QObjectEx::undoStack_.push(new PropertyAssignCommand(pre,object->property(propertyName.toLocal8Bit()),object,propertyName)); \
+			if (QObjectEx::undoStack_.count() != 0) { \
+				PropertyAssignCommand* command = dynamic_cast< PropertyAssignCommand*>(const_cast<QUndoCommand*>( QObjectEx::undoStack_.command(QObjectEx::undoStack_.index()-1))); \
+				if (command && command->propertyName_ == propertyName)\
+					command->post_ = object->property(propertyName.toLocal8Bit());\
+				else \
+					QObjectEx::undoStack_.push(new PropertyAssignCommand(pre, object->property(propertyName.toLocal8Bit()), object, propertyName));\
+			} \
+			else \
+				QObjectEx::undoStack_.push(new PropertyAssignCommand(pre, object->property(propertyName.toLocal8Bit()), object, propertyName)); \
 		});	\
 		return adjuster;\
 	};
 //QVariant pre = getter();
 //
-
-namespace sol {
-namespace stack {
-template <>
-struct unqualified_pusher<QString> { // or whatever the full qualified name is
-	static int push(lua_State* L, const ::QString& str) {
-		qDebug() << "hello1";
-		return stack::push(L, str.toLocal8Bit().constData()); // or whatever would need to be done
-	}
-};
-
-template <>
-struct unqualified_getter<QString> {
-	static QString get(lua_State* L, int index, record& tracking) {
-		tracking.use(1);
-		std::size_t len;
-		auto str = lua_tolstring(L, index, &len);
-		qDebug() << "hello2";
-		return  QString::fromStdString(std::string(str, len));
-	}
-};
-} // stack
-namespace detail {
-template <>
-struct lua_type_of<QString> : std::integral_constant<type, type::string> {};
-}
-}
 
 AdjusterFactory::AdjusterFactory() {
 	BIND_ADJUSTER(double, DoubleBox);
@@ -125,22 +108,35 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty
 		QMetaEnum meta = property.enumerator();
 		QStringList enumItems;
 		for (int i = 0; i < meta.keyCount(); i++) {
-			enumItems << meta.valueToKey(meta.value(i));
+			enumItems <<meta.valueToKey(meta.value(i));
 		}
 		ComboBox* comboBox = new ComboBox(QCombo(meta.valueToKey(property.read(object).toInt()), enumItems));
 		QObject::connect(comboBox, &Adjuster::valueChanged, object, [=](QVariant var) {
 			QCombo combo = var.value<QCombo>();
-			property.write(object, meta.value(combo.currentIndex_));
+			property.write(object, meta.value(combo.getCurrentIndex()));
 		});
 		adjuster = comboBox;
+		if (adjuster) {
+			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster,meta, property, enumItems, object]() {
+				QCombo combo(meta.valueToKey(property.read(object).toInt()), enumItems);
+				adjuster->updateValue(QVariant::fromValue(combo));
+			});
+		}
 	}
 	else if (getInstance()->AdjusterCreator_.contains(property.typeId())) {
 		adjuster = getInstance()->AdjusterCreator_[property.typeId()](object, property.name());
-		if (adjuster != nullptr) {
-			int index = adjuster->staticMetaObject.indexOfMethod("updateValue(QVariant)");
-			QObject::connect(object, property.notifySignal(), adjuster, adjuster->metaObject()->method(index));
+		//if (adjuster != nullptr) {
+		//	int index = adjuster->staticMetaObject.indexOfMethod("updateValue(QVariant)");
+		//	QObject::connect(object, property.notifySignal(), adjuster, adjuster->metaObject()->method(index));
+		//}
+
+		if (adjuster) {
+			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, property, object]() {
+				adjuster->updateValue(property.read(object));
+			});
 		}
 	}
+
 	return adjuster;
 }
 
@@ -148,6 +144,11 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QString prope
 	QVariant var = object->property(propertyName.toLocal8Bit().constData());
 	if (getInstance()->AdjusterCreator_.contains(var.typeId())) {
 		Adjuster* adjuster = getInstance()->AdjusterCreator_[var.typeId()](object, propertyName);
+		if (adjuster) {
+			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, propertyName, object]() {
+				adjuster->updateValue(object->property(propertyName.toLocal8Bit()));
+			});
+		}
 		return adjuster;
 	}
 	return nullptr;

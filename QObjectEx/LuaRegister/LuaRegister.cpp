@@ -1,14 +1,27 @@
-#include "StaticRegister.h"
-#include "QObjectEx.h"
+#include "LuaRegister.h"
+#include "QObjectEx\QObjectEx.h"
+#include "TypeRegister.inl"
 
 LuaRegisterBase::LuaRegisterBase(const char* typeName)
 {
 	LuaRegisterFactory::instance()->addRegister(typeName, this);
 }
 
+LuaRegisterFactory::LuaRegisterFactory()
+{
+	addRegister("QVector2D", new Vec2StaticRegister());
+	addRegister("QVector3D", new Vec3StaticRegister());
+	addRegister("QVector4D", new Vec4StaticRegister());
+	addRegister("QColor", new ColorStaticRegister());
+	addRegister("QRange", new RangeStaticRegister());
+	addRegister("QCombo", new ComboStaticRegister());
+}
+
+
 LuaRegisterFactory* LuaRegisterFactory::instance()
 {
 	static LuaRegisterFactory inst;
+
 	return &inst;
 }
 
@@ -47,6 +60,7 @@ LuaRegisterBase* LuaRegisterFactory::getLuaRegister(std::string typeName)
 {
 	return staticRegisterMap.at(typeName);
 }
+
 
 void LuaRegisterFactory::processApis(QStringList& apis, QString typeName, QString varName) {
 	QString normailze = typeName.trimmed().replace("*", "");

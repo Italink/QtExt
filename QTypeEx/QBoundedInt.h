@@ -5,8 +5,10 @@
 
 class QBoundedInt {
 public:
-	QBoundedInt() {};
+	QBoundedInt(){}
+	QBoundedInt(int number):value_(number) {}
 	QBoundedInt(int number, int min, int max);
+	QBoundedInt(const QBoundedInt& other);
 
 	void setBound(int min, int max);
 
@@ -28,7 +30,7 @@ public:
 
 private:
 	int value_ = 0;
-	int min_ = 0, max_ = 100;
+	int min_ = 0, max_ = 0;
 };
 
 Q_DECLARE_METATYPE(QBoundedInt)

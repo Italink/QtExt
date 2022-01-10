@@ -254,7 +254,6 @@ void QsciScintilla::handleCharAdded(int ch)
     {
         cancelList();
         startAutoCompletion(acSource, false, use_single == AcusAlways);
-
         return;
     }
 
@@ -674,7 +673,6 @@ void QsciScintilla::startAutoCompletion(AutoCompletionSource acs,
 
     if (context.isEmpty())
         return;
-
     // Get the last word's raw data and length.
     ScintillaBytes s = textAsBytes(context.last());
     const char *last_data = ScintillaBytesConstData(s);

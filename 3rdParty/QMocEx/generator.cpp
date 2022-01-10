@@ -965,8 +965,8 @@ void Generator::generateLuaRegister()
 	fprintf(out, "        };\n");
 	fprintf(out, "    }\n");
 
-	fprintf(out, "    void objectToLua(QObjectEx* object, std::string varName, sol::state& lua) override { \n");
-	fprintf(out, "        lua[varName] = dynamic_cast<%s*>(object); \n", cdef->classname.constData());
+	fprintf(out, "    void objectToLua(void* object, std::string varName, sol::state& lua) override { \n");
+	fprintf(out, "        lua[varName] = static_cast<%s*>(object); \n", cdef->classname.constData());
 	fprintf(out, "    }\n");
 	fprintf(out, "}%sRegister(\"%s\");\n\n", cdef->classname.constData(), cdef->classname.constData());
 }

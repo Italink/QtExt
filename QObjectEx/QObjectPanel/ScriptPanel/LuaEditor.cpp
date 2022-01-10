@@ -24,7 +24,7 @@ LuaEditor::LuaEditor(QStringList apis_, QWidget* parent)
 	markerDefine(QsciScintilla::MarkerSymbol::CircledPlus, 0);
 	setMarginWidth(0, 30);//设置页边宽度
 	setAutoCompletionSource(QsciScintilla::AcsAll);   //设置源，自动补全所有地方出现的
-	setAutoCompletionCaseSensitivity(true);           //设置自动补全大小写敏感
+	setAutoCompletionCaseSensitivity(false);           //设置自动补全大小写敏感
 	setAutoCompletionThreshold(1);                    //设置每输入1个字符就会出现自动补全的提示
 	setTabWidth(4);
 	setIndentationGuides(false);
