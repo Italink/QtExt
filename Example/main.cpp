@@ -4,6 +4,8 @@
 #include "QWidgetEx\Window\FramlessWindow.h"
 #include "QWidgetEx\Application\DesktopApplication.h"
 #include "QWidgetEx\Window\WallpaperWindow.h"
+#include "QWidgetEx\Widgets\ResPanel\ResPanel.h"
+#include <QUndoView>
 
 int main(int argc, char* argv[]) {
 	Q_INIT_RESOURCE(resources);
@@ -29,10 +31,15 @@ int main(int argc, char* argv[]) {
 	});
 	QColor color = Qt::red;
 	qDebug() << color;
+	QUndoView view(&QObjectEx::undoStack_);
+	view.show();
 
 	//FramelessWidget frameLess("hello");
 	//frameLess.show();
 	panel->show();
+
+	//ResPanel res;
+	//res.show();
 
 	return a.exec();
 }

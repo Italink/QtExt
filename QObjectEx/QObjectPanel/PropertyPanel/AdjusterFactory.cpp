@@ -108,7 +108,7 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty
 		QMetaEnum meta = property.enumerator();
 		QStringList enumItems;
 		for (int i = 0; i < meta.keyCount(); i++) {
-			enumItems <<meta.valueToKey(meta.value(i));
+			enumItems << meta.valueToKey(meta.value(i));
 		}
 		ComboBox* comboBox = new ComboBox(QCombo(meta.valueToKey(property.read(object).toInt()), enumItems));
 		QObject::connect(comboBox, &Adjuster::valueChanged, object, [=](QVariant var) {
@@ -117,7 +117,7 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty
 		});
 		adjuster = comboBox;
 		if (adjuster) {
-			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster,meta, property, enumItems, object]() {
+			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, meta, property, enumItems, object]() {
 				QCombo combo(meta.valueToKey(property.read(object).toInt()), enumItems);
 				adjuster->updateValue(QVariant::fromValue(combo));
 			});
