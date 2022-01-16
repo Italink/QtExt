@@ -13,7 +13,7 @@ class FramelessWidget : public QWidget
 {
 	Q_OBJECT
 public:
-	FramelessWidget(const QString& title, QWidget* parent = 0);
+	FramelessWidget(const QString& title = "", QWidget* parent = 0);
 	~FramelessWidget();
 	CustomHeaderBar* headerBar;
 	QVBoxLayout vLayout;

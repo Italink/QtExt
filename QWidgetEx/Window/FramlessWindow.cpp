@@ -21,7 +21,9 @@ public:
 		h->addWidget(&maxButton, 0, Qt::AlignRight);
 		h->addWidget(&closeButton, 0, Qt::AlignRight);
 	}
-
+	bool isCaption(QPoint point) {
+		return geometry().contains(point) && point.x() < minButton.geometry().left();
+	}
 	QLabel title;
 	WinMaxButton maxButton;
 	WinMinButton minButton;
@@ -145,6 +147,8 @@ bool FramelessWidget::nativeEvent(const QByteArray& eventType, void* message, qi
 	switch (msg->message)
 	{
 	case WM_NCHITTEST:
+		if (isFullScreen())
+			return false;
 		int xPos = QCursor::pos().x() - this->geometry().x();
 		int yPos = QCursor::pos().y() - this->geometry().y();
 		if (xPos < boundaryWidth && yPos < boundaryWidth)                    //左上角
@@ -163,6 +167,8 @@ bool FramelessWidget::nativeEvent(const QByteArray& eventType, void* message, qi
 			*result = HTTOP;
 		else if (yPos >= height() - boundaryWidth)                             //下边
 			*result = HTBOTTOM;
+		else if (headerBar->isCaption(QPoint( xPos,yPos)))
+			*result = HTCAPTION;
 		else              //其他部分不做处理，返回false，留给其他事件处理器处理
 			return false;
 		return true;
@@ -177,8 +183,8 @@ void FramelessWidget::mousePressEvent(QMouseEvent* e)
 }
 void FramelessWidget::mouseMoveEvent(QMouseEvent* e)
 {
-	if (e->buttons() & Qt::LeftButton && !clickPos.isNull() && !isFullScreen() && e->y() < headerBar->height())
-		move(e->pos() + pos() - clickPos);
+	//if (e->buttons() & Qt::LeftButton && !clickPos.isNull() && !isFullScreen() && e->y() < headerBar->height())
+	//	move(e->pos() + pos() - clickPos);
 }
 
 void FramelessWidget::mouseReleaseEvent(QMouseEvent*)
@@ -191,7 +197,7 @@ void FramelessWidget::paintEvent(QPaintEvent*)
 	QPainter painter(this);
 	painter.setPen(QColor(0, 0, 0, 80));
 	painter.setBrush(QColor(255, 255, 255, 200));
-	painter.drawRect(rect().adjusted(1, 1, -1, -1));
+	painter.drawRect(rect().adjusted(0, 0, -1, -1));
 }
 
 void FramelessWidget::showEvent(QShowEvent*)

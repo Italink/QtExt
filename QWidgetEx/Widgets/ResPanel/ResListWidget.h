@@ -11,10 +11,13 @@ public:
 protected:
 	void dropEvent(QDropEvent* event) override;
 	void rowsInserted(const QModelIndex& parent, int start, int end) override;
+	void startDrag(Qt::DropActions supportedActions) override;
+
 Q_SIGNALS:
-	void dropItems(QList<QListWidgetItem*>);
+	void dropItems(int dstIndex ,QList<QListWidgetItem*>);
 private:
 	QList<QListWidgetItem*> insertItems_;
+	int dstIndex_ = -1;
 };
 
 #endif // ResListWidget_h__

@@ -6,7 +6,7 @@
 ResListWidget::ResListWidget() {
 	this->setMovement(QListView::Free);
 	this->setFlow(QListView::LeftToRight);
-	this->setDragDropMode(QAbstractItemView::DragDrop);
+	this->setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 	this->setDefaultDropAction(Qt::MoveAction);
 	this->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	this->setFrameShape(QFrame::NoFrame);
@@ -20,12 +20,14 @@ void ResListWidget::addItem(QString text)
 	item->setSizeHint({ 30,26 });
 	item->setTextAlignment(Qt::AlignCenter);
 	QListWidget::addItem(item);
+	insertItems_.clear();
 }
 
 void ResListWidget::dropEvent(QDropEvent* event) {
 	QListWidget::dropEvent(event);
 	if (event->isAccepted()) {
-		Q_EMIT dropItems(insertItems_);
+		if(!insertItems_.isEmpty())
+			Q_EMIT dropItems(dstIndex_, insertItems_);
 		insertItems_.clear();
 	}
 }
@@ -35,5 +37,11 @@ void ResListWidget::rowsInserted(const QModelIndex& parent, int start, int end)
 	for (int i = start; i <= end; i++) {
 		insertItems_ << item(i);
 	}
+	dstIndex_ = start;
 	QListWidget::rowsInserted(parent, start, end);
+}
+
+void ResListWidget::startDrag(Qt::DropActions supportedActions)
+{
+	QListWidget::startDrag(Qt::DropAction::MoveAction);
 }

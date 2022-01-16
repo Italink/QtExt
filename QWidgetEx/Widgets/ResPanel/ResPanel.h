@@ -13,11 +13,13 @@ public:
 	ResPanel();
 private:
 	void reset();
+	void setTopCurrent(QString id);
 private:
 	ResListWidget topWidget_;
 	ResListWidget bottomWidget_;
 	ResGroupItem* currentGroupItem_;
-	QString currentCroupId_;
+	QString currentGroupId_;
+	QString currentSingleId_;
 	ResManagement* resManagement_;
 };
 

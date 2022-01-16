@@ -66,12 +66,11 @@ void LuaRegisterFactory::processApis(QStringList& apis, QString typeName, QStrin
 	QString normailze = typeName.trimmed().replace("*", "");
 	auto luaRegister = staticRegisterMap.find(normailze.toStdString());
 	if (luaRegister == staticRegisterMap.end()) {
-		apis << varName;
+		return;
 	}
-	else {
-		for (auto propertyInfo : luaRegister->second->propertyDescription()) {
-			processApis(apis, propertyInfo.type, varName + "." + propertyInfo.name);
-		}
+	for (auto propertyInfo : luaRegister->second->propertyDescription()) {
+		processApis(apis, propertyInfo.type, propertyInfo.name);
+		apis << varName + "." + propertyInfo.name;
 	}
 }
 

@@ -16,9 +16,11 @@ public:
 	void addResItem(int index, ResItem* item);
 	void removeItems(QStringList idList);
 	void makeGroup(QStringList idList);
-	void takePart(QString groupId);
+	void takeApart(QString groupId);
 	void moveItem(int start, int end, int dst);
 	void moveGroupChildItem(QString groupId, int start, int end, int dst);
+	void enterGroup(QString groupId, QStringList idList,int dstIndex);
+	void leaveGroup(QString groupId, QStringList idList,int dstIndex);
 	QStringList getIdList();
 	QStringList getChildIdList(QString groupId);
 Q_SIGNALS:

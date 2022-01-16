@@ -22,6 +22,9 @@ ScriptPanel::ScriptPanel(QObjectEx* object, QWidget* parent /*= nullptr*/)
 	btTest_->setFixedWidth(50);
 	logBox_->setMaximumHeight(300);
 	connect(btTest_, &QPushButton::clicked, this, &ScriptPanel::runTest);
+	for (auto& it : LuaRegisterFactory::instance()->getApis(object->metaObject()->className(), "this")) {
+		qDebug() << it;
+	}
 }
 
 void ScriptPanel::runTest() {
