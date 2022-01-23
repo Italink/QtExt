@@ -9,6 +9,7 @@ ResPanel::ResPanel() {
 	resManagement_ = new ResManagement;
 	QVBoxLayout* v = new QVBoxLayout(this);
 	v->setSpacing(0);
+	v->setContentsMargins(2, 2, 2, 2);
 	v->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
 	v->addWidget(&topWidget_);
 	v->addWidget(&bottomWidget_);
@@ -19,7 +20,6 @@ ResPanel::ResPanel() {
 			QStringList idList;
 			for (auto& item : items) {
 				idList << item->text();
-
 			}
 			QMenu menu;
 			if (items.size() > 1) {
@@ -80,8 +80,6 @@ ResPanel::ResPanel() {
 	connect(bottomWidget_.model(), &QAbstractItemModel::rowsMoved, this, [this](const QModelIndex& parent, int start, int end, const QModelIndex& destination, int row) {
 		resManagement_->moveGroupChildItem(currentGroupId_,start, end, row);
 	});
-
-
 
 	reset();
 }

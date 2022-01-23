@@ -16,7 +16,9 @@ class AdjusterFactory {
 public:
 	static Adjuster* create(QObjectEx* object = nullptr, QMetaProperty property = {});
 	static Adjuster* create(QObjectEx* object = nullptr, QString propertyName = "");
+	inline static bool isUpdating_ = false;
 private:
+
 	QHash<int, CreateAdjuster> AdjusterCreator_;
 };
 

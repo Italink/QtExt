@@ -31,13 +31,16 @@
 
 class PropertyAssignCommand :public QUndoCommand {
 public:
-	PropertyAssignCommand(QVariant pre, QVariant post, QObjectEx* obejct, QString propertyName)
-		: pre_(pre)
-		, post_(post)
-		, obejct_(obejct)
+	PropertyAssignCommand(QObjectEx* obejct, QString propertyName,QVariant post)
+		: obejct_(obejct)
 		, propertyName_(propertyName)
+		, post_(post)
 	{
-		setText(QString("Property: %1  ->  %2").arg(propertyName).arg(pre_.toString()));
+		pre_ = obejct_->property(propertyName_.toLocal8Bit());
+		QString varStr = QDebug::toString(pre_);
+		int index = varStr.indexOf(",");
+		varStr = varStr.mid(index + 1, varStr.size() - index - 2);
+		setText(QString("Property[%1]:  %2 ").arg(propertyName_).arg(varStr));
 	}
 public:
 	QVariant pre_;	//¸³ÖµÇ°
@@ -55,26 +58,32 @@ public:
 	}
 };
 
+void notifyValueChanged(QObjectEx* object, QString propertyName, QVariant var) {
+	if (AdjusterFactory::isUpdating_)
+		return;
+	QVariant pre = object->property(propertyName.toLocal8Bit());
+	if (QObjectEx::undoStack_.count() != 0) {
+		PropertyAssignCommand* command = dynamic_cast<PropertyAssignCommand*>(const_cast<QUndoCommand*>(QObjectEx::undoStack_.command(QObjectEx::undoStack_.index() - 1)));
+		if (command && command->propertyName_ == propertyName) {
+			command->post_ = object->property(propertyName.toLocal8Bit());
+			object->setProperty(propertyName.toLocal8Bit(), var);
+		}
+		else
+			QObjectEx::undoStack_.push(new PropertyAssignCommand(object, propertyName,var));
+	}
+	else {
+		QObjectEx::undoStack_.push(new PropertyAssignCommand(object, propertyName,var));
+	}
+}
+
 #define BIND_ADJUSTER(Type,Adjuster) \
 	AdjusterCreator_[QMetaTypeId2<Type>::qt_metatype_id()] = [](QObjectEx* object,QString propertyName) {\
 		Adjuster * adjuster = new Adjuster(object->property(propertyName.toLocal8Bit()).value<Type>()); \
 		QObject::connect(adjuster,&Adjuster::valueChanged,object,[=](QVariant var){	\
-			QVariant pre = object->property(propertyName.toLocal8Bit()); \
-			object->setProperty(propertyName.toLocal8Bit(),var); \
-			if (QObjectEx::undoStack_.count() != 0) { \
-				PropertyAssignCommand* command = dynamic_cast< PropertyAssignCommand*>(const_cast<QUndoCommand*>( QObjectEx::undoStack_.command(QObjectEx::undoStack_.index()-1))); \
-				if (command && command->propertyName_ == propertyName)\
-					command->post_ = object->property(propertyName.toLocal8Bit());\
-				else \
-					QObjectEx::undoStack_.push(new PropertyAssignCommand(pre, object->property(propertyName.toLocal8Bit()), object, propertyName));\
-			} \
-			else \
-				QObjectEx::undoStack_.push(new PropertyAssignCommand(pre, object->property(propertyName.toLocal8Bit()), object, propertyName)); \
+			notifyValueChanged(object,propertyName,var);\
 		});	\
 		return adjuster;\
 	};
-//QVariant pre = getter();
-//
 
 AdjusterFactory::AdjusterFactory() {
 	BIND_ADJUSTER(double, DoubleBox);
@@ -118,8 +127,11 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty
 		adjuster = comboBox;
 		if (adjuster) {
 			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, meta, property, enumItems, object]() {
+				isUpdating_ = true;
 				QCombo combo(meta.valueToKey(property.read(object).toInt()), enumItems);
 				adjuster->updateValue(QVariant::fromValue(combo));
+				isUpdating_ = false;
+
 			});
 		}
 	}
@@ -132,11 +144,12 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty
 
 		if (adjuster) {
 			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, property, object]() {
+				isUpdating_ = true;
 				adjuster->updateValue(property.read(object));
+				isUpdating_ = false;
 			});
 		}
 	}
-
 	return adjuster;
 }
 
@@ -146,7 +159,9 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QString prope
 		Adjuster* adjuster = getInstance()->AdjusterCreator_[var.typeId()](object, propertyName);
 		if (adjuster) {
 			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, propertyName, object]() {
+				isUpdating_ = true;
 				adjuster->updateValue(object->property(propertyName.toLocal8Bit()));
+				isUpdating_ = false;
 			});
 		}
 		return adjuster;

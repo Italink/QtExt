@@ -10,14 +10,14 @@ ResListWidget::ResListWidget() {
 	this->setDefaultDropAction(Qt::MoveAction);
 	this->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	this->setFrameShape(QFrame::NoFrame);
-	this->setFixedHeight(30);
+	this->setFixedHeight(25);
 }
 
 void ResListWidget::addItem(QString text)
 {
 	QListWidgetItem* item = new QListWidgetItem();
 	item->setText(text);
-	item->setSizeHint({ 30,26 });
+	item->setSizeHint({ 25,22 });
 	item->setTextAlignment(Qt::AlignCenter);
 	QListWidget::addItem(item);
 	insertItems_.clear();
