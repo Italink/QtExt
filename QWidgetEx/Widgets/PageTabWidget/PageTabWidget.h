@@ -7,7 +7,7 @@
 class PageTabWidget : public QTabWidget {
 public:
 	PageTabWidget();
-	void addPage(QString text, QWidget* page);
+	void addPage(QString text,QIcon icon, QWidget* page);
 protected:
 	double process_ = 1;
 	QVariantAnimation switchAnim_;

@@ -4,6 +4,7 @@
 #include <QSystemTrayIcon>
 
 class QLocalServer;
+
 class DesktopApplication : public QApplication {
 	Q_OBJECT
 public:

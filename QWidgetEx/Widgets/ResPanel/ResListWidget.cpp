@@ -26,7 +26,7 @@ void ResListWidget::addItem(QString text)
 void ResListWidget::dropEvent(QDropEvent* event) {
 	QListWidget::dropEvent(event);
 	if (event->isAccepted()) {
-		if(!insertItems_.isEmpty())
+		if(!insertItems_.isEmpty()&&dragRes != this)
 			Q_EMIT dropItems(dstIndex_, insertItems_);
 		insertItems_.clear();
 	}
@@ -43,5 +43,6 @@ void ResListWidget::rowsInserted(const QModelIndex& parent, int start, int end)
 
 void ResListWidget::startDrag(Qt::DropActions supportedActions)
 {
+	dragRes = this;
 	QListWidget::startDrag(Qt::DropAction::MoveAction);
 }

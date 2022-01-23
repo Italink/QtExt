@@ -8,6 +8,8 @@ FlowPanel::FlowPanel(){
 	setDragDropMode(QAbstractItemView::NoDragDrop);
 	setIconSize(QSize(80, 80));
 	setSpacing(10);
+	setStyleSheet("QListWidget{background-color : transparent; }");
+
 }
 
 void FlowPanel::addItem(QString text, QIcon icon)

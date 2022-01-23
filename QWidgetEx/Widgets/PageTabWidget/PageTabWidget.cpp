@@ -22,7 +22,7 @@ public:
         if (type == QStyle::CT_TabBarTab) {
             s.transpose();
             s.rwidth() = 60; // 设置每个tabBar中item的大小
-            s.rheight() = 30;
+            s.rheight() = 60;
         }
         return s;
     }
@@ -44,31 +44,31 @@ public:
         if (element == CE_TabBarTabLabel) {
             if (const QStyleOptionTab* tab = qstyleoption_cast<const QStyleOptionTab*>(option))
             {
-                QRect allRect = tab->rect;
                 if (tab->state & QStyle::State_Selected) {
                     painter->save();
                     painter->setPen(Qt::NoPen);
                     painter->setBrush(QColor(0,100,200,50));
-                    painter->drawRect(allRect);
+                    painter->drawRect(tab->rect);
                     painter->restore();
                 }
 			    if (tab->state & QStyle::State_MouseOver) {
 					painter->save();
                     painter->setPen(Qt::NoPen);
                     painter->setBrush(QColor(0, 100, 200, 50));
-					painter->drawRect(allRect);
+					painter->drawRect(tab->rect);
 					painter->restore();
 				}
+           
                 QTextOption option;
-                option.setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+                option.setAlignment(Qt::AlignCenter);
                 if (tab->state & QStyle::State_Selected) {
                     painter->setPen(0x5d5d5d);
                 }
                 else {
                     painter->setPen(0x5d5d5d);
                 }
-
-                painter->drawText(allRect.adjusted(5,0,0,0), tab->text, option);
+                tab->icon.paint(painter, QRect(tab->rect.x(), tab->rect.y(),tab->rect.width(), tab->iconSize.height()).adjusted(5,5,-5,-5));
+                painter->drawText(QRect(tab->rect.x(), tab->rect.y()+tab->iconSize.height(), tab->rect.width(), tab->rect.height()- tab->iconSize.height()), tab->text, option);
                 return;
             }
         }
@@ -81,12 +81,12 @@ public:
 
 PageTabWidget::PageTabWidget()
 {
+    setIconSize(QSize(40,40));
 	setTabPosition(QTabWidget::West);
     tabBar()->setStyle(new CustomTabStyle);
 	QPalette p;
 	p.setColor(QPalette::Window, Qt::transparent);
 	setPalette(p);
-   
     setStyleSheet("QTabWidget::pane { border: 0; background-color : transparent; }");
 
 	switchAnim_.setDuration(200);
@@ -108,12 +108,14 @@ PageTabWidget::PageTabWidget()
 	});
 }
 
-void PageTabWidget::addPage(QString text, QWidget* page){
-    this->blockSignals(true);
+
+void PageTabWidget::addPage(QString text, QIcon icon, QWidget* page)
+{
+	this->blockSignals(true);
 	PageArea* area = new PageArea;
-    area->setWidget(page);
-    addTab(area, text);
-    this->blockSignals(false);
+	area->setWidget(page);
+    addTab(area, icon, text);
+	this->blockSignals(false);
 }
 
 void PageTabWidget::paintEvent(QPaintEvent*){
