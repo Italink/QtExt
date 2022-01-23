@@ -47,9 +47,6 @@ public:
 	QVariant post_;	//¸³Öµºó
 	QObjectEx* obejct_;
 	QString propertyName_;
-	void changePost(QVariant var) {
-		post_ = var;
-	}
 	void undo() override {
 		obejct_->setProperty(propertyName_.toLocal8Bit(), pre_);
 	}
@@ -65,7 +62,7 @@ void notifyValueChanged(QObjectEx* object, QString propertyName, QVariant var) {
 	if (QObjectEx::undoStack_.count() != 0) {
 		PropertyAssignCommand* command = dynamic_cast<PropertyAssignCommand*>(const_cast<QUndoCommand*>(QObjectEx::undoStack_.command(QObjectEx::undoStack_.index() - 1)));
 		if (command && command->propertyName_ == propertyName) {
-			command->post_ = object->property(propertyName.toLocal8Bit());
+			command->post_ = var;
 			object->setProperty(propertyName.toLocal8Bit(), var);
 		}
 		else
