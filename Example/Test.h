@@ -12,7 +12,6 @@
 #include <QVector4D>
 #include "QTypeEx/QRange.h"
 #include "QObjectEx/QObjectEx.h"
-#include "QWidgetEx/Window/WallpaperWindow.h"
 #include <QWindow>
 class InlineObject : public QObjectEx {
 	Q_OBJECT
@@ -53,7 +52,6 @@ public:
 	Q_AUTO(QBoundedDouble, strength) = QBoundedDouble(0.8, 0, 1);
 	Q_AUTO(InlineObject*, Object) = new InlineObject();
 
-	WallpaperWindow w;
 	QWindow window;
 };
 

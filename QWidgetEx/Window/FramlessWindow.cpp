@@ -196,7 +196,7 @@ void FramelessWidget::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
 	painter.setPen(QColor(0, 0, 0, 80));
-	painter.setBrush(QColor(255, 255, 255, 200));
+	painter.setBrush(QColor(255, 255, 255, 255));
 	painter.drawRect(rect().adjusted(0, 0, -1, -1));
 }
 

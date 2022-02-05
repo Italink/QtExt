@@ -12,9 +12,9 @@ Test::Test(){
 		ins->setAngle(angle.number());
 	}
 
-	connect(this, &Test::EnumChanged, this, [this](QVariant var) {
-		this->w.setWindowLevel((WallpaperWindow::WindowLevel)var.toInt());
-	});
+	//connect(this, &Test::EnumChanged, this, [this](QVariant var) {
+	//	this->w.setWindowLevel((WallpaperWindow::WindowLevel)var.toInt());
+	//});
 
 	connect(this, &Test::enable_effectChanged, this, [this](QVariant var) {
 		QNeumorphism::setEffectEnabled(var.toBool());

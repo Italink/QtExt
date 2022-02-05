@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Network Core REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets OpenGLWidgets Network Core REQUIRED)
 
 option(QtExt_BUILD_EXAMPLE "Build Example" ON)
 
@@ -25,7 +25,13 @@ qt6_add_resources(QRC_FILES resources.qrc)
 
 add_library(QtExt STATIC ${PROJECT_SOURCES} ${QRC_FILES})
 
-target_link_libraries(QtExt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network ksuser ole32 QScintilla sol2 liblua-5.3.5)
+target_link_libraries(QtExt PUBLIC 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    Qt${QT_VERSION_MAJOR}::Network 
+	Qt${QT_VERSION_MAJOR}::WidgetsPrivate
+	Qt${QT_VERSION_MAJOR}::OpenGL 
+	Qt${QT_VERSION_MAJOR}::OpenGLPrivate 
+    ksuser ole32 QScintilla sol2 liblua-5.3.5)
 target_include_directories(QtExt PUBLIC .)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})

@@ -3,7 +3,7 @@
 #include "QFile"
 #include "QWidgetEx\Window\FramlessWindow.h"
 #include "QWidgetEx\Application\DesktopApplication.h"
-#include "QWidgetEx\Window\WallpaperWindow.h"
+
 #include "QWidgetEx\Widgets\ResPanel\ResPanel.h"
 #include <QUndoView>
 #include "QWidgetEx\Widgets\PageTabWidget\PageTabWidget.h"

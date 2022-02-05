@@ -156,13 +156,6 @@ void ResManagement::leaveGroup(QString groupId, QStringList idList, int dstIndex
 	rollback();
 }
 
-//void ResManagement::resort(QStringList idList)
-//{
-//}
-//
-//void ResManagement::resort(QString groupId, QStringList idList)
-//{
-//}
 
 QStringList ResManagement::getIdList()
 {
