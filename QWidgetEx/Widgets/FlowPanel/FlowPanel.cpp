@@ -5,6 +5,7 @@ FlowPanel::FlowPanel(){
 	setFrameShape(QFrame::NoFrame);
 	setFlow(QListView::LeftToRight);
 	setResizeMode(QListView::Adjust);
+	setSelectionMode(QListView::SingleSelection);
 	setDragDropMode(QAbstractItemView::NoDragDrop);
 	setIconSize(QSize(80, 80));
 	setSpacing(10);
@@ -22,3 +23,4 @@ void FlowPanel::addItem(QString text, QIcon icon)
 	this->setTextElideMode(Qt::ElideRight);
 	QListWidget::addItem(item);
 }
+

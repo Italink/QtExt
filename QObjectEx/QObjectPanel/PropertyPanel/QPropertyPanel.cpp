@@ -21,7 +21,7 @@ QPropertyPanel::QPropertyPanel(QObjectEx* object /*= nullptr*/) {
 	});
 	setStyleSheet(
 		"QTreeView{"
-		" background-color: rgb(255,255,255);"
+		" background-color: rgba(255,255,255,0);"
 		"}"
 	);
 }

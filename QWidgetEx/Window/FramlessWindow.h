@@ -15,9 +15,9 @@ class FramelessWidget : public QWidget
 public:
 	FramelessWidget(const QString& title = "", QWidget* parent = 0);
 	~FramelessWidget();
+	void setWindowTitle(QString title);
 	CustomHeaderBar* headerBar;
 	QVBoxLayout vLayout;
-
 protected:
 	virtual bool nativeEvent(const QByteArray& eventType, void* message, qintptr* result) override;
 	virtual void mousePressEvent(QMouseEvent* e)override;
@@ -27,7 +27,6 @@ protected:
 	static int boundaryWidth;
 	QPoint clickPos;
 private:
-
 	// QWidget interface
 protected:
 	virtual void showEvent(QShowEvent* event) override;

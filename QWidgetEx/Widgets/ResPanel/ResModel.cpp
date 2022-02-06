@@ -1,41 +1,42 @@
-#include "ResManagement.h"
+#include "ResModel.h"
 #include "ResGroupItem.h"
 #include "QApplication"
 
-ResManagement::ResManagement()
+
+ResModel::ResModel()
 {
-	addNewSingleItem();
-	addNewSingleItem();
-	addNewSingleItem();
-	addNewSingleItem();
-	addNewSingleItem();
 }
 
-bool ResManagement::isGroup(QString id)
+ResGroupItem* ResModel::createGroupItem()
+{
+	return new ResGroupItem;
+}
+
+bool ResModel::isGroup(QString id)
 {
 	return dynamic_cast<ResGroupItem*>(getItem(id)) != nullptr;
 }
 
-void ResManagement::addNewSingleItem()
+void ResModel::appendResItem(ResItem* item)
 {
-	ResSingleItem* item = new ResSingleItem;
-	addResItem(itemList_.size(), item);
+	insertResItem(itemList_.size(), item);
+	rollback();
 }
 
-void ResManagement::addResItem(int index, ResItem* item)
+void ResModel::insertResItem(int index, ResItem* item)
 {
 	itemList_.insert(index, item);
 	itemMap_[item->getId()] = item;
 }
 
-void ResManagement::removeItems(QStringList idList)
+void ResModel::removeItems(QStringList idList)
 {
 	for (auto& id : idList) {
 		removeItem(getItem(id));
 	}
 }
 
-void ResManagement::makeGroup(QStringList idList)
+void ResModel::makeGroup(QStringList idList)
 {
 	QList<ResSingleItem*> sItemList;
 	int minIndex =itemList_.size();
@@ -48,8 +49,8 @@ void ResManagement::makeGroup(QStringList idList)
 		}
 		else {
 			ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
-			sItemList << gItem->childList_;
-			gItem->childList_.clear();
+			sItemList << gItem->getChildList();
+			gItem->clear();
 			removeItem(gItem);
 		}
 	}
@@ -57,26 +58,28 @@ void ResManagement::makeGroup(QStringList idList)
 		ResItem* item = getItem(id);
 		itemList_.removeOne(item);
 	}
-	ResGroupItem* gItem = new ResGroupItem;
-	gItem->childList_ = sItemList;
-	addResItem(minIndex, gItem);
+	ResGroupItem* gItem = createGroupItem();
+	for (auto& item : sItemList) {
+		gItem->append(item);
+	}
+	insertResItem(minIndex, gItem);
 	rollback();
 }
 
-void ResManagement::takeApart(QString groupId)
+void ResModel::takeApart(QString groupId)
 {
 	ResItem* item = getItem(groupId);
 	int index = itemList_.indexOf(item);
 	ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
-	for (auto child : gItem->childList_) {
-		addResItem(index++, child);
+	for (auto child : gItem->getChildList()) {
+		insertResItem(index++, child);
 	}
-	gItem->childList_.clear();
+	gItem->clear();
 	removeItem(item);
 	rollback();
 }
 
-void ResManagement::moveItem(int start, int end, int dst)
+void ResModel::moveItem(int start, int end, int dst)
 {
 	qDebug() << "copy" << (QApplication::keyboardModifiers() & Qt::ControlModifier);
 	for (int i = start; i <= end; i++) {
@@ -88,21 +91,21 @@ void ResManagement::moveItem(int start, int end, int dst)
 	}
 }
 
-void ResManagement::moveGroupChildItem(QString groupId, int start, int end, int dst)
+void ResModel::moveGroupChildItem(QString groupId, int start, int end, int dst)
 {
 	qDebug() << "copy" << (QApplication::keyboardModifiers() & Qt::ControlModifier);
 	ResItem* item = getItem(groupId);
 	ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
 	for (int i = start; i <= end; i++) {
-		gItem->childList_.insert(dst, gItem->childList_[i]);
+		gItem->insertItem(dst, gItem->childItem(i));
 	}
 	int removeIndex = start + (dst < start ? (end - start + 1) : 0);
 	for (int i = 0; i <= end - start; i++) {
-		gItem->childList_.removeAt(removeIndex);
+		gItem->removeItemByIndex(removeIndex);
 	}
 }
 
-void ResManagement::enterGroup(QString groupId, QStringList idList, int dstIndex)
+void ResModel::enterGroup(QString groupId, QStringList idList, int dstIndex)
 {
 	qDebug() << "copy" << (QApplication::keyboardModifiers() & Qt::ControlModifier);
 	QList<ResSingleItem*> sItemList;
@@ -114,8 +117,8 @@ void ResManagement::enterGroup(QString groupId, QStringList idList, int dstIndex
 		}
 		else {
 			ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
-			sItemList << gItem->childList_;
-			gItem->childList_.clear();
+			sItemList << gItem->getChildList();
+			gItem->clear();
 			removeItem(gItem);
 		}
 	}
@@ -126,38 +129,39 @@ void ResManagement::enterGroup(QString groupId, QStringList idList, int dstIndex
 	ResItem* item = getItem(groupId);
 	ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
 	for (auto child : sItemList) {
-		gItem->childList_.insert(dstIndex, child);
+		gItem->insertItem(dstIndex, child);
 	}
 	rollback();
 }
 
-void ResManagement::leaveGroup(QString groupId, QStringList idList, int dstIndex)
+void ResModel::leaveGroup(QString groupId, QStringList idList, int dstIndex)
 {
 	qDebug() << "copy" << (QApplication::keyboardModifiers() & Qt::ControlModifier);
 	ResItem* item = getItem(groupId);
 	ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
 	QList<ResSingleItem*> sItemList;
-	for (auto& child : gItem->childList_) {
+	for (auto& child : gItem->getChildList()) {
 		if (idList.contains(child->getId()))
 			sItemList << child;
 	}
 	for (auto child : sItemList) {
-		addResItem(dstIndex++, child);
-		gItem->childList_.removeOne(child);
+		insertResItem(dstIndex++, child);
+		gItem->removeItem(child);
 	}
-	if (gItem->childList_.isEmpty()) {
+	if (gItem->count()==0) {
 		removeItem(gItem);
 	}
-	else if (gItem->childList_.size() == 1) {
+	else if (gItem->count() == 1) {
 		int index = itemList_.indexOf(item);
-		addResItem(index, gItem->childList_.takeFirst());
+		insertResItem(index, gItem->childItem(0));
+		gItem->removeItemByIndex(0);
 		removeItem(gItem);
 	}
 	rollback();
 }
 
 
-QStringList ResManagement::getIdList()
+QStringList ResModel::getIdList()
 {
 	QStringList list;
 	for (auto& item : itemList_) {
@@ -166,31 +170,36 @@ QStringList ResManagement::getIdList()
 	return list;
 }
 
-QStringList ResManagement::getChildIdList(QString groupId)
+QStringList ResModel::getChildIdList(QString groupId)
 {
 	ResItem* item = getItem(groupId);
 	ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
 	QStringList list;
-	for (auto& item : gItem->childList_) {
+	for (auto& item : gItem->getChildList()) {
 		list << item->getId();
 	}
 	return list;
 }
 
-ResItem* ResManagement::getItem(QString id)
+ResItem* ResModel::getItemById(QString id)
+{
+	return itemMap_.value(id);
+}
+
+ResItem* ResModel::getItem(QString id)
 {
 	return itemMap_.value(id, nullptr);
 }
 
-void ResManagement::removeItem(ResItem* item)
+void ResModel::removeItem(ResItem* item)
 {
 	ResGroupItem* gItem = dynamic_cast<ResGroupItem*>(item);
 	if (gItem != nullptr) {
-		for (auto& child : gItem->childList_) {
+		for (auto& child : gItem->getChildList()) {
 			removeItem(child);
 		}
 	}
 	itemList_.removeOne(item);
 	itemMap_.take(item->getId());
-	item->deleteLater();
+	delete item;
 }

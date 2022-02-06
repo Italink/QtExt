@@ -6,7 +6,7 @@
 class ResSingleItem :public ResItem {
 public:
 	ResSingleItem();
-	~ResSingleItem();
+	virtual ~ResSingleItem() override;
 	virtual QString getId() override;
 private:
 	int id;

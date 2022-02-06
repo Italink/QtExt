@@ -141,6 +141,11 @@ FramelessWidget::~FramelessWidget()
 {
 }
 
+void FramelessWidget::setWindowTitle(QString title)
+{
+	headerBar->title.setText(title);
+}
+
 bool FramelessWidget::nativeEvent(const QByteArray& eventType, void* message, qintptr* result)
 {
 	MSG* msg = (MSG*)message;

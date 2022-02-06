@@ -3,10 +3,10 @@
 
 #include <QObject>
 
-class ResItem :public QObject {
+class ResItem {
 public:
 	ResItem();
-	~ResItem();
+	virtual ~ResItem();
 	virtual QString getId() = 0;
 private:
 };

@@ -1,15 +1,15 @@
 #include "ResPanel.h"
 #include "QBoxLayout"
 #include "ResGroupItem.h"
-#include "ResManagement.h"
+#include "ResModel.h"
 #include <QApplication>
 #include "QMenu"
 
-ResPanel::ResPanel() {
-	resManagement_ = new ResManagement;
+ResPanel::ResPanel(ResModel* defaultModel)
+	:resManagement_(defaultModel){
 	QVBoxLayout* v = new QVBoxLayout(this);
 	v->setSpacing(0);
-	v->setContentsMargins(2, 2, 2, 2);
+	v->setContentsMargins(5,0,5,0);
 	v->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
 	v->addWidget(&topWidget_);
 	v->addWidget(&bottomWidget_);
@@ -34,6 +34,11 @@ ResPanel::ResPanel() {
 					});
 				}
 			}
+			menu.addAction("Clone");
+			menu.addAction("Remove" ,[idList, this]() {
+				resManagement_->removeItems(idList);
+				reset();
+			});
 			menu.exec(QCursor::pos());
 		}
 	});
@@ -41,6 +46,10 @@ ResPanel::ResPanel() {
 	connect(&topWidget_, &QListWidget::itemClicked, this, [this](QListWidgetItem* item) {
 		QString id = item->text();
 		setTopCurrent(id);
+	});
+
+	connect(&bottomWidget_, &QListWidget::itemClicked, this, [this](QListWidgetItem* item) {
+		setCurrentSingleItem(item->text());
 	});
 
 	connect(&topWidget_, &ResListWidget::dropItems, this, [this](int dstIndex, QList<QListWidgetItem*> items) {
@@ -71,7 +80,7 @@ ResPanel::ResPanel() {
 		resManagement_->leaveGroup(currentGroupId_, idList, dstIndex);
 	});
 
-	connect(resManagement_, &ResManagement::rollback, this, &ResPanel::reset);
+	connect(resManagement_, &ResModel::rollback, this, &ResPanel::reset);
 
 	connect(topWidget_.model(), &QAbstractItemModel::rowsMoved, this, [this](const QModelIndex& parent, int start, int end, const QModelIndex& destination, int row) {
 		resManagement_->moveItem(start, end, row);
@@ -83,6 +92,7 @@ ResPanel::ResPanel() {
 
 	reset();
 }
+
 
 void ResPanel::reset() {
 	topWidget_.clear();
@@ -104,7 +114,7 @@ void ResPanel::setTopCurrent(QString id)
 		bottomWidget_.show();
 		bottomWidget_.clear();
 		currentGroupId_ = id;
-		currentSingleId_ = "";
+		setCurrentSingleItem("");
 		for (auto& childId : resManagement_->getChildIdList(id)) {
 			bottomWidget_.addItem(childId);
 		}
@@ -119,7 +129,7 @@ void ResPanel::setTopCurrent(QString id)
 	else {
 		currentGroupId_ = "";
 		bottomWidget_.hide();
-		currentSingleId_ = id;
+		setCurrentSingleItem(id);
 		//for (int i = 0; i < topWidget_.count(); i++) {
 		//	QListWidgetItem* item = topWidget_.item(i);
 		//	if (item->text() == currentSingleId_ && !item->isSelected()) {
@@ -127,5 +137,11 @@ void ResPanel::setTopCurrent(QString id)
 		//	}
 		//}
 	}
+}
+
+void ResPanel::setCurrentSingleItem(QString id)
+{
+	currentSingleId_ = id;
+	Q_EMIT currentSingleItemChanged(dynamic_cast<ResSingleItem*>(resManagement_->getItemById(id)));
 }
 

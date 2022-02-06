@@ -6,21 +6,26 @@
 #include "ResSingleItem.h"
 
 class ResGroupItem;
-class ResManagement;
+class ResSingleItem;
+class ResModel;
 
 class ResPanel :public QWidget {
+	Q_OBJECT
 public:
-	ResPanel();
+	ResPanel(ResModel* defaultModel);
+	ResModel* getManagement() { return resManagement_; };
 private:
 	void reset();
 	void setTopCurrent(QString id);
+	void setCurrentSingleItem(QString id);
 private:
 	ResListWidget topWidget_;
 	ResListWidget bottomWidget_;
-	ResGroupItem* currentGroupItem_;
 	QString currentGroupId_;
 	QString currentSingleId_;
-	ResManagement* resManagement_;
+	ResModel* resManagement_;
+Q_SIGNALS:
+	void currentSingleItemChanged(ResSingleItem *item);
 };
 
 #endif // ResPanel_h__
