@@ -5,7 +5,7 @@
 #include <QLineEdit>
 #include "AdjusterFactory.h"
 
-QPropertyItem::QPropertyItem(QObjectEx* object, QMetaProperty property)
+QPropertyItem::QPropertyItem(QObject* object, QMetaProperty property)
 	: object_(object)
 	, property_(property)
 	, itemWidget_(new QWidget)

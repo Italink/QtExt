@@ -17,6 +17,11 @@ QCombo::QCombo(QString currentItem, QStringList items)
 {
 }
 
+void QCombo::setComboList(QStringList list)
+{
+	items_ = list;
+}
+
 int QCombo::getCurrentIndex() const
 {
 	return currentIndex_;

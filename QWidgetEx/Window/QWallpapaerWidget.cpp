@@ -190,6 +190,7 @@ void QWallparperWidget::setWindowLevel(WindowLevel level, bool toolWindow /*= fa
 	windowLevel_ = level;
 }
 
+
 QWallparperWidget::~QWallparperWidget()
 {
 	Q_D(QWallparperWidget);

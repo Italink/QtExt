@@ -5,7 +5,7 @@
 #include "QFile"
 #include "QDynamicPropertyItem.h"
 
-QPropertyPanel::QPropertyPanel(QObjectEx* object /*= nullptr*/) {
+QPropertyPanel::QPropertyPanel(QObject* object /*= nullptr*/) {
 	setObject(object);
 	setColumnCount(1);
 	setIndentation(8);
@@ -26,19 +26,19 @@ QPropertyPanel::QPropertyPanel(QObjectEx* object /*= nullptr*/) {
 	);
 }
 
-QObjectEx* QPropertyPanel::getObject() const
+QObject* QPropertyPanel::getObject() const
 {
 	return object_;
 }
 
-void QPropertyPanel::setObject(QObjectEx* val) {
+void QPropertyPanel::setObject(QObject* val) {
 	if (val != object_) {
 		object_ = val;
 		updatePanel();
 	}
 }
 
-void setupItemInternal(QObjectEx* object, QTreeWidgetItem* parentItem) {
+void setupItemInternal(QObject* object, QTreeWidgetItem* parentItem) {
 	if (object == nullptr)
 		return;
 
@@ -49,7 +49,7 @@ void setupItemInternal(QObjectEx* object, QTreeWidgetItem* parentItem) {
 
 		const QMetaObject* meta = property.metaType().metaObject();
 		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
-			QObjectEx* obj = property.read(object).value<QObjectEx*>();
+			QObject* obj = property.read(object).value<QObject*>();
 			if (obj != nullptr) {
 				setupItemInternal(obj, item);
 			}
@@ -68,8 +68,8 @@ void QPropertyPanel::updatePanel() {
 
 		const QMetaObject* meta = property.metaType().metaObject();
 
-		if (meta != nullptr && meta->inherits(&QObjectEx::staticMetaObject)) {
-			QObjectEx* obj = property.read(object_).value<QObjectEx*>();
+		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
+			QObject* obj = property.read(object_).value<QObject*>();
 			if (obj != nullptr) {
 				setupItemInternal(obj, item);
 			}
@@ -82,11 +82,17 @@ void QPropertyPanel::updatePanel() {
 		item->setUp(this);
 		QVariant var = object_->property(dpName);
 		const QMetaObject* meta = var.metaType().metaObject();
-		if (meta != nullptr && meta->inherits(&QObjectEx::staticMetaObject)) {
-			QObjectEx* obj = var.value<QObjectEx*>();
+		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
+			QObject* obj = var.value<QObject*>();
 			if (obj != nullptr) {
 				setupItemInternal(obj, item);
 			}
 		}
 	}
+}
+
+void QPropertyPanel::showEvent(QShowEvent* event)
+{
+	QTreeWidget::showEvent(event);
+	updatePanel();
 }

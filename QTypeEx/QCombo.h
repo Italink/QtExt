@@ -10,6 +10,7 @@ public:
 	QCombo();
 	QCombo(int currentIndex, QStringList items);
 	QCombo(QString currentItem, QStringList items);
+	void setComboList(QStringList list);
 	bool operator==(const QCombo& other);
 	friend QDebug operator<<(QDebug debug, const QCombo& range);
 	friend QDataStream& operator<<(QDataStream& out, const QCombo& var);

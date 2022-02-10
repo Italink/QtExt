@@ -31,7 +31,7 @@
 
 class PropertyAssignCommand :public QUndoCommand {
 public:
-	PropertyAssignCommand(QObjectEx* obejct, QString propertyName,QVariant post)
+	PropertyAssignCommand(QObject* obejct, QString propertyName,QVariant post)
 		: obejct_(obejct)
 		, propertyName_(propertyName)
 		, post_(post)
@@ -45,7 +45,7 @@ public:
 public:
 	QVariant pre_;	//赋值前
 	QVariant post_;	//赋值后
-	QObjectEx* obejct_;
+	QObject* obejct_;
 	QString propertyName_;
 	void undo() override {
 		obejct_->setProperty(propertyName_.toLocal8Bit(), pre_);
@@ -55,7 +55,7 @@ public:
 	}
 };
 
-void notifyValueChanged(QObjectEx* object, QString propertyName, QVariant var) {
+void notifyValueChanged(QObject* object, QString propertyName, QVariant var) {
 	if (AdjusterFactory::isUpdating_)
 		return;
 	QVariant pre = object->property(propertyName.toLocal8Bit());
@@ -74,7 +74,7 @@ void notifyValueChanged(QObjectEx* object, QString propertyName, QVariant var) {
 }
 
 #define BIND_ADJUSTER(Type,Adjuster) \
-	AdjusterCreator_[QMetaTypeId2<Type>::qt_metatype_id()] = [](QObjectEx* object,QString propertyName) {\
+	AdjusterCreator_[QMetaTypeId2<Type>::qt_metatype_id()] = [](QObject* object,QString propertyName) {\
 		Adjuster * adjuster = new Adjuster(object->property(propertyName.toLocal8Bit()).value<Type>()); \
 		QObject::connect(adjuster,&Adjuster::valueChanged,object,[=](QVariant var){	\
 			notifyValueChanged(object,propertyName,var);\
@@ -107,7 +107,7 @@ AdjusterFactory* AdjusterFactory::getInstance()
 	return &instance;
 }
 
-Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty property /*= {}*/)
+Adjuster* AdjusterFactory::create(QObject* object /*= nullptr*/, QMetaProperty property /*= {}*/)
 {
 	Adjuster* adjuster = nullptr;
 	if (property.isEnumType()) {
@@ -122,15 +122,6 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty
 			property.write(object, meta.value(combo.getCurrentIndex()));
 		});
 		adjuster = comboBox;
-		if (adjuster) {
-			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, meta, property, enumItems, object]() {
-				isUpdating_ = true;
-				QCombo combo(meta.valueToKey(property.read(object).toInt()), enumItems);
-				adjuster->updateValue(QVariant::fromValue(combo));
-				isUpdating_ = false;
-
-			});
-		}
 	}
 	else if (getInstance()->AdjusterCreator_.contains(property.typeId())) {
 		adjuster = getInstance()->AdjusterCreator_[property.typeId()](object, property.name());
@@ -138,29 +129,14 @@ Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QMetaProperty
 		//	int index = adjuster->staticMetaObject.indexOfMethod("updateValue(QVariant)");
 		//	QObject::connect(object, property.notifySignal(), adjuster, adjuster->metaObject()->method(index));
 		//}
-
-		if (adjuster) {
-			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, property, object]() {
-				isUpdating_ = true;
-				adjuster->updateValue(property.read(object));
-				isUpdating_ = false;
-			});
-		}
 	}
 	return adjuster;
 }
 
-Adjuster* AdjusterFactory::create(QObjectEx* object /*= nullptr*/, QString propertyName /*= {}*/) {
+Adjuster* AdjusterFactory::create(QObject* object /*= nullptr*/, QString propertyName /*= {}*/) {
 	QVariant var = object->property(propertyName.toLocal8Bit().constData());
 	if (getInstance()->AdjusterCreator_.contains(var.typeId())) {
 		Adjuster* adjuster = getInstance()->AdjusterCreator_[var.typeId()](object, propertyName);
-		if (adjuster) {
-			QObject::connect(object, &QObjectEx::requestUpdate, adjuster, [adjuster, propertyName, object]() {
-				isUpdating_ = true;
-				adjuster->updateValue(object->property(propertyName.toLocal8Bit()));
-				isUpdating_ = false;
-			});
-		}
 		return adjuster;
 	}
 	return nullptr;

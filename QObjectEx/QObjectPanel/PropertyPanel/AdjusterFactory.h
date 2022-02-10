@@ -10,12 +10,12 @@
 class Adjuster;
 
 class AdjusterFactory {
-	typedef std::function<Adjuster* (QObjectEx*, QString propertyName)> CreateAdjuster;
+	typedef std::function<Adjuster* (QObject*, QString propertyName)> CreateAdjuster;
 	AdjusterFactory();
 	static AdjusterFactory* getInstance();
 public:
-	static Adjuster* create(QObjectEx* object = nullptr, QMetaProperty property = {});
-	static Adjuster* create(QObjectEx* object = nullptr, QString propertyName = "");
+	static Adjuster* create(QObject* object = nullptr, QMetaProperty property = {});
+	static Adjuster* create(QObject* object = nullptr, QString propertyName = "");
 	inline static bool isUpdating_ = false;
 private:
 

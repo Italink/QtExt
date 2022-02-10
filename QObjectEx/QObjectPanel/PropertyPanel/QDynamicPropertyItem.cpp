@@ -5,7 +5,7 @@
 #include <QLineEdit>
 #include "AdjusterFactory.h"
 
-QDynamicPropertyItem::QDynamicPropertyItem(QObjectEx* object, QString propertyName)
+QDynamicPropertyItem::QDynamicPropertyItem(QObject* object, QString propertyName)
 	: object_(object)
 	, propertyName_(propertyName)
 	, itemWidget_(new QWidget)

@@ -6,13 +6,16 @@
 
 class QPropertyPanel :public QTreeWidget {
 public:
-	QPropertyPanel(QObjectEx* object = nullptr);
-	QObjectEx* getObject() const;
-	void setObject(QObjectEx* val);
+	QPropertyPanel(QObject* object = nullptr);
+	QObject* getObject() const;
+	void setObject(QObject* val);
 private:
 	void updatePanel();
 private:
-	QObjectEx* object_ = nullptr;
+	QObject* object_ = nullptr;
+protected:
+	void showEvent(QShowEvent* event) override;
+
 };
 
 #endif // QPropertyPanel_h__

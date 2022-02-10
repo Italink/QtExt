@@ -4,21 +4,20 @@
 #include <QMetaProperty>
 #include <QTreeWidgetItem>
 
-class QObjectEx;
 class QLabel;
 class QHBoxLayout;
 
 class QDynamicPropertyItem : public QTreeWidgetItem
 {
 public:
-	explicit QDynamicPropertyItem(QObjectEx* object, QString propertyName);
+	explicit QDynamicPropertyItem(QObject* object, QString propertyName);
 	~QDynamicPropertyItem();
 	virtual QWidget* createWidget();
 	virtual void setUp(QTreeWidgetItem* tree);
 	virtual void setUp(QTreeWidget* tree);
 	void rename();
 protected:
-	QObjectEx* object_ = nullptr;
+	QObject* object_ = nullptr;
 	QString propertyName_;
 	QWidget* itemWidget_ = nullptr;
 	QHBoxLayout* layout_ = nullptr;
