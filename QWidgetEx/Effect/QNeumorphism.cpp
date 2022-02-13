@@ -198,4 +198,4 @@ void QNeumorphism::setEffectEnabled(bool enabled)
 	}
 }
 
-bool QNeumorphism::enabled_ = false;
+bool QNeumorphism::enabled_ = true;

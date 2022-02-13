@@ -123,20 +123,15 @@ QWallparperWidget::QWallparperWidget(QWidget* parent, Qt::WindowFlags f)
 		qWarning("QWallparperWidget is not supported on this platform.");
 	else
 		d->setRenderToTexture();
-	setAttribute(Qt::WA_TransparentForMouseEvents);
-	setWindowFlags(Qt::FramelessWindowHint);
-	setAttribute(Qt::WA_TranslucentBackground);
 	setGeometry(0,0,200,200);
 }
 
-void QWallparperWidget::setWindowLevel(WindowLevel level, bool toolWindow /*= false*/)
+void QWallparperWidget::setWindowLevel(WindowLevel level)
 {
 	if (windowLevel_ == level)
 		return;
+	QRect rect = this->geometry();
 	close();
-
-	Qt::WindowType toolWindowType = toolWindow ? Qt::Tool : Qt::Widget;
-
 	switch (level) {
 	case WindowLevel::Top: {
 		setAttribute(Qt::WA_TransparentForMouseEvents, true);
@@ -145,17 +140,17 @@ void QWallparperWidget::setWindowLevel(WindowLevel level, bool toolWindow /*= fa
 		SetParent((HWND)winId(), NULL);
 		SetWindowLongA((HWND)winId(), GWL_STYLE, (WS_POPUP | WS_VISIBLE));
 		SetWindowLongA((HWND)winId(), GWL_EXSTYLE, 0);
-		setWindowFlags(Qt::Window | toolWindowType | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+		setWindowFlags(Qt::Window |Qt::Tool| Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 		break;
 	}
-	case WindowLevel::Normal: {
+	case WindowLevel::HasTaskIcon: {
 		setAttribute(Qt::WA_TransparentForMouseEvents, true);
 		LONG l = GetWindowLongA((HWND)winId(), GWL_EXSTYLE) | WS_EX_LAYERED;
 		SetWindowLongA((HWND)winId(), GWL_EXSTYLE, l);
 		SetParent((HWND)winId(), NULL);
 		SetWindowLongA((HWND)winId(), GWL_STYLE, (WS_POPUP | WS_VISIBLE));
 		SetWindowLongA((HWND)winId(), GWL_EXSTYLE, 0);
-		setWindowFlags(Qt::Window | toolWindowType | Qt::FramelessWindowHint);
+		setWindowFlags(Qt::Window  |  Qt::FramelessWindowHint);
 		break;
 	}
 	case WindowLevel::Bottom: {
@@ -165,7 +160,7 @@ void QWallparperWidget::setWindowLevel(WindowLevel level, bool toolWindow /*= fa
 		SetParent((HWND)winId(), NULL);
 		SetWindowLongA((HWND)winId(), GWL_STYLE, (WS_POPUP | WS_VISIBLE));
 		SetWindowLongA((HWND)winId(), GWL_EXSTYLE, 0);
-		setWindowFlags(Qt::Window | toolWindowType | Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
+		setWindowFlags(Qt::Window | Qt::Tool |  Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
 		break;
 	}
 	case WindowLevel::Wallpaper: {
@@ -174,13 +169,15 @@ void QWallparperWidget::setWindowLevel(WindowLevel level, bool toolWindow /*= fa
 		SetParent((HWND)winId(), Parent);
 		SetWindowLongA((HWND)winId(), GWL_STYLE, (WS_POPUP | WS_VISIBLE));
 		SetWindowLongA((HWND)winId(), GWL_EXSTYLE, (WS_EX_LAYERED | WS_EX_NOACTIVATE | WS_EX_TRANSPARENT | WS_EX_TOPMOST));
-		setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);
+		setWindowFlags(Qt::SubWindow | Qt::Tool | Qt::FramelessWindowHint);
 		break;
 	}
 	default:
 		break;
 	}
+	setAttribute(Qt::WA_TranslucentBackground);
 	show();
+	setGeometry(rect);
 	if (windowLevel_ == Wallpaper) {
 		HWND desktop = getDesktopHWND();
 		ShowWindow(desktop, SW_HIDE);

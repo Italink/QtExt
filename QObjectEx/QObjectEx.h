@@ -31,13 +31,17 @@ public:
 	virtual QObjectPanel* createQObjectPanel();
 	virtual void dump();
 	virtual QByteArray serialize();
-	virtual void unserialize(QByteArray byteArray);
+	virtual void deserialize(QByteArray byteArray);
 	static QObjectEx* createFromData(QByteArray byteArray);
 	static QUndoStack undoStack_;
+	static QByteArray serialize(QObject * obj);
+	static void deserialize(QObject* obj, QByteArray data);
 Q_SIGNALS:
 	void requestUpdate();
 public:
 	Q_AUTO(QString, luaCode_);
 };
+
+
 
 #endif // QObjectEx_h__

@@ -6,6 +6,7 @@ class FlowPanel :public QListWidget{
 public:
 	FlowPanel();
 	void addItem(QString text,QIcon icon);
+	QListWidgetItem* getItem(QString name);
 };
 
 

@@ -34,6 +34,8 @@ void serializeInternal(QObject* object, QCborStreamWriter& writer) {
 		writer.startMap(meta->propertyCount());
 		for (int i = 0; i < meta->propertyCount(); i++) {
 			QMetaProperty property = meta->property(i);
+			if(!property.isWritable())
+				continue;
 			writer.append(QLatin1String(property.name()));
 			const QMetaObject* meta = property.metaType().metaObject();
 			if (meta != nullptr) {
@@ -87,6 +89,14 @@ QByteArray QObjectEx::serialize()
 	return data;
 }
 
+QByteArray QObjectEx::serialize(QObject* obj)
+{
+	QByteArray data;
+	QCborStreamWriter writer(&data);
+	serializeInternal(obj, writer);
+	return data;
+}
+
 void unserializeInternal(QObject* object, QCborMap cbor)
 {
 	if (cbor.value("ClassName") == object->metaObject()->className()) {
@@ -123,10 +133,16 @@ void unserializeInternal(QObject* object, QCborMap cbor)
 	}
 }
 
-void QObjectEx::unserialize(QByteArray byteArray)
+void QObjectEx::deserialize(QByteArray byteArray)
 {
 	QCborMap cbor = QCborValue::fromCbor(byteArray).toMap();
 	unserializeInternal(this, cbor);
+}
+
+void QObjectEx::deserialize(QObject* obj, QByteArray data)
+{
+	QCborMap cbor = QCborValue::fromCbor(data).toMap();
+	unserializeInternal(obj, cbor);
 }
 
 QObjectEx* QObjectEx::createFromData(QByteArray byteArray)

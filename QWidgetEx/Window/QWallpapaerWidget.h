@@ -13,13 +13,13 @@ public:
 	explicit QWallparperWidget(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 	~QWallparperWidget();
 	enum WindowLevel {
-		Top,
-		Normal,
+		Top = 0,
+		HasTaskIcon,
 		Bottom,
 		Wallpaper
 	}windowLevel_;
 	Q_ENUM(WindowLevel);
-	void setWindowLevel(WindowLevel level, bool toolWindow = false);
+	void setWindowLevel(WindowLevel level);
 protected:
 protected:
 	HWND getDesktopHWND();

@@ -24,3 +24,12 @@ void FlowPanel::addItem(QString text, QIcon icon)
 	QListWidget::addItem(item);
 }
 
+QListWidgetItem* FlowPanel::getItem(QString name)
+{
+	for (int i = 0; i < count(); i++) {
+		if (item(i)->text() == name)
+			return item(i);
+	}
+	return nullptr;
+}
+

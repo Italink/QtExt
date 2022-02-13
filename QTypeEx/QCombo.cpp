@@ -17,6 +17,16 @@ QCombo::QCombo(QString currentItem, QStringList items)
 {
 }
 
+void QCombo::clearItem()
+{
+	items_.clear();
+}
+
+void QCombo::addItem(QString item)
+{
+	items_ << item;
+}
+
 void QCombo::setComboList(QStringList list)
 {
 	items_ = list;

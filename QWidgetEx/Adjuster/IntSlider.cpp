@@ -149,7 +149,7 @@ void IntSlider::paintEvent(QPaintEvent* event)
 	painter.drawRoundedRect(rect(), 2, 2);
 
 	QRect slider = numberEditer_->geometry();
-	slider.setRight(slider.left() + slider.width() * (value_.number() / double(value_.max() - value_.min())));
+	slider.setRight(slider.left() + slider.width() * ((value_.number()-value_.min()) / double(value_.max() - value_.min())));
 	painter.setBrush(QColor(140, 140, 140));
 	painter.drawRoundedRect(slider, 2, 2);
 	QWidget::paintEvent(event);

@@ -178,7 +178,8 @@ bool FramelessWidget::nativeEvent(const QByteArray& eventType, void* message, qi
 			return false;
 		return true;
 	}
-	return false;         //此处返回false，留给其他事件处理器处理
+	return false;       
+	//此处返回false，留给其他事件处理器处理
 }
 
 void FramelessWidget::mousePressEvent(QMouseEvent* e)
@@ -201,7 +202,7 @@ void FramelessWidget::paintEvent(QPaintEvent*)
 {
 	QPainter painter(this);
 	painter.setPen(QColor(0, 0, 0, 80));
-	painter.setBrush(QColor(255, 255, 255, 255));
+	painter.setBrush(QColor(255, 255, 255, 150));
 	painter.drawRect(rect().adjusted(0, 0, -1, -1));
 }
 

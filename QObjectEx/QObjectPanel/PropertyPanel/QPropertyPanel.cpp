@@ -63,11 +63,11 @@ void QPropertyPanel::updatePanel() {
 		return;
 	for (int i = object_->metaObject()->propertyOffset(); i < object_->metaObject()->propertyCount(); i++) {
 		QMetaProperty property = object_->metaObject()->property(i);
+		if(!property.isScriptable())
+			continue;
 		QPropertyItem* item = new QPropertyItem(object_, property);
 		item->setUp(this);
-
 		const QMetaObject* meta = property.metaType().metaObject();
-
 		if (meta != nullptr && meta->inherits(&QObject::staticMetaObject)) {
 			QObject* obj = property.read(object_).value<QObject*>();
 			if (obj != nullptr) {
