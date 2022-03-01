@@ -1,19 +1,21 @@
-#include "DoubleSlider.h"
+#include "QGradientSlider.hpp"
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QMouseEvent>
 #include <QLabel>
 #include <QDoubleValidator>
 #include <QPainter>
-#include "QFocusLineEdit.h"
 #include "QWidgetEx/Effect/QNeumorphism.h"
 
-DoubleSlider::DoubleSlider(QBoundedDouble number  /*= 0*/, QString name, QWidget* parent /*= nullptr*/)
+QGradientSlider::QGradientSlider(QString name /*= ""*/, float var /*= 0.0f*/, float min /*= 0.0f*/, float max /*= 1.0f*/, bool limited /*=false*/, QWidget* parent /*= nullptr*/)
 	: Adjuster(parent)
 	, nameLabel_(new QLabel(name))
 	, numberEditer_(new QFocusLineEdit)
 	, arrowLabel_(new QLabel)
-	, value_(number)
+	, var_(var)
+	, min_(min)
+	, max_(max)
+	, limited_(limited)
 {
 	setFixedHeight(20);
 	setGraphicsEffect(new QNeumorphism);
@@ -36,35 +38,31 @@ DoubleSlider::DoubleSlider(QBoundedDouble number  /*= 0*/, QString name, QWidget
 	numberEditer_->setValidator(new QDoubleValidator);
 	numberEditer_->setStyleSheet("background-color:transparent;");
 	//numberEditer_->setAlignment(Qt::AlignRight);
-	setNumber(value_.number());
+	setNumber(var);
 	setEditEnabled(false);
 	connect(numberEditer_, &QFocusLineEdit::loseFocus, this, [this]() {
 		setEditEnabled(false);
 	});
-	connect(numberEditer_, &QLineEdit::textChanged, this, [this](QString) {
-		double num = this->number();
-		if (num == value_.number()) {
-			return;
-		}
-		if (value_.setNumber(this->number())) {
-			Q_EMIT valueChanged(QVariant::fromValue(value_));
-		}
-		else {
-			setNumber(value_.number());
-		}
+	connect(numberEditer_, &QLineEdit::returnPressed, this, [this]() {
+		float num = this->number();
+		setNumber(num);
+		Q_EMIT valueChanged(var_);
 	});
 }
 
-DoubleSlider::~DoubleSlider()
+QGradientSlider::~QGradientSlider()
 {
 }
 
-double DoubleSlider::number()
+float QGradientSlider::number()
 {
-	return numberEditer_->text().toDouble();
+	return numberEditer_->text().toFloat();
 }
 
-void DoubleSlider::setNumber(double num) {
+void QGradientSlider::setNumber(float num) {
+	if (limited_)
+		num = qBound(min_, num, max_);
+	var_ = num;
 	int precision = qBound(0, 12 - (int)log10(qAbs(num)), 6);
 	QString text = QString::number(num, 'F', precision);
 	int index = text.size() - 1;
@@ -74,9 +72,10 @@ void DoubleSlider::setNumber(double num) {
 	if (text[index] == '.')
 		index++;
 	numberEditer_->setText(text.mid(0, index + 1));
+	update();
 }
 
-void DoubleSlider::setEditEnabled(bool enable) {
+void QGradientSlider::setEditEnabled(bool enable) {
 	if (enable) {
 		numberEditer_->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 		numberEditer_->setAttribute(Qt::WA_TransparentForMouseEvents, false);
@@ -94,27 +93,28 @@ void DoubleSlider::setEditEnabled(bool enable) {
 	}
 }
 
-bool DoubleSlider::getEditEnabled()
+bool QGradientSlider::getEditEnabled()
 {
 	return numberEditer_->focusPolicy() == Qt::FocusPolicy::StrongFocus;
 }
 
-QVariant DoubleSlider::getValue()
+QVariant QGradientSlider::getValue()
 {
-	return QVariant::fromValue(value_);
+	return var_;
 }
 
-void DoubleSlider::setValue(QVariant var)
+void QGradientSlider::setValue(QVariant var)
 {
-	setNumber(var.value<QBoundedDouble>().number());
+	setNumber(var.toFloat());
 }
 
-void DoubleSlider::moveBox(QPointF offset)
+void QGradientSlider::moveBox(QPointF offset)
 {
-	setNumber(number() + offset.x() * (value_.max() - value_.min()) / 2000);
+	float var = qBound(min_, number() + offset.x() * (max_ - min_) / 1000, max_);
+	setNumber(var);
 }
 
-void DoubleSlider::mousePressEvent(QMouseEvent* event)
+void QGradientSlider::mousePressEvent(QMouseEvent* event)
 {
 	if (event->buttons() & Qt::LeftButton) {
 		clickPosition_ = event->pos();
@@ -124,7 +124,7 @@ void DoubleSlider::mousePressEvent(QMouseEvent* event)
 	}
 }
 
-void DoubleSlider::mouseReleaseEvent(QMouseEvent* event)
+void QGradientSlider::mouseReleaseEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton) {
 		if (this->cursor() == Qt::BlankCursor) {
@@ -137,7 +137,7 @@ void DoubleSlider::mouseReleaseEvent(QMouseEvent* event)
 	}
 }
 
-void DoubleSlider::mouseMoveEvent(QMouseEvent* event)
+void QGradientSlider::mouseMoveEvent(QMouseEvent* event)
 {
 	if (!getEditEnabled()) {
 		setCursor(Qt::BlankCursor);
@@ -149,7 +149,7 @@ void DoubleSlider::mouseMoveEvent(QMouseEvent* event)
 	}
 }
 
-void DoubleSlider::paintEvent(QPaintEvent* event)
+void QGradientSlider::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
@@ -158,7 +158,7 @@ void DoubleSlider::paintEvent(QPaintEvent* event)
 	painter.drawRoundedRect(rect(), 2, 2);
 
 	QRect slider = rect();
-	slider.setRight(rect().width() * ((value_.number() - value_.min()) / (value_.max() - value_.min())));
+	slider.setRight(rect().width() * ((var_ - min_) / (max_ - min_)));
 	painter.setBrush(QColor(140, 140, 140));
 	painter.drawRoundedRect(slider, 2, 2);
 	QWidget::paintEvent(event);

@@ -1,18 +1,19 @@
 #ifndef Test_h__
 #define Test_h__
 
+#include "QObjectEx/QObjectEx.h"
 #include "QTypeEx/QBoundedDouble.h"
 #include "QTypeEx/QBoundedInt.h"
+#include "QTypeEx/QColor4D.h"
 #include "QTypeEx/QColors.h"
 #include "QTypeEx/QCombo.h"
-
+#include "QTypeEx/QRange.h"
 #include <QObject>
 #include <QVector2D>
 #include <QVector3D>
 #include <QVector4D>
-#include "QTypeEx/QRange.h"
-#include "QObjectEx/QObjectEx.h"
 #include <QWindow>
+
 class InlineObject : public QObjectEx {
 	Q_OBJECT
 public:
@@ -34,6 +35,7 @@ public:
 	Q_AUTO(QVector3D, Vec3) = QVector3D(1, 2, 3);
 	Q_AUTO(QVector4D, Vec4) = QVector4D(1, 2, 3, 4);
 	Q_AUTO(QColor, Color) = Qt::red;
+	Q_AUTO(QColor4D, Color4D) = Qt::red;
 	Q_AUTO(QColors, Colors) = { {{0.5,Qt::red},{0.8, Qt::blue}} };
 	Q_AUTO(QRange, Range) = QRange(50, 100, 0, 48000);
 	Q_AUTO(QImage, Image);

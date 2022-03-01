@@ -11,6 +11,7 @@
 #include "QWidgetEx\Adjuster\ByteArrayLoader.h"
 #include "QWidgetEx\Adjuster\Color\ColorButton.hpp"
 #include "QWidgetEx\Adjuster\Color\ColorDialog.hpp"
+#include "QWidgetEx\Adjuster\Color\QColor4DButton.hpp"
 #include "QWidgetEx\Adjuster\Color\ColorsButton.hpp"
 #include "QWidgetEx\Adjuster\Color\ColorsDialog.hpp"
 #include "QWidgetEx\Adjuster\ComboBox.h"
@@ -28,10 +29,11 @@
 #include "QTypeEx/QBoundedDouble.h"
 #include "QTypeEx/QBoundedInt.h"
 #include "QTypeEx/QColors.h"
+#include "QTypeEx/QColor4D.h"
 
 class PropertyAssignCommand :public QUndoCommand {
 public:
-	PropertyAssignCommand(QObject* obejct, QString propertyName,QVariant post)
+	PropertyAssignCommand(QObject* obejct, QString propertyName, QVariant post)
 		: obejct_(obejct)
 		, propertyName_(propertyName)
 		, post_(post)
@@ -66,10 +68,10 @@ void notifyValueChanged(QObject* object, QString propertyName, QVariant var) {
 			object->setProperty(propertyName.toLocal8Bit(), var);
 		}
 		else
-			QObjectEx::undoStack_.push(new PropertyAssignCommand(object, propertyName,var));
+			QObjectEx::undoStack_.push(new PropertyAssignCommand(object, propertyName, var));
 	}
 	else {
-		QObjectEx::undoStack_.push(new PropertyAssignCommand(object, propertyName,var));
+		QObjectEx::undoStack_.push(new PropertyAssignCommand(object, propertyName, var));
 	}
 }
 
@@ -91,6 +93,7 @@ AdjusterFactory::AdjusterFactory() {
 	BIND_ADJUSTER(QBoundedDouble, DoubleSlider);
 	BIND_ADJUSTER(QBoundedInt, IntSlider);
 	BIND_ADJUSTER(QColor, ColorButton);
+	BIND_ADJUSTER(QColor4D, QColor4DButton);
 	BIND_ADJUSTER(QColors, ColorsButton);
 	BIND_ADJUSTER(QVector2D, Vec2Box);
 	BIND_ADJUSTER(QVector3D, Vec3Box);

@@ -1,20 +1,21 @@
-#ifndef DoubleSlider_h__
-#define DoubleSlider_h__
+#ifndef QGradientSlider_h__
+#define QGradientSlider_h__
 
-#include "Adjuster.h"
-#include "QTypeEx/QBoundedDouble.h"
+#include <QWidget>
+#include "QWidgetEx\Adjuster\Adjuster.h"
+#include "QWidgetEx\Adjuster\QFocusLineEdit.h"
 
 class QFocusLineEdit;
 class QLabel;
 
-class DoubleSlider : public Adjuster
+class QGradientSlider : public Adjuster
 {
 	Q_OBJECT
 public:
-	DoubleSlider(QBoundedDouble number = QBoundedDouble(0, 0, 100), QString name = "", QWidget* parent = nullptr);
-	~DoubleSlider();
-	double number();
-	void setNumber(double num);
+	QGradientSlider(QString name = "", float var = 0.0f, float min = 0.0f, float max = 1.0f, bool limited = false, QWidget* parent = nullptr);
+	~QGradientSlider();
+	float number();
+	void setNumber(float num);
 	void setEditEnabled(bool enable);
 	bool getEditEnabled();
 	QVariant getValue() override;
@@ -27,12 +28,15 @@ protected:
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void paintEvent(QPaintEvent* event) override;
 protected:
-	QBoundedDouble value_;
+	float var_;
+	float min_;
+	float max_;
+	bool limited_;
 	QLabel* nameLabel_;
 	QFocusLineEdit* numberEditer_;
 	QLabel* arrowLabel_;
 	QPointF clickPosition_;
-	QBrush mBrush = QColor(200,200,200);
+	QBrush mBrush = QColor(200, 200, 200);
 };
 
-#endif // DoubleSlider_h__
+#endif // QGradientSlider_h__

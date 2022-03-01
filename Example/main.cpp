@@ -4,9 +4,9 @@
 #include "QWidgetEx\Window\FramlessWindow.h"
 #include "QWidgetEx\Application\DesktopApplication.h"
 
-#include "QWidgetEx\Widgets\ResPanel\ResPanel.h"
 #include <QUndoView>
 #include "QWidgetEx\Widgets\PageTabWidget\PageTabWidget.h"
+#include "QWidgetEx\Adjuster\Color\QColor4DDialog.hpp"
 
 int main(int argc, char* argv[]) {
 	Q_INIT_RESOURCE(resources);
@@ -30,20 +30,20 @@ int main(int argc, char* argv[]) {
 		file.close();
 		test->dump();
 	});
-	QColor color = Qt::red;
-	qDebug() << color;
-	QUndoView view(&QObjectEx::undoStack_);
-	view.show();
+	//QColor color = Qt::red;
+	//qDebug() << color;
+	//QUndoView view(&QObjectEx::undoStack_);
+	//view.show();
 
-	////FramelessWidget frameLess("hello");
-	////frameLess.show();
-	//panel->show();
+	//////FramelessWidget frameLess("hello");
+	//////frameLess.show();
+	////panel->show();
 
-	//ResPanel res;
-	//res.show();
+	////ResPanel res;
+	////res.show();
 
-	PageTabWidget t;
-	t.show();
+	//PageTabWidget t;
+	//t.show();
 
 	return a.exec();
 }
